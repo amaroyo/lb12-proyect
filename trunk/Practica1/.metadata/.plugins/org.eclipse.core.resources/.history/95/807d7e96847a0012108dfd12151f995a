@@ -1,0 +1,34 @@
+package interfaz;
+
+import javax.swing.JFrame;
+
+public class ClasePrincipal extends JFrame{
+
+	/***********************
+	 * ATRIBUTOS PRIVADOS
+	 * 
+	 ***********************/
+	
+	
+	
+	public void ClasePrincipal(){
+		
+		//INICIALIZAR VARIABLES
+		
+		JOptionPane.showMessageDialog(null,"AVISO: TIENE QUE INTRODUCIR EL TAMANYO DE LA MATRIZ!");
+		inicializarInterfaz();
+		
+	};
+	
+	
+	
+	
+	
+	
+	public static void main(String[] args) {
+		
+		ClasePrincipal f = new ClasePrincipal();
+
+	}
+
+}
