@@ -456,8 +456,8 @@ public class ClasePrincipal extends JFrame {
 				JFrame f = new JFrame();
 				f.setVisible(true);
 				f.setEnabled(true);
-				f.setSize(200,200);
-		//		f.setContentPane(damePanelTamanyo());
+				f.setSize(300,300);
+				f.setContentPane(damePanelTamanyo());
 				/*
 				 * 
 				 * 
@@ -473,6 +473,31 @@ public class ClasePrincipal extends JFrame {
 			}
 		});
 		return tamanyoItem;
+	}
+	
+	private JPanel damePanelTamanyo(){
+		JPanel panelTamanyo = new JPanel();
+		panelTamanyo.setLayout(new BorderLayout());
+		panelTamanyo.add("North", new JLabel("Introduce las filas y las columnas"));
+		JPanel panelCentro = new JPanel();
+		panelTamanyo.add("Center",panelCentro);
+		
+		JLabel lab = new JLabel("Filas");
+		panelCentro.add(lab);
+		JTextField f = new JTextField();
+		//f.setSize(50, 10);
+		f.setEnabled(true);
+		f.setVisible(true);
+		//f.setEditable(true);
+		f.setColumns(2);
+		f.validate();
+		panelCentro.add(f);
+		
+		
+		panelTamanyo.validate();
+		return panelTamanyo;
+	
+		
 	}
 	
 	public static void main(String[] args) {
