@@ -1,0 +1,43 @@
+package interfaz;
+
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.*;
+
+public class ClasePrincipal extends JFrame{
+
+	/***********************
+	 * ATRIBUTOS PRIVADOS
+	 * 
+	 ***********************/
+	
+	
+	
+	public void ClasePrincipal(){
+		
+		//INICIALIZAR VARIABLES
+		
+		JOptionPane.showMessageDialog(null,"AVISO: TIENE QUE INTRODUCIR EL TAMANYO DE LA MATRIZ!");
+		inicializarInterfaz();
+		
+	}
+	
+	
+	public void inicializarInterfaz(){
+		this.setTitle("CALCULADORA DE MATRICES);");
+		this.setVisible(true);
+		this.setEnabled(true);
+		this.setSize(500,500);
+			
+	}
+	
+	
+	
+	
+	public static void main(String[] args) {
+		
+		ClasePrincipal f = new ClasePrincipal();
+
+	}
+
+}

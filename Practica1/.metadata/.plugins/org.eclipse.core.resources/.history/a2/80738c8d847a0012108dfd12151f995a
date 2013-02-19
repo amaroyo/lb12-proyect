@@ -1,0 +1,30 @@
+package interfaz;
+
+import javax.swing.JFrame;
+
+public class ClasePrincipal extends JFrame{
+
+	/**
+	 * ATRIBUTOS PRIVADOS
+	 * 
+	 */
+	
+	
+	
+	public void ClasePrincipal(){
+		
+		
+	};
+	
+	
+	
+	
+	
+	
+	public static void main(String[] args) {
+		
+		ClasePrincipal f = new ClasePrincipal();
+
+	}
+
+}

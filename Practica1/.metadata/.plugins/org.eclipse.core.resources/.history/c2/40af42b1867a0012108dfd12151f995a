@@ -1,0 +1,82 @@
+package interfaz;
+
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.*;
+
+public class ClasePrincipal extends JFrame{
+
+	/***********************
+	 * ATRIBUTOS PRIVADOS
+	 * 
+	 ***********************/
+	
+	
+	
+	public ClasePrincipal(){
+		
+		//INICIALIZAR VARIABLES
+		
+		JOptionPane.showMessageDialog(null,"AVISO: TIENE QUE INTRODUCIR EL TAMANYO DE LA MATRIZ!");
+		inicializarInterfaz();
+		
+	}
+	
+	
+	public void inicializarInterfaz(){
+		
+		this.setTitle("CALCULADORA DE MATRICES);");
+		this.setVisible(true);
+		this.setEnabled(true);
+		this.setSize(500,500);
+		this.setJMenuBar(dameBarraMenu()); //crea la barra de menu y la adjunta al jframe
+		this.setContentPane(damePanelPrincipal()); //sirve para el contenido del jframe
+			
+	}
+	
+	private JMenuBar dameBarraMenu(){
+		
+		JMenuBar barra = new JMenuBar();
+		barra.add(getMenuMatrices());
+		barra.add(getMenuOperar());
+		barra.add(getMenuFicheros());
+		return barra;
+		
+	}
+	
+	private JMenu getMenuMatrices(){
+		
+		JMenu matricesMenu = new JMenu("Matrices");
+		matricesMenu.add(getTamanyoMenuItem());
+		matricesMenu.add(getCargarMenuItem());
+		matricesMenu.add(getInicializarMenuItem());
+		return matricesMenu;
+	}
+	
+	private JMenu getMenuOperar(){
+		
+		JMenu operarMenu = new JMenu("Operar");
+		operarMenu.add(getSumaMenuItem());
+		operarMenu.add(getRestaMenuItem());
+		operarMenu.add(getMultiplicacionMenuItem());
+		return operarMenu;
+	}
+	
+	
+	private JMenu getMenuFicheros(){
+		
+		JMenu ficherosMenu = new JMenu("Ficheros");
+		ficherosMenu.add(getLeerMenuItem());
+		ficherosMenu.add(getGuardarMenuItem());
+		ficherosMenu.add(getMDefaultMenuItem());
+		return ficherosMenu;
+	}
+	
+	
+	public static void main(String[] args) {
+		
+		ClasePrincipal f = new ClasePrincipal();
+
+	}
+
+}
