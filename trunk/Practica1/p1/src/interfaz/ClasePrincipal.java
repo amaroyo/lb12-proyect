@@ -54,7 +54,7 @@ public class ClasePrincipal extends JFrame {
 		tm3 = new DefaultTableModel();
 		
 		
-		JOptionPane.showMessageDialog(null,"AVISO: TIENE QUE INTRODUCIR EL TAMAÑO DE LA MATRIZ!");
+		JOptionPane.showMessageDialog(null,"AVISO: TIENE QUE INTRODUCIR EL TAMA„O DE LA MATRIZ!");
 		inicializarInterfaz();
 		
 	}
@@ -360,17 +360,11 @@ public class ClasePrincipal extends JFrame {
 		multiplicaMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e){
 				
-				/*
-				 * 
-				 * 
-				 * 
-				 */
-			//	cargarMenuItem.setEnabled(true);
-				
-				/*
-				 * 
-				 * 
-				 */
+				Matriz m1 = convertirEnMatriz(tm1);
+				Matriz m2 = convertirEnMatriz(tm2);
+				Matriz m3 = new Matriz(filas,columnas);
+				resultado = m3.multiplica(m1, m2);
+				muestraResultado(resultado);
 					
 			}
 		});
@@ -387,17 +381,11 @@ public class ClasePrincipal extends JFrame {
 		restarMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e){
 				
-				/*
-				 * 
-				 * 
-				 * 
-				 */
-			//	cargarMenuItem.setEnabled(true);
-				
-				/*
-				 * 
-				 * 
-				 */
+				Matriz m1 = convertirEnMatriz(tm1);
+				Matriz m2 = convertirEnMatriz(tm2);
+				Matriz m3 = new Matriz(filas,columnas);
+				resultado = m3.resta(m1, m2);
+				muestraResultado(resultado);
 					
 			}
 		});
@@ -494,7 +482,7 @@ public class ClasePrincipal extends JFrame {
 	
 	
 	private JMenuItem getTamanyoMenuItem(){
-		JMenuItem tamanyoItem = new JMenuItem("Fijar Tamaño");
+		JMenuItem tamanyoItem = new JMenuItem("Fijar Tama–o");
 		tamanyoItem.setEnabled(true);
 		tamanyoItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e){
@@ -570,9 +558,9 @@ public class ClasePrincipal extends JFrame {
 	    			filas = Integer.parseInt(s1);
 	    			columnas = Integer.parseInt(s2);
 	    			
-	    			/*m1= new Matriz(filas,columnas);
+	    			m1= new Matriz(filas,columnas);
 		    		m2= new Matriz(filas,columnas);
-		    		resultado = new Matriz(filas,columnas);*/
+		    		resultado = new Matriz(filas,columnas);
 	    			
 	    			panelTabulado.add("Matriz1", damePanelTabla(tm1));
 		    		panelTabulado.add("Matriz2", damePanelTabla(tm2));
