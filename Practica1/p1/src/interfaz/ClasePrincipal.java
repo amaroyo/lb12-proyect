@@ -1,11 +1,14 @@
 package interfaz;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+
+import matriz.Matriz;
 
 public class ClasePrincipal extends JFrame {
 
@@ -21,9 +24,18 @@ public class ClasePrincipal extends JFrame {
 	int filas;
 	int columnas;
 	
+	JTextField botonFil;
+	JTextField botonCol;
+	
+	Matriz m1;
+	Matriz m2;
+	Matriz resultado;
+	
 	DefaultTableModel tm1;
 	DefaultTableModel tm2;
 	DefaultTableModel tm3;
+	
+	JFrame ventanaFijarTamanyo;
 	
 	/************************************************/
 	
@@ -37,7 +49,7 @@ public class ClasePrincipal extends JFrame {
 		tm3 = new DefaultTableModel();
 		
 		
-		JOptionPane.showMessageDialog(null,"AVISO: TIENE QUE INTRODUCIR EL TAMANYO DE LA MATRIZ!");
+		JOptionPane.showMessageDialog(null,"AVISO: TIENE QUE INTRODUCIR EL TAMAÑO DE LA MATRIZ!");
 		inicializarInterfaz();
 		
 	}
@@ -262,18 +274,9 @@ public class ClasePrincipal extends JFrame {
 		defaultSMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e){
 				
-				/*
-				 * 
-				 * 
-				 * 
-				 */
-			//	cargarMenuItem.setEnabled(true);
-				
-				/*
-				 * 
-				 * 
-				 */
-					
+			m1 = new Matriz(1);
+			m2 = new Matriz(2);
+			//	cargarMenuItem.setEnabled(true);			
 			}
 		});
 		
@@ -449,15 +452,15 @@ public class ClasePrincipal extends JFrame {
 	
 	
 	private JMenuItem getTamanyoMenuItem(){
-		JMenuItem tamanyoItem = new JMenuItem("Fijar Tamanyo");
+		JMenuItem tamanyoItem = new JMenuItem("Fijar Tamaño");
 		tamanyoItem.setEnabled(true);
 		tamanyoItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e){
-				JFrame f = new JFrame();
-				f.setVisible(true);
-				f.setEnabled(true);
-				f.setSize(300,100);
-				f.setContentPane(damePanelTamanyo());
+				ventanaFijarTamanyo = new JFrame();
+				ventanaFijarTamanyo.setVisible(true);
+				ventanaFijarTamanyo.setEnabled(true);
+				ventanaFijarTamanyo.setSize(300,100);
+				ventanaFijarTamanyo.setContentPane(damePanelTamanyo());
 				/*
 				 * 
 				 * 
@@ -484,29 +487,52 @@ public class ClasePrincipal extends JFrame {
 		
 		JLabel lab1 = new JLabel("Filas");
 		panelCentro.add(lab1);
-		JTextField f = new JTextField();
+		botonFil = new JTextField();
 		//f.setSize(50, 10);
-		f.setEnabled(true);
-		f.setVisible(true);
+		botonFil.setEnabled(true);
+		botonFil.setVisible(true);
 		//f.setEditable(true);
-		f.setColumns(2);
-		f.validate();
-		panelCentro.add(f);
+		botonFil.setColumns(2);
+		botonFil.validate();
+		panelCentro.add(botonFil);
 		
 		JLabel lab2 = new JLabel("Columnas");
 		panelCentro.add(lab2);
-		JTextField c = new JTextField();
+		botonCol = new JTextField();
 		//f.setSize(50, 10);
-		c.setEnabled(true);
-		c.setVisible(true);
+		botonCol.setEnabled(true);
+		botonCol.setVisible(true);
 		//f.setEditable(true);
-		c.setColumns(2);
-		c.validate();
-		panelCentro.add(c);
+		botonCol.setColumns(2);
+		botonCol.validate();
+		panelCentro.add(botonCol);
 		
 		
 		JButton botonAceptar = new JButton("Aceptar");
 	    panelCentro.add(botonAceptar);
+	    botonAceptar.addActionListener(new ActionListener()
+	    	{ public void actionPerformed(ActionEvent e){
+	    		String s1= botonFil.getText();
+	    		String s2= botonCol.getText();
+	    		//Recordar validar los enteros!!!!
+	    		if ((s1!="")&&(s2!="")){
+	    			filas = Integer.parseInt(s1);
+	    			columnas = Integer.parseInt(s2);
+	    			
+	    			/*m1= new Matriz(filas,columnas);
+		    		m2= new Matriz(filas,columnas);
+		    		resultado = new Matriz(filas,columnas);*/
+	    			
+	    			panelTabulado.add("Matriz1", damePanelTabla(tm1));
+		    		panelTabulado.add("Matriz2", damePanelTabla(tm2));
+		    		panelTabulado.add("Resultado", damePanelTabla(tm3));
+		    		
+	    		} else JOptionPane.showMessageDialog(null,"AVISO: Introducir filas y columnas!");
+	    		
+	    		
+	    	}
+	    	
+	    	});
 		
 		
 		panelTamanyo.validate();
@@ -514,6 +540,23 @@ public class ClasePrincipal extends JFrame {
 	
 		
 	}
+	
+	private JPanel damePanelTabla(DefaultTableModel tm) {
+		JPanel pAux = new JPanel();
+		pAux.setLayout(new BorderLayout());
+				
+		for (int i=0;i <columnas;i++)
+			tm.addColumn(new String[i]);
+		
+		for (int i =0; i<filas;i++)
+			tm.addRow(new String[columnas]);
+		
+		JTable tabla = new JTable(tm);
+		pAux.add("Center", tabla);
+		pAux.validate();
+		return pAux;	
+	}
+	
 	
 	public static void main(String[] args) {
 		
