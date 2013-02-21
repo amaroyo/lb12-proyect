@@ -456,7 +456,7 @@ public class ClasePrincipal extends JFrame {
 				JFrame f = new JFrame();
 				f.setVisible(true);
 				f.setEnabled(true);
-				f.setSize(300,300);
+				f.setSize(300,100);
 				f.setContentPane(damePanelTamanyo());
 				/*
 				 * 
@@ -482,8 +482,8 @@ public class ClasePrincipal extends JFrame {
 		JPanel panelCentro = new JPanel();
 		panelTamanyo.add("Center",panelCentro);
 		
-		JLabel lab = new JLabel("Filas");
-		panelCentro.add(lab);
+		JLabel lab1 = new JLabel("Filas");
+		panelCentro.add(lab1);
 		JTextField f = new JTextField();
 		//f.setSize(50, 10);
 		f.setEnabled(true);
@@ -492,6 +492,21 @@ public class ClasePrincipal extends JFrame {
 		f.setColumns(2);
 		f.validate();
 		panelCentro.add(f);
+		
+		JLabel lab2 = new JLabel("Columnas");
+		panelCentro.add(lab2);
+		JTextField c = new JTextField();
+		//f.setSize(50, 10);
+		c.setEnabled(true);
+		c.setVisible(true);
+		//f.setEditable(true);
+		c.setColumns(2);
+		c.validate();
+		panelCentro.add(c);
+		
+		
+		JButton botonAceptar = new JButton("Aceptar");
+	    panelCentro.add(botonAceptar);
 		
 		
 		panelTamanyo.validate();
