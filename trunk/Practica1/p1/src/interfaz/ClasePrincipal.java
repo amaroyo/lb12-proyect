@@ -37,13 +37,18 @@ public class ClasePrincipal extends JFrame {
 	
 	JFrame ventanaFijarTamanyo;
 	
+	JPanel panelDeMatrices;
+	
+	boolean operacionesPermitidas;
+	
 	/************************************************/
 	
 	public ClasePrincipal(){
 		
 		//INICIALIZAR VARIABLES
-		filas = 0;
-		columnas = 0;
+		filas = 5;
+		columnas = 5;
+		operacionesPermitidas = false;
 		tm1 = new DefaultTableModel();
 		tm2 = new DefaultTableModel();
 		tm3 = new DefaultTableModel();
@@ -142,7 +147,11 @@ public class ClasePrincipal extends JFrame {
 	
 	private JMenuItem dameGuardarResultado(){
 		JMenuItem guardarRMenuItem = new JMenuItem("Guardar Matriz Resultado");
-		guardarRMenuItem.setEnabled(false);
+	
+		if(!operacionesPermitidas) {
+			guardarRMenuItem.setEnabled(false);
+		}
+		
 		guardarRMenuItem.setVisible(true);
 		guardarRMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e){
@@ -274,13 +283,37 @@ public class ClasePrincipal extends JFrame {
 		defaultSMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e){
 				
+			panelTabulado.add("Matriz1", damePanelTabla(tm1));
+	    	panelTabulado.add("Matriz2", damePanelTabla(tm2));
+	    	panelTabulado.add("Resultado", damePanelTabla(tm3));	
+				
 			m1 = new Matriz(1);
 			m2 = new Matriz(2);
-			//	cargarMenuItem.setEnabled(true);			
+			escribirMatrizA(m1);
+			escribirMatrizB(m2);
+			operacionesPermitidas = true;
+			
 			}
 		});
 		
+		defaultSMenuItem.validate();
 		return defaultSMenuItem;
+	}
+	
+	private void escribirMatrizA(Matriz m){
+		
+		for (int i = 0; i < filas; i++)
+			for (int j = 0; j < columnas; j++)
+				tm1.setValueAt(m.getIJ(i, j), i, j);
+		
+	}
+	
+	private void escribirMatrizB(Matriz m){
+		
+		for (int i = 0; i < filas; i++)
+			for (int j = 0; j < columnas; j++)
+				tm2.setValueAt(m.getIJ(i, j), i, j);
+		
 	}
 	
 	private JMenu getMultiplicacionMenuItem(){
@@ -322,7 +355,7 @@ public class ClasePrincipal extends JFrame {
 	
 	private JMenuItem dameMultiplicaNormal(){
 		JMenuItem multiplicaMenuItem = new JMenuItem("Multiplicacion Normal");
-		multiplicaMenuItem.setEnabled(false);
+		//multiplicaMenuItem.setEnabled(false);
 		multiplicaMenuItem.setVisible(true);
 		multiplicaMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e){
@@ -349,7 +382,7 @@ public class ClasePrincipal extends JFrame {
 	private JMenuItem getRestaMenuItem(){
 		
 		JMenuItem restarMenuItem = new JMenuItem("Restar");
-		restarMenuItem.setEnabled(false);
+		//restarMenuItem.setEnabled(false);
 		restarMenuItem.setVisible(true);
 		restarMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e){
@@ -375,28 +408,37 @@ public class ClasePrincipal extends JFrame {
 	private JMenuItem getSumaMenuItem(){
 		
 		JMenuItem sumarMenuItem = new JMenuItem("Sumar");
-		sumarMenuItem.setEnabled(false);
+		//sumarMenuItem.setEnabled(false);
 		sumarMenuItem.setVisible(true);
 		sumarMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e){
 				
-				/*
-				 * 
-				 * 
-				 * 
-				 */
-			//	cargarMenuItem.setEnabled(true);
-				
-				/*
-				 * 
-				 * 
-				 */
+				Matriz m1 = convertirEnMatriz(tm1);
+				Matriz m2 = convertirEnMatriz(tm2);
+				Matriz m3 = new Matriz(filas,columnas);
+				resultado = m3.suma(m1, m2);
+				muestraResultado(resultado);
+				 
 					
 			}
 		});
 		return sumarMenuItem;
 	}
 	
+	private void muestraResultado(Matriz m){
+		for (int i = 0; i < filas; i++)
+			for (int j = 0; j < columnas; j++)
+				tm3.setValueAt(m.getIJ(i, j), i, j);
+	}
+	
+	private Matriz convertirEnMatriz(DefaultTableModel tm){
+		Matriz resultado = new Matriz(filas,columnas);
+		for (int i = 0; i<filas; i++)
+			for (int j = 0; j<columnas; j++)
+				resultado.setIJ(i, j, (Integer) tm.getValueAt(i, j));
+		
+		return resultado;
+	}
 	
 	private JMenuItem getInicializarMenuItem(){
 		
@@ -456,11 +498,18 @@ public class ClasePrincipal extends JFrame {
 		tamanyoItem.setEnabled(true);
 		tamanyoItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e){
+				
+				if(panelDeMatrices != null){
+					ventanaFijarTamanyo.remove(panelDeMatrices);
+					ventanaFijarTamanyo.validate();
+				}
 				ventanaFijarTamanyo = new JFrame();
 				ventanaFijarTamanyo.setVisible(true);
 				ventanaFijarTamanyo.setEnabled(true);
 				ventanaFijarTamanyo.setSize(300,100);
-				ventanaFijarTamanyo.setContentPane(damePanelTamanyo());
+				
+				panelDeMatrices = damePanelTamanyo();
+				ventanaFijarTamanyo.setContentPane(panelDeMatrices);
 				/*
 				 * 
 				 * 
@@ -514,7 +563,9 @@ public class ClasePrincipal extends JFrame {
 	    	{ public void actionPerformed(ActionEvent e){
 	    		String s1= botonFil.getText();
 	    		String s2= botonCol.getText();
+	    		
 	    		//Recordar validar los enteros!!!!
+	    		
 	    		if ((s1!="")&&(s2!="")){
 	    			filas = Integer.parseInt(s1);
 	    			columnas = Integer.parseInt(s2);
@@ -553,10 +604,17 @@ public class ClasePrincipal extends JFrame {
 		
 		JTable tabla = new JTable(tm);
 		pAux.add("Center", tabla);
+		inicializarMatrices(tm);
 		pAux.validate();
 		return pAux;	
 	}
 	
+	
+	private void inicializarMatrices(DefaultTableModel tm){
+		for (int i = 0; i < filas; i++)
+			for (int j = 0; j < columnas; j++)
+				tm.setValueAt(0, i, j);
+	}
 	
 	public static void main(String[] args) {
 		
