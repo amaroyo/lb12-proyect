@@ -151,11 +151,11 @@ public class ClasePrincipal extends JFrame {
 		JMenuItem guardarRMenuItem = new JMenuItem("Guardar Matriz Resultado");
 	
 
-		if(!operacionesPermitidas) {
+	/*	if(!operacionesPermitidas) {
 			guardarRMenuItem.setEnabled(false);
 		}
 		else guardarRMenuItem.setEnabled(true);
-		
+		*/
 		
 		
 		guardarRMenuItem.setVisible(true);
@@ -183,7 +183,7 @@ public class ClasePrincipal extends JFrame {
 	
 	private JMenuItem dameGuardarMatrizB(){
 		JMenuItem guardarBMenuItem = new JMenuItem("Guardar Matriz B");
-		guardarBMenuItem.setEnabled(false);
+		//guardarBMenuItem.setEnabled(false);
 		guardarBMenuItem.setVisible(true);
 		guardarBMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e){
@@ -208,7 +208,7 @@ public class ClasePrincipal extends JFrame {
 	
 	private JMenuItem dameGuardarMatrizA(){
 		JMenuItem guardarAMenuItem = new JMenuItem("Guardar Matriz A");
-		guardarAMenuItem.setEnabled(false);
+	//	guardarAMenuItem.setEnabled(false);
 		guardarAMenuItem.setVisible(true);
 		guardarAMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e){
@@ -233,7 +233,7 @@ public class ClasePrincipal extends JFrame {
 	
 	private JMenuItem dameCargarMatrizB(){
 		JMenuItem cargaBMenuItem = new JMenuItem("Cargar Matriz B");
-		cargaBMenuItem.setEnabled(false);
+		cargaBMenuItem.setEnabled(true);
 		cargaBMenuItem.setVisible(true);
 		cargaBMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e){
@@ -258,7 +258,7 @@ public class ClasePrincipal extends JFrame {
 	
 	private JMenuItem dameCargarMatrizA(){
 		JMenuItem cargaAMenuItem = new JMenuItem("Cargar Matriz A");
-		cargaAMenuItem.setEnabled(false);
+		cargaAMenuItem.setEnabled(true);
 		cargaAMenuItem.setVisible(true);
 		cargaAMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e){
