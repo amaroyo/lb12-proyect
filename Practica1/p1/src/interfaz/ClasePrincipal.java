@@ -39,6 +39,8 @@ public class ClasePrincipal extends JFrame {
 	
 	JPanel panelDeMatrices;
 	
+	JMenuBar barraPrincipal;
+	
 	boolean operacionesPermitidas;
 	
 	/************************************************/
@@ -84,13 +86,13 @@ public class ClasePrincipal extends JFrame {
 	
 	private JMenuBar dameBarraMenu(){
 		
-		JMenuBar barra = new JMenuBar();
-		barra.add(getMenuMatrices());
-		barra.add(getMenuOperar());
-		barra.add(getMenuFicheros());
-		barra.setVisible(true);
-		barra.setEnabled(true);
-		return barra;
+		barraPrincipal = new JMenuBar();
+		barraPrincipal.add(getMenuMatrices());
+		barraPrincipal.add(getMenuOperar());
+		barraPrincipal.add(getMenuFicheros());
+		barraPrincipal.setVisible(true);
+		barraPrincipal.setEnabled(true);
+		return barraPrincipal;
 		
 	}
 	
@@ -148,9 +150,13 @@ public class ClasePrincipal extends JFrame {
 	private JMenuItem dameGuardarResultado(){
 		JMenuItem guardarRMenuItem = new JMenuItem("Guardar Matriz Resultado");
 	
+
 		if(!operacionesPermitidas) {
 			guardarRMenuItem.setEnabled(false);
 		}
+		else guardarRMenuItem.setEnabled(true);
+		
+		
 		
 		guardarRMenuItem.setVisible(true);
 		guardarRMenuItem.addActionListener(new ActionListener() {
@@ -293,6 +299,9 @@ public class ClasePrincipal extends JFrame {
 			escribirMatrizB(m2);
 			operacionesPermitidas = true;
 			
+			barraPrincipal.validate();
+			
+			
 			}
 		});
 		
@@ -431,22 +440,15 @@ public class ClasePrincipal extends JFrame {
 	private JMenuItem getInicializarMenuItem(){
 		
 		JMenuItem inicializarMenuItem = new JMenuItem("Inicializar");
-		inicializarMenuItem.setEnabled(false);
+		//inicializarMenuItem.setEnabled(false);
 		inicializarMenuItem.setVisible(true);
 		inicializarMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e){
 				
-				/*
-				 * 
-				 * 
-				 * 
-				 */
-			//	cargarMenuItem.setEnabled(true);
+				inicializarMatrices(tm1);
+				inicializarMatrices(tm2);
+				inicializarMatrices(tm3);
 				
-				/*
-				 * 
-				 * 
-				 */
 					
 			}
 		});
