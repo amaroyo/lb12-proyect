@@ -555,16 +555,26 @@ public class ClasePrincipal extends JFrame {
 	    		//Recordar validar los enteros!!!!
 	    		
 	    		if ((s1!="")&&(s2!="")){
+	    		  try{	
 	    			filas = Integer.parseInt(s1);
 	    			columnas = Integer.parseInt(s2);
+	    		  }
+	    		  catch (NumberFormatException ex){
+	    			  if(ex != null){
+	    				  JOptionPane.showMessageDialog(null,"AVISO: TIENES QUE INTRODUCIR NUMEROS!");
+	    			  }
+	    		  }  
+	    		
+	    		   if (filas > 0 && filas <=20 && columnas > 0 && columnas <= 20){	
+	    				m1= new Matriz(filas,columnas);
+		    			m2= new Matriz(filas,columnas);
+		    			resultado = new Matriz(filas,columnas);
 	    			
-	    			m1= new Matriz(filas,columnas);
-		    		m2= new Matriz(filas,columnas);
-		    		resultado = new Matriz(filas,columnas);
-	    			
-	    			panelTabulado.add("Matriz1", damePanelTabla(tm1));
-		    		panelTabulado.add("Matriz2", damePanelTabla(tm2));
-		    		panelTabulado.add("Resultado", damePanelTabla(tm3));
+	    				panelTabulado.add("Matriz1", damePanelTabla(tm1));
+		    			panelTabulado.add("Matriz2", damePanelTabla(tm2));
+		    			panelTabulado.add("Resultado", damePanelTabla(tm3));
+	    		   }
+	    		   else JOptionPane.showMessageDialog(null,"AVISO: Filas o columnas fuera de rango, solo entre 1 y 20!");
 		    		
 	    		} else JOptionPane.showMessageDialog(null,"AVISO: Introducir filas y columnas!");
 	    		
