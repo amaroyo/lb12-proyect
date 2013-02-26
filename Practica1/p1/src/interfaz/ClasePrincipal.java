@@ -47,6 +47,8 @@ public class ClasePrincipal extends JFrame {
 	JTable tablaR;
 	
 	JMenuBar barraPrincipal;
+	
+	String[] sColumnas;
 
 	boolean operacionesPermitidas;
 
@@ -58,6 +60,8 @@ public class ClasePrincipal extends JFrame {
 		filas = 5;
 		columnas = 5;
 		operacionesPermitidas = false;
+		
+		sColumnas = new String[columnas];
 
 		
 		pAuxA = new JPanel();
@@ -293,6 +297,8 @@ public class ClasePrincipal extends JFrame {
 		defaultSMenuItem.addActionListener(new ActionListener() { // Implementamos
 																	// el oyente
 					public void actionPerformed(ActionEvent e) {
+						
+						
 
 						panelTabulado.add("Matriz1", damePanelTabla(tm1, pAuxA,tablaA));
 						panelTabulado.add("Matriz2", damePanelTabla(tm2, pAuxB,tablaB));
@@ -570,7 +576,10 @@ public class ClasePrincipal extends JFrame {
 						m2 = new Matriz(filas, columnas);
 						resultado = new Matriz(filas, columnas);
 
-
+						tm1 = new DefaultTableModel();
+						tm2 = new DefaultTableModel();
+						tm3 = new DefaultTableModel();
+						
 						panelTabulado.add("Matriz1", damePanelTabla(tm1, pAuxA, tablaA));
 						panelTabulado.add("Matriz2", damePanelTabla(tm2, pAuxB, tablaB));
 						panelTabulado.add("Resultado", damePanelTabla(tm3, pAuxR, tablaR));
@@ -604,7 +613,7 @@ public class ClasePrincipal extends JFrame {
 			tm.addColumn("i");
 		
 		for (int i = 0; i < filas; i++)
-			tm.addRow(new String[columnas]);
+			tm.addRow(sColumnas);
 		
 	
 
