@@ -346,7 +346,7 @@ public class ClasePrincipal extends JFrame {
 		            FileReader FR = null;
 		            //BufferedReader BR = null;
 		            Scanner sc = null;
-		            tm1 = new DefaultTableModel();
+		           
 
 		            try {
 		                //abro el fichero y creo un BufferedReader para hacer
@@ -373,12 +373,14 @@ public class ClasePrincipal extends JFrame {
 		                        	filas = Integer.parseInt(s);
 		                        	s = sc.nextLine();
 		                        	columnas = Integer.parseInt(s);
+		                        	tm1 = new DefaultTableModel();
+		                        	panelTabulado.add("Matriz1", damePanelTabla(tm1));
 		                        	while(sc.hasNext()){
 		                        		s = sc.nextLine();
 		                        		procesalinea(s,linea,tm1);
 		                        		linea++;
 		                        	}
-		                        	panelTabulado.add("Matriz1", damePanelTabla(tm1));
+		                        	
 		                        }
 		                        
 		                       catch (NumberFormatException ex) {
@@ -826,6 +828,7 @@ public class ClasePrincipal extends JFrame {
 				if (numNeg) numero = -numero;
 				tm.setValueAt(numero, fila, i);
 				numNeg = false;
+				num="";
 				i++;
 			}
 		}
