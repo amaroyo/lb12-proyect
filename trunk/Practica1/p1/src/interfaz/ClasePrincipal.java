@@ -17,86 +17,49 @@ public class ClasePrincipal extends JFrame {
 	 * 
 	 ***********************/
 
-	JPanel panelPrincipal;
+	private JPanel panelPrincipal;
 
-	JTabbedPane panelTabulado;
+	private JTabbedPane panelTabulado;
 
-	int filas;
-	int columnas;
+	private int filas;
+	private int columnas;
 
-	JTextField botonFil;
-	JTextField botonCol;
+	private JTextField botonFil;
+	private JTextField botonCol;
 
-	Matriz m1;
-	Matriz m2;
-	Matriz resultado;
+	private Matriz m1;
+	private Matriz m2;
+	private Matriz resultado;
 
-	DefaultTableModel tm1;
-	DefaultTableModel tm2;
-	DefaultTableModel tm3;
+	private DefaultTableModel tm1;
+	private DefaultTableModel tm2;
+	private DefaultTableModel tm3;
 
-	JFrame ventanaFijarTamanyo;
+	private JFrame ventanaFijarTamanyo;
 
-	JPanel panelDeMatrices;
-	JPanel pAuxA;
-	JPanel pAuxB;
-	JPanel pAuxR;
-	
-	JTable tablaA;
-	JTable tablaB;
-	JTable tablaR;
-	
-	JMenuBar barraPrincipal;
-	
-	String[] sColumnas;
-
-	boolean operacionesPermitidas;
-
-	/************************************************/
+	/******************************************************************************************************/
 
 	public ClasePrincipal() {
-
-		// INICIALIZAR VARIABLES
-		filas = 5;
-		columnas = 5;
-		operacionesPermitidas = false;
 		
-		sColumnas = new String[columnas];
-
-		
-		pAuxA = new JPanel();
-		pAuxB = new JPanel();
-		pAuxR = new JPanel();
-		
-		tm1 = new DefaultTableModel();
-		tm2 = new DefaultTableModel();
-		tm3 = new DefaultTableModel();
-		
-		tablaA = new JTable(tm1);
-		tablaB = new JTable(tm2);
-		tablaR = new JTable(tm3);
-		
-
-		JOptionPane.showMessageDialog(null,
-				"AVISO: TIENE QUE INTRODUCIR EL TAMA„O DE LA MATRIZ!");
+		JOptionPane.showMessageDialog(null, "AVISO: TIENE QUE INTRODUCIR EL TAMANYO DE LA MATRIZ!");
 		inicializarInterfaz();
 
 	}
 
+	/******************************************************************************************************/
 	public void inicializarInterfaz() {
 
 		this.setTitle("CALCULADORA DE MATRICES");
 		this.setVisible(true);
 		this.setEnabled(true);
 		this.setSize(500, 500);
-		this.setJMenuBar(dameBarraMenu()); // crea la barra de menu y la adjunta
-											// al jframe
-		this.setContentPane(damePanelPrincipal()); // sirve para el contenido
-													// del jframe
+		this.setJMenuBar(dameBarraMenu()); // crea la barra de menu y la adjunta al jframe
+		this.setContentPane(damePanelPrincipal()); // sirve para el contenido del jframe
 		this.validate();
 
 	}
-
+	
+	/******************************************************************************************************/
 	private JPanel damePanelPrincipal() {
 
 		panelPrincipal = new JPanel();
@@ -107,9 +70,10 @@ public class ClasePrincipal extends JFrame {
 		return panelPrincipal;
 	}
 
+	/******************************************************************************************************/
 	private JMenuBar dameBarraMenu() {
 
-		barraPrincipal = new JMenuBar();
+		JMenuBar barraPrincipal = new JMenuBar();
 		barraPrincipal.add(getMenuMatrices());
 		barraPrincipal.add(getMenuOperar());
 		barraPrincipal.add(getMenuFicheros());
@@ -119,6 +83,7 @@ public class ClasePrincipal extends JFrame {
 
 	}
 
+	/******************************************************************************************************/
 	private JMenu getMenuMatrices() {
 
 		JMenu matricesMenu = new JMenu("Matrices");
@@ -128,6 +93,7 @@ public class ClasePrincipal extends JFrame {
 		return matricesMenu;
 	}
 
+	/******************************************************************************************************/
 	private JMenu getMenuOperar() {
 
 		JMenu operarMenu = new JMenu("Operar");
@@ -137,6 +103,7 @@ public class ClasePrincipal extends JFrame {
 		return operarMenu;
 	}
 
+	/******************************************************************************************************/
 	private JMenu getMenuFicheros() {
 
 		JMenu ficherosMenu = new JMenu("Ficheros");
@@ -146,6 +113,7 @@ public class ClasePrincipal extends JFrame {
 		return ficherosMenu;
 	}
 
+	/******************************************************************************************************/
 	private JMenu getGuardarMenuItem() {
 
 		JMenu guardarMenu = new JMenu("Guardar");
@@ -157,6 +125,7 @@ public class ClasePrincipal extends JFrame {
 		return guardarMenu;
 	}
 
+	/******************************************************************************************************/
 	private JMenu getLeerMenuItem() {
 
 		JMenu multiplicarMenu = new JMenu("Cargar");
@@ -167,13 +136,9 @@ public class ClasePrincipal extends JFrame {
 		return multiplicarMenu;
 	}
 
+	/******************************************************************************************************/
 	private JMenuItem dameGuardarResultado() {
 		JMenuItem guardarRMenuItem = new JMenuItem("Guardar Matriz Resultado");
-
-		/*
-		 * if(!operacionesPermitidas) { guardarRMenuItem.setEnabled(false); }
-		 * else guardarRMenuItem.setEnabled(true);
-		 */
 
 		guardarRMenuItem.setVisible(true);
 		guardarRMenuItem.addActionListener(new ActionListener() {
@@ -197,9 +162,9 @@ public class ClasePrincipal extends JFrame {
 		return guardarRMenuItem;
 	}
 
+	/******************************************************************************************************/
 	private JMenuItem dameGuardarMatrizB() {
 		JMenuItem guardarBMenuItem = new JMenuItem("Guardar Matriz B");
-		// guardarBMenuItem.setEnabled(false);
 		guardarBMenuItem.setVisible(true);
 		guardarBMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -222,9 +187,9 @@ public class ClasePrincipal extends JFrame {
 		return guardarBMenuItem;
 	}
 
+	/******************************************************************************************************/
 	private JMenuItem dameGuardarMatrizA() {
 		JMenuItem guardarAMenuItem = new JMenuItem("Guardar Matriz A");
-		// guardarAMenuItem.setEnabled(false);
 		guardarAMenuItem.setVisible(true);
 		guardarAMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -247,6 +212,7 @@ public class ClasePrincipal extends JFrame {
 		return guardarAMenuItem;
 	}
 
+	/******************************************************************************************************/
 	/* Leer de Ficheros */
 
 	private JMenuItem dameCargarMatrizB() {
@@ -264,6 +230,7 @@ public class ClasePrincipal extends JFrame {
 		return cargaBMenuItem;
 	}
 
+	/******************************************************************************************************/
 	private JMenuItem dameCargarMatrizA() {
 		JMenuItem cargaAMenuItem = new JMenuItem("Cargar Matriz A");
 		cargaAMenuItem.setEnabled(true);
@@ -288,31 +255,42 @@ public class ClasePrincipal extends JFrame {
 
 		return cargaAMenuItem;
 	}
+	
+	/******************************************************************************************************/
+	/**
+	 * 
+	 * @Matriz
+	 */
 
 	private JMenuItem getDefaultMenuItem() {
 		JMenuItem defaultSMenuItem = new JMenuItem("Matrices por defecto");
 		defaultSMenuItem.setEnabled(true);
 		defaultSMenuItem.setVisible(true);
 
-		defaultSMenuItem.addActionListener(new ActionListener() { // Implementamos
-																	// el oyente
+		defaultSMenuItem.addActionListener(new ActionListener() { // Implementamos el oyente
 					public void actionPerformed(ActionEvent e) {
 						
+						if ((tm1 != null) || (tm2 != null) || (tm3 != null)) 
+							panelTabulado.removeAll();
 						
-
-						panelTabulado.add("Matriz1", damePanelTabla(tm1, pAuxA,tablaA));
-						panelTabulado.add("Matriz2", damePanelTabla(tm2, pAuxB,tablaB));
-						panelTabulado.add("Resultado", damePanelTabla(tm3, pAuxR,tablaR));
-
 						m1 = new Matriz(1);
 						m2 = new Matriz(2);
+						
+						filas = 5;
+						columnas = 5;
+						
+						tm1 = new DefaultTableModel();
+						tm2 = new DefaultTableModel();
+						tm3 = new DefaultTableModel();
+						
+						panelTabulado.add("Matriz1", damePanelTabla(tm1));
+						panelTabulado.add("Matriz2", damePanelTabla(tm2));
+						panelTabulado.add("Resultado", damePanelTabla(tm3));
+						panelTabulado.validate();
+						
 						escribirMatriz(m1, tm1);
 						escribirMatriz(m2, tm2);
-						// escribirMatrizB(m2);
-						operacionesPermitidas = true;
-
-						barraPrincipal.validate();
-
+						
 					}
 				});
 
@@ -320,6 +298,7 @@ public class ClasePrincipal extends JFrame {
 		return defaultSMenuItem;
 	}
 
+	/******************************************************************************************************/
 	private void escribirMatriz(Matriz m, DefaultTableModel tm) {
 
 		for (int i = 0; i < filas; i++)
@@ -328,15 +307,7 @@ public class ClasePrincipal extends JFrame {
 
 	}
 
-	/*
-	 * private void escribirMatrizB(Matriz m){
-	 * 
-	 * for (int i = 0; i < filas; i++) for (int j = 0; j < columnas; j++)
-	 * tm2.setValueAt(m.getIJ(i, j), i, j);
-	 * 
-	 * }
-	 */
-
+	/******************************************************************************************************/
 	private JMenu getMultiplicacionMenuItem() {
 
 		JMenu multiplicarMenu = new JMenu("Multiplicar");
@@ -347,6 +318,7 @@ public class ClasePrincipal extends JFrame {
 		return multiplicarMenu;
 	}
 
+	/******************************************************************************************************/
 	private JMenuItem dameMultiplicaStrassen() {
 		JMenuItem multiplicaSMenuItem = new JMenuItem("Multiplicacion Strassen");
 		multiplicaSMenuItem.setEnabled(false);
@@ -372,9 +344,9 @@ public class ClasePrincipal extends JFrame {
 		return multiplicaSMenuItem;
 	}
 
+	/******************************************************************************************************/
 	private JMenuItem dameMultiplicaNormal() {
 		JMenuItem multiplicaMenuItem = new JMenuItem("Multiplicacion Normal");
-		// multiplicaMenuItem.setEnabled(false);
 		multiplicaMenuItem.setVisible(true);
 		multiplicaMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -391,10 +363,10 @@ public class ClasePrincipal extends JFrame {
 		return multiplicaMenuItem;
 	}
 
+	/******************************************************************************************************/
 	private JMenuItem getRestaMenuItem() {
 
 		JMenuItem restarMenuItem = new JMenuItem("Restar");
-		// restarMenuItem.setEnabled(false);
 		restarMenuItem.setVisible(true);
 		restarMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -410,10 +382,10 @@ public class ClasePrincipal extends JFrame {
 		return restarMenuItem;
 	}
 
+	/******************************************************************************************************/
 	private JMenuItem getSumaMenuItem() {
 
 		JMenuItem sumarMenuItem = new JMenuItem("Sumar");
-		// sumarMenuItem.setEnabled(false);
 		sumarMenuItem.setVisible(true);
 		sumarMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -429,12 +401,14 @@ public class ClasePrincipal extends JFrame {
 		return sumarMenuItem;
 	}
 
+	/******************************************************************************************************/
 	private void muestraResultado(Matriz m) {
 		for (int i = 0; i < filas; i++)
 			for (int j = 0; j < columnas; j++)
 				tm3.setValueAt(m.getIJ(i, j), i, j);
 	}
 
+	/******************************************************************************************************/
 	private Matriz convertirEnMatriz(DefaultTableModel tm) {
 		Matriz resultado = new Matriz(filas, columnas);
 		for (int i = 0; i < filas; i++)
@@ -444,23 +418,25 @@ public class ClasePrincipal extends JFrame {
 		return resultado;
 	}
 
+	/******************************************************************************************************/
 	private JMenuItem getInicializarMenuItem() {
 
 		JMenuItem inicializarMenuItem = new JMenuItem("Inicializar");
-		// inicializarMenuItem.setEnabled(false);
 		inicializarMenuItem.setVisible(true);
 		inicializarMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
+				
+				if ((tm1 != null) && (tm2!= null) && (tm3!= null)){
 				inicializarMatrices(tm1);
 				inicializarMatrices(tm2);
 				inicializarMatrices(tm3);
-
+				}
 			}
 		});
 		return inicializarMenuItem;
 	}
 
+	/******************************************************************************************************/
 	private JMenuItem getCargarMenuItem() {
 
 		JMenuItem cargarMenuItem = new JMenuItem("Cargar Tablas");
@@ -486,23 +462,19 @@ public class ClasePrincipal extends JFrame {
 		return cargarMenuItem;
 	}
 
+	/******************************************************************************************************/	
 	private JMenuItem getTamanyoMenuItem() {
-		JMenuItem tamanyoItem = new JMenuItem("Fijar Tama–o");
+		
+		JMenuItem tamanyoItem = new JMenuItem("Fijar Tamanyo");
 		tamanyoItem.setEnabled(true);
 		tamanyoItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				if (panelDeMatrices != null) {
-					ventanaFijarTamanyo.remove(panelDeMatrices);
-					ventanaFijarTamanyo.validate();
-				}
 				ventanaFijarTamanyo = new JFrame();
 				ventanaFijarTamanyo.setVisible(true);
 				ventanaFijarTamanyo.setEnabled(true);
 				ventanaFijarTamanyo.setSize(300, 100);
-
-				panelDeMatrices = damePanelTamanyo();
-				ventanaFijarTamanyo.setContentPane(panelDeMatrices);
+				ventanaFijarTamanyo.setContentPane(damePanelTamanyo());
 				/*
 				 * 
 				 * 
@@ -519,22 +491,25 @@ public class ClasePrincipal extends JFrame {
 		});
 		return tamanyoItem;
 	}
+	
+	/******************************************************************************************************/
+	/**
+	 * 
+	 * @Matriz
+	 */
 
 	private JPanel damePanelTamanyo() {
-		JPanel panelTamanyo = new JPanel();
+	    JPanel panelTamanyo = new JPanel();
 		panelTamanyo.setLayout(new BorderLayout());
-		panelTamanyo.add("North", new JLabel(
-				"Introduce las filas y las columnas"));
+		panelTamanyo.add("North", new JLabel("Introduce las filas y las columnas"));
 		JPanel panelCentro = new JPanel();
 		panelTamanyo.add("Center", panelCentro);
 
 		JLabel lab1 = new JLabel("Filas");
 		panelCentro.add(lab1);
 		botonFil = new JTextField();
-		// f.setSize(50, 10);
 		botonFil.setEnabled(true);
 		botonFil.setVisible(true);
-		// f.setEditable(true);
 		botonFil.setColumns(2);
 		botonFil.validate();
 		panelCentro.add(botonFil);
@@ -542,10 +517,8 @@ public class ClasePrincipal extends JFrame {
 		JLabel lab2 = new JLabel("Columnas");
 		panelCentro.add(lab2);
 		botonCol = new JTextField();
-		// f.setSize(50, 10);
 		botonCol.setEnabled(true);
 		botonCol.setVisible(true);
-		// f.setEditable(true);
 		botonCol.setColumns(2);
 		botonCol.validate();
 		panelCentro.add(botonCol);
@@ -554,10 +527,12 @@ public class ClasePrincipal extends JFrame {
 		panelCentro.add(botonAceptar);
 		botonAceptar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
+				if ((tm1 != null) || (tm2 != null) || (tm3 != null)) 
+					panelTabulado.removeAll();
+				
 				String s1 = botonFil.getText();
 				String s2 = botonCol.getText();
-
-				// Recordar validar los enteros!!!!
 
 				if ((s1 != "") && (s2 != "")) {
 					try {
@@ -565,8 +540,7 @@ public class ClasePrincipal extends JFrame {
 						columnas = Integer.parseInt(s2);
 					} catch (NumberFormatException ex) {
 						if (ex != null) {
-							JOptionPane.showMessageDialog(null,
-									"AVISO: TIENES QUE INTRODUCIR NUMEROS!");
+							JOptionPane.showMessageDialog(null, "AVISO: TIENES QUE INTRODUCIR NUMEROS!");
 						}
 					}
 
@@ -575,65 +549,74 @@ public class ClasePrincipal extends JFrame {
 						m1 = new Matriz(filas, columnas);
 						m2 = new Matriz(filas, columnas);
 						resultado = new Matriz(filas, columnas);
-
+						
 						tm1 = new DefaultTableModel();
 						tm2 = new DefaultTableModel();
 						tm3 = new DefaultTableModel();
 						
-						panelTabulado.add("Matriz1", damePanelTabla(tm1, pAuxA, tablaA));
-						panelTabulado.add("Matriz2", damePanelTabla(tm2, pAuxB, tablaB));
-						panelTabulado.add("Resultado", damePanelTabla(tm3, pAuxR, tablaR));
+						panelTabulado.add("Matriz1", damePanelTabla(tm1));
+						panelTabulado.add("Matriz2", damePanelTabla(tm2));
+						panelTabulado.add("Resultado", damePanelTabla(tm3));
+						panelTabulado.validate();
 						
 					} else
-						JOptionPane
-								.showMessageDialog(null,
-										"AVISO: Filas o columnas fuera de rango, solo entre 1 y 20!");
+						JOptionPane.showMessageDialog(null,"AVISO: Filas o columnas fuera de rango, solo entre 1 y 20!");
 
 				} else
-					JOptionPane.showMessageDialog(null,
-							"AVISO: Introducir filas y columnas!");
-
+					JOptionPane.showMessageDialog(null, "AVISO: Introducir filas y columnas!");
+			
+				ventanaFijarTamanyo.setAlwaysOnTop(false);
+				ventanaFijarTamanyo.setVisible(false);
+				ventanaFijarTamanyo.setEnabled(false);
+				ventanaFijarTamanyo.dispose();
+				ventanaFijarTamanyo=null;
 			}
+			
 
 		});
 
 		panelTamanyo.validate();
+		
 		return panelTamanyo;
 
 	}
 
-	private JPanel damePanelTabla(DefaultTableModel tm, JPanel p, JTable t) {
+	/******************************************************************************************************/
+	private JPanel damePanelTabla(DefaultTableModel tm) {
+		JPanel pAux = new JPanel();
+		pAux.setLayout(new BorderLayout());
 		
-		p.setLayout(new BorderLayout());
-		
-		for (int i=0; i<tm.getRowCount();i++)
-			tm.removeRow(i);
-		
-		for (int i = 0; i < columnas; i++)
-			tm.addColumn("i");
+		tm.setColumnCount(columnas);
 		
 		for (int i = 0; i < filas; i++)
-			tm.addRow(sColumnas);
-		
-	
+			tm.addRow(new String [columnas]);
 
-	    //tabla = new JTable(tm);
-		p.add("Center", t);
-		inicializarMatrices(tm);
-		p.validate();
-		return p;
+	    JTable tabla = new JTable(tm);
+		pAux.add("Center", tabla);
+		pAux.validate();
+		return pAux;
 	}
 
+	/******************************************************************************************************/
 	private void inicializarMatrices(DefaultTableModel tm) {
-		for (int i = 0; i < filas; i++)
-			for (int j = 0; j < columnas; j++)
-				tm.setValueAt(0, i, j);
+		
+		panelTabulado.removeAll();
+		tm1 = new DefaultTableModel();
+		tm2 = new DefaultTableModel();
+		tm3 = new DefaultTableModel();
+		panelTabulado.add("Matriz1", damePanelTabla(tm1));
+		panelTabulado.add("Matriz2", damePanelTabla(tm2));
+		panelTabulado.add("Resultado", damePanelTabla(tm3));
+		panelTabulado.validate();	
+	
 	}
 
+	/******************************************************************************************************/
 	public static void main(String[] args) {
 
 		ClasePrincipal f = new ClasePrincipal();
 
 	}
+	
 
 }
