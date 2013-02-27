@@ -43,6 +43,7 @@ public class ClasePrincipal extends JFrame {
 	private JMenuItem sumarMenuItem;
 	
 	private JMenu multiplicarMenu;
+	private JMenu guardarMenu;
 	
 
 	/******************************************************************************************************/
@@ -124,7 +125,7 @@ public class ClasePrincipal extends JFrame {
 	/******************************************************************************************************/
 	private JMenu getGuardarMenuItem() {
 
-		JMenu guardarMenu = new JMenu("Guardar");
+		guardarMenu = new JMenu("Guardar");
 		guardarMenu.setEnabled(false);
 		guardarMenu.setVisible(true);
 		guardarMenu.add(dameGuardarMatrizA());
@@ -292,6 +293,7 @@ public class ClasePrincipal extends JFrame {
 						escribirMatriz(m2, tm2);
 						
 						activarMenus();
+						guardarMenu.setEnabled(true);
 						
 					}
 				});
@@ -353,8 +355,8 @@ public class ClasePrincipal extends JFrame {
 		multiplicaMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				Matriz m1 = convertirEnMatriz(tm1);
-				Matriz m2 = convertirEnMatriz(tm2);
+				/*Matriz m1 = convertirEnMatriz(tm1);
+				Matriz m2 = convertirEnMatriz(tm2);*/
 				Matriz m3 = new Matriz(filas, columnas);
 				resultado = m3.multiplica(m1, m2);
 				muestraResultado(resultado);
@@ -374,8 +376,8 @@ public class ClasePrincipal extends JFrame {
 		restarMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				Matriz m1 = convertirEnMatriz(tm1);
-				Matriz m2 = convertirEnMatriz(tm2);
+				/*Matriz m1 = convertirEnMatriz(tm1);
+				Matriz m2 = convertirEnMatriz(tm2);*/
 				Matriz m3 = new Matriz(filas, columnas);
 				resultado = m3.resta(m1, m2);
 				muestraResultado(resultado);
@@ -394,8 +396,8 @@ public class ClasePrincipal extends JFrame {
 		sumarMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				Matriz m1 = convertirEnMatriz(tm1);
-				Matriz m2 = convertirEnMatriz(tm2);
+				/*Matriz m1 = convertirEnMatriz(tm1);
+				Matriz m2 = convertirEnMatriz(tm2);*/
 				Matriz m3 = new Matriz(filas, columnas);
 				resultado = m3.suma(m1, m2);
 				muestraResultado(resultado);
@@ -453,18 +455,8 @@ public class ClasePrincipal extends JFrame {
 		cargarMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				/*
-				 * 
-				 * 
-				 * 
-				 */
-				// cargarMenuItem.setEnabled(true);
-
-				/*
-				 * 
-				 * 
-				 */
-
+				Matriz m1 = convertirEnMatriz(tm1);
+				Matriz m2 = convertirEnMatriz(tm2);
 			}
 		});
 		return cargarMenuItem;
@@ -635,6 +627,7 @@ public class ClasePrincipal extends JFrame {
 			restarMenuItem.setEnabled(true);
 			multiplicarMenu.setEnabled(true);
 			inicializarMenuItem.setEnabled(true);
+			cargarMenuItem.setEnabled(true);
 		}
 	}
 	
