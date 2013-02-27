@@ -36,6 +36,14 @@ public class ClasePrincipal extends JFrame {
 	private DefaultTableModel tm3;
 
 	private JFrame ventanaFijarTamanyo;
+	
+	private JMenuItem inicializarMenuItem;
+	private JMenuItem cargarMenuItem;
+	private JMenuItem restarMenuItem;
+	private JMenuItem sumarMenuItem;
+	
+	private JMenu multiplicarMenu;
+	
 
 	/******************************************************************************************************/
 
@@ -117,7 +125,7 @@ public class ClasePrincipal extends JFrame {
 	private JMenu getGuardarMenuItem() {
 
 		JMenu guardarMenu = new JMenu("Guardar");
-		guardarMenu.setEnabled(true);
+		guardarMenu.setEnabled(false);
 		guardarMenu.setVisible(true);
 		guardarMenu.add(dameGuardarMatrizA());
 		guardarMenu.add(dameGuardarMatrizB());
@@ -128,12 +136,12 @@ public class ClasePrincipal extends JFrame {
 	/******************************************************************************************************/
 	private JMenu getLeerMenuItem() {
 
-		JMenu multiplicarMenu = new JMenu("Cargar");
-		multiplicarMenu.setEnabled(true);
-		multiplicarMenu.setVisible(true);
-		multiplicarMenu.add(dameCargarMatrizA());
-		multiplicarMenu.add(dameCargarMatrizB());
-		return multiplicarMenu;
+		JMenu cargarMenu = new JMenu("Cargar");
+		cargarMenu.setEnabled(true);
+		cargarMenu.setVisible(true);
+		cargarMenu.add(dameCargarMatrizA());
+		cargarMenu.add(dameCargarMatrizB());
+		return cargarMenu;
 	}
 
 	/******************************************************************************************************/
@@ -238,17 +246,9 @@ public class ClasePrincipal extends JFrame {
 		cargaAMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				/*
-				 * 
-				 * 
-				 * 
-				 */
+
 				// cargarMenuItem.setEnabled(true);
 
-				/*
-				 * 
-				 * 
-				 */
 
 			}
 		});
@@ -291,6 +291,8 @@ public class ClasePrincipal extends JFrame {
 						escribirMatriz(m1, tm1);
 						escribirMatriz(m2, tm2);
 						
+						activarMenus();
+						
 					}
 				});
 
@@ -310,8 +312,8 @@ public class ClasePrincipal extends JFrame {
 	/******************************************************************************************************/
 	private JMenu getMultiplicacionMenuItem() {
 
-		JMenu multiplicarMenu = new JMenu("Multiplicar");
-		multiplicarMenu.setEnabled(true);
+		multiplicarMenu = new JMenu("Multiplicar");
+		multiplicarMenu.setEnabled(false);
 		multiplicarMenu.setVisible(true);
 		multiplicarMenu.add(dameMultiplicaNormal());
 		multiplicarMenu.add(dameMultiplicaStrassen());
@@ -366,8 +368,9 @@ public class ClasePrincipal extends JFrame {
 	/******************************************************************************************************/
 	private JMenuItem getRestaMenuItem() {
 
-		JMenuItem restarMenuItem = new JMenuItem("Restar");
+		restarMenuItem = new JMenuItem("Restar");
 		restarMenuItem.setVisible(true);
+		restarMenuItem.setEnabled(false);
 		restarMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
@@ -385,8 +388,9 @@ public class ClasePrincipal extends JFrame {
 	/******************************************************************************************************/
 	private JMenuItem getSumaMenuItem() {
 
-		JMenuItem sumarMenuItem = new JMenuItem("Sumar");
+		sumarMenuItem = new JMenuItem("Sumar");
 		sumarMenuItem.setVisible(true);
+		sumarMenuItem.setEnabled(false);
 		sumarMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
@@ -421,8 +425,9 @@ public class ClasePrincipal extends JFrame {
 	/******************************************************************************************************/
 	private JMenuItem getInicializarMenuItem() {
 
-		JMenuItem inicializarMenuItem = new JMenuItem("Inicializar");
+		inicializarMenuItem = new JMenuItem("Inicializar");
 		inicializarMenuItem.setVisible(true);
+		inicializarMenuItem.setEnabled(false);
 		inicializarMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
@@ -430,7 +435,10 @@ public class ClasePrincipal extends JFrame {
 				inicializarMatrices(tm1);
 				inicializarMatrices(tm2);
 				inicializarMatrices(tm3);
+				
 				}
+				
+				desactivarMenus();
 			}
 		});
 		return inicializarMenuItem;
@@ -439,7 +447,7 @@ public class ClasePrincipal extends JFrame {
 	/******************************************************************************************************/
 	private JMenuItem getCargarMenuItem() {
 
-		JMenuItem cargarMenuItem = new JMenuItem("Cargar Tablas");
+		cargarMenuItem = new JMenuItem("Cargar Tablas");
 		cargarMenuItem.setEnabled(false);
 		cargarMenuItem.setVisible(true);
 		cargarMenuItem.addActionListener(new ActionListener() {
@@ -565,6 +573,8 @@ public class ClasePrincipal extends JFrame {
 				} else
 					JOptionPane.showMessageDialog(null, "AVISO: Introducir filas y columnas!");
 			
+				activarMenus();
+				
 				ventanaFijarTamanyo.setAlwaysOnTop(false);
 				ventanaFijarTamanyo.setVisible(false);
 				ventanaFijarTamanyo.setEnabled(false);
@@ -618,5 +628,24 @@ public class ClasePrincipal extends JFrame {
 
 	}
 	
+	private void activarMenus(){
+		if ((tm1 != null) || (tm2 != null) || (tm3 != null)) 
+		{
+			sumarMenuItem.setEnabled(true);
+			restarMenuItem.setEnabled(true);
+			multiplicarMenu.setEnabled(true);
+			inicializarMenuItem.setEnabled(true);
+		}
+	}
+	
+	private void desactivarMenus(){
+		if ((tm1 != null) || (tm2 != null) || (tm3 != null)) 
+		{
+			sumarMenuItem.setEnabled(false);
+			restarMenuItem.setEnabled(false);
+			multiplicarMenu.setEnabled(false);
+			inicializarMenuItem.setEnabled(false);
+		}
+	}
 
 }
