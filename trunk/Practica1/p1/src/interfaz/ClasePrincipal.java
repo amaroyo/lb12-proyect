@@ -4,9 +4,14 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Scanner;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -157,17 +162,43 @@ public class ClasePrincipal extends JFrame {
 		guardarRMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				/*
-				 * 
-				 * 
-				 * 
-				 */
-				// cargarMenuItem.setEnabled(true);
-
-				/*
-				 * 
-				 * 
-				 */
+				JFileChooser fileChooser = new JFileChooser();
+	            fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("todos los archivos *.TXT", "txt","TXT"));//filtro para ver solo archivos .txt
+	            int seleccion = fileChooser.showSaveDialog(null);
+	            try{
+	                if (seleccion == JFileChooser.APPROVE_OPTION){//comprueba si ha presionado el boton de aceptar
+	                    File JFC = fileChooser.getSelectedFile();
+	                    String PATH = JFC.getAbsolutePath();//obtenemos el path del archivo a guardar
+	                    PrintWriter printwriter = new PrintWriter(JFC);
+	                    
+	                    
+	                    printwriter.println(filas);
+	                    printwriter.println(columnas);
+	                    
+	                    for (int i = 0; i < filas; i++){
+	                    	for (int j = 0; j < columnas; j++){
+	                    		printwriter.print((Integer) tm3.getValueAt(i, j));
+	                    		printwriter.print(" ");
+	                    	}
+	                    	printwriter.println();
+	                    }
+	                    
+	                    
+	                    printwriter.close();//cierra el archivo
+	                    
+	                    
+	                    
+	                    //comprobamos si a la hora de guardar obtuvo la extension y si no se la asignamos
+	                    if(!(PATH.endsWith(".txt"))){
+	                        File temp = new File(PATH+".txt");
+	                        JFC.renameTo(temp);//renombramos el archivo
+	                    }
+	                    
+	                    JOptionPane.showMessageDialog(null,"Guardado con exito!", "Guardado con exito!", JOptionPane.INFORMATION_MESSAGE);
+	                }
+	            }catch (Exception ex){//por alguna excepcion salta un mensaje de error
+	                JOptionPane.showMessageDialog(null,"Error al guardar el archivo!", "Oops! Error", JOptionPane.ERROR_MESSAGE);
+	            }
 
 			}
 		});
@@ -182,18 +213,43 @@ public class ClasePrincipal extends JFrame {
 		guardarBMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				/*
-				 * 
-				 * 
-				 * 
-				 */
-				// cargarMenuItem.setEnabled(true);
-
-				/*
-				 * 
-				 * 
-				 */
-
+				JFileChooser fileChooser = new JFileChooser();
+	            fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("todos los archivos *.TXT", "txt","TXT"));//filtro para ver solo archivos .txt
+	            int seleccion = fileChooser.showSaveDialog(null);
+	            try{
+	                if (seleccion == JFileChooser.APPROVE_OPTION){//comprueba si ha presionado el boton de aceptar
+	                    File JFC = fileChooser.getSelectedFile();
+	                    String PATH = JFC.getAbsolutePath();//obtenemos el path del archivo a guardar
+	                    PrintWriter printwriter = new PrintWriter(JFC);
+	                    
+	                    
+	                    printwriter.println(filas);
+	                    printwriter.println(columnas);
+	                    
+	                    for (int i = 0; i < filas; i++){
+	                    	for (int j = 0; j < columnas; j++){
+	                    		printwriter.print((Integer) tm2.getValueAt(i, j));
+	                    		printwriter.print(" ");
+	                    	}
+	                    	printwriter.println();
+	                    }
+	                    
+	                    
+	                    printwriter.close();//cierra el archivo
+	                    
+	                    
+	                    
+	                    //comprobamos si a la hora de guardar obtuvo la extension y si no se la asignamos
+	                    if(!(PATH.endsWith(".txt"))){
+	                        File temp = new File(PATH+".txt");
+	                        JFC.renameTo(temp);//renombramos el archivo
+	                    }
+	                    
+	                    JOptionPane.showMessageDialog(null,"Guardado con exito!", "Guardado con exito!", JOptionPane.INFORMATION_MESSAGE);
+	                }
+	            }catch (Exception ex){//por alguna excepcion salta un mensaje de error
+	                JOptionPane.showMessageDialog(null,"Error al guardar el archivo!", "Oops! Error", JOptionPane.ERROR_MESSAGE);
+	            }
 			}
 		});
 
@@ -216,8 +272,23 @@ public class ClasePrincipal extends JFrame {
 	                    File JFC = fileChooser.getSelectedFile();
 	                    String PATH = JFC.getAbsolutePath();//obtenemos el path del archivo a guardar
 	                    PrintWriter printwriter = new PrintWriter(JFC);
-	                    printwriter.print("hola");//escribe en el archivo todo lo que se encuentre en el JTextArea
+	                    
+	                    
+	                    printwriter.println(filas);
+	                    printwriter.println(columnas);
+	                    
+	                    for (int i = 0; i < filas; i++){
+	                    	for (int j = 0; j < columnas; j++){
+	                    		printwriter.print((Integer) tm1.getValueAt(i, j));
+	                    		printwriter.print(" ");
+	                    	}
+	                    	printwriter.println();
+	                    }
+	                    
+	                    
 	                    printwriter.close();//cierra el archivo
+	                    
+	                    
 	                    
 	                    //comprobamos si a la hora de guardar obtuvo la extension y si no se la asignamos
 	                    if(!(PATH.endsWith(".txt"))){
@@ -225,7 +296,7 @@ public class ClasePrincipal extends JFrame {
 	                        JFC.renameTo(temp);//renombramos el archivo
 	                    }
 	                    
-	                    JOptionPane.showMessageDialog(null,"Guardado exitoso!", "Guardado exitoso!", JOptionPane.INFORMATION_MESSAGE);
+	                    JOptionPane.showMessageDialog(null,"Guardado con exito!", "Guardado con exito!", JOptionPane.INFORMATION_MESSAGE);
 	                }
 	            }catch (Exception ex){//por alguna excepcion salta un mensaje de error
 	                JOptionPane.showMessageDialog(null,"Error al guardar el archivo!", "Oops! Error", JOptionPane.ERROR_MESSAGE);
@@ -263,9 +334,85 @@ public class ClasePrincipal extends JFrame {
 		cargaAMenuItem.setVisible(true);
 		cargaAMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				String path="";
 
+				//empezamos implementando la clase JFileChooser para abrir archivos
+		        JFileChooser JFC = new JFileChooser();
+		        //filtro que muestra solo los archivos con extension *.edu
+		        JFC.setFileFilter(new FileNameExtensionFilter("todos los archivos *.TXT", "txt","TXT"));
+		        //se comprueba si se ha dado al boton aceptar
+		        int abrir = JFC.showDialog(null, "Abrir");
+		        if (abrir == JFileChooser.APPROVE_OPTION) {
+		            FileReader FR = null;
+		            //BufferedReader BR = null;
+		            Scanner sc = null;
+		            tm1 = new DefaultTableModel();
 
-				// cargarMenuItem.setEnabled(true);
+		            try {
+		                //abro el fichero y creo un BufferedReader para hacer
+		                //una lectura comoda (tener el metodo readLine();)
+		                File archivo = JFC.getSelectedFile();//abre un archivo .lengf
+		                
+		                //evitar abrir archivo con otra extension que no sea *.LFP
+		                String PATH = JFC.getSelectedFile().getAbsolutePath();
+		                if(PATH.endsWith(".txt")||PATH.endsWith(".TXT")){
+		                    
+		                    FR = new FileReader(archivo);
+		                   // BR = new BufferedReader(FR);
+		                    sc = new Scanner(FR);
+		                    
+		                    //leyendo el archivo
+		                   String s = "";
+		                   int linea = 0;
+		                    if(path.compareTo(archivo.getAbsolutePath())==0){
+		                        JOptionPane.showMessageDialog(null, "Archivo Abierto","Oops! Error", JOptionPane.ERROR_MESSAGE);
+		                    }else{
+		                        path = archivo.getAbsolutePath();
+		                        try{
+		                        	s = sc.nextLine();
+		                        	filas = Integer.parseInt(s);
+		                        	s = sc.nextLine();
+		                        	columnas = Integer.parseInt(s);
+		                        	while(sc.hasNext()){
+		                        		s = sc.nextLine();
+		                        		procesalinea(s,linea,tm1);
+		                        		linea++;
+		                        	}
+		                        	panelTabulado.add("Matriz1", damePanelTabla(tm1));
+		                        }
+		                        
+		                       catch (NumberFormatException ex) {
+		    						if (ex != null) {
+		    							JOptionPane.showMessageDialog(null, "AVISO: LECTURA INCORRECTA!");
+		    						}
+		    					}
+		                        
+		                        
+		                       
+		                    }
+		                    
+		                }else{
+		                    JOptionPane.showMessageDialog(null, "Archivo no soportado","Oops! Error", JOptionPane.ERROR_MESSAGE);
+		                    //open();
+		                }
+
+		            } catch (FileNotFoundException ex) {
+		                ex.printStackTrace();
+		                
+		            //cerramos el fichero, para asegurar que se cierra tanto
+		            // si todo va bien si salta una excepcion
+		            } finally {
+		                try {
+		                    if(null!= FR){
+		                        FR.close();
+		                    }
+
+		                } catch (IOException ex) {
+		                    ex.printStackTrace();
+		                
+		                }
+		            }
+		        }
 
 
 			}
@@ -656,6 +803,33 @@ public class ClasePrincipal extends JFrame {
 			multiplicarMenu.setEnabled(false);
 			inicializarMenuItem.setEnabled(false);
 		}
+	}
+	
+	private void procesalinea(String s, int fila, DefaultTableModel tm){
+		int i = 0;
+		String num="";
+		boolean numNeg = false;
+		char[] array = s.toCharArray();
+		
+		while (i!= array.length){
+			
+			if(array[i] == '-'){
+				numNeg = true;
+				i++;
+			}
+			else if(array[i]!= ' '){
+				num += array[i];
+				i++;
+			}
+			else{
+				int numero = Integer.parseInt(num);
+				if (numNeg) numero = -numero;
+				tm.setValueAt(numero, fila, i);
+				numNeg = false;
+				i++;
+			}
+		}
+		
 	}
 
 }
