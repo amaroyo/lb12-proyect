@@ -4,8 +4,12 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 
 import matriz.Matriz;
@@ -203,18 +207,31 @@ public class ClasePrincipal extends JFrame {
 		guardarAMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				/*
-				 * 
-				 * 
-				 * 
-				 */
-				// cargarMenuItem.setEnabled(true);
 
-				/*
-				 * 
-				 * 
-				 */
-
+				JFileChooser fileChooser = new JFileChooser();
+	            fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("todos los archivos *.TXT", "txt","TXT"));//filtro para ver solo archivos .txt
+	            int seleccion = fileChooser.showSaveDialog(null);
+	            try{
+	                if (seleccion == JFileChooser.APPROVE_OPTION){//comprueba si ha presionado el boton de aceptar
+	                    File JFC = fileChooser.getSelectedFile();
+	                    String PATH = JFC.getAbsolutePath();//obtenemos el path del archivo a guardar
+	                    PrintWriter printwriter = new PrintWriter(JFC);
+	                    printwriter.print("hola");//escribe en el archivo todo lo que se encuentre en el JTextArea
+	                    printwriter.close();//cierra el archivo
+	                    
+	                    //comprobamos si a la hora de guardar obtuvo la extension y si no se la asignamos
+	                    if(!(PATH.endsWith(".txt"))){
+	                        File temp = new File(PATH+".txt");
+	                        JFC.renameTo(temp);//renombramos el archivo
+	                    }
+	                    
+	                    JOptionPane.showMessageDialog(null,"Guardado exitoso!", "Guardado exitoso!", JOptionPane.INFORMATION_MESSAGE);
+	                }
+	            }catch (Exception ex){//por alguna excepcion salta un mensaje de error
+	                JOptionPane.showMessageDialog(null,"Error al guardar el archivo!", "Oops! Error", JOptionPane.ERROR_MESSAGE);
+	            }
+	        		
+				
 			}
 		});
 
