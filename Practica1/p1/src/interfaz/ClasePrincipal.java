@@ -14,6 +14,8 @@ import java.io.PrintWriter;
 import java.util.Scanner;
 
 import javax.swing.*;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 
@@ -61,6 +63,7 @@ public class ClasePrincipal extends JFrame {
 		
 		JOptionPane.showMessageDialog(null, "AVISO: TIENE QUE INTRODUCIR EL TAMANYO DE LA MATRIZ!");
 		inicializarInterfaz();
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //Para que se termine el hilo al cerrar la ventana
 
 	}
 
@@ -358,14 +361,17 @@ public class ClasePrincipal extends JFrame {
 		                        	filas = Integer.parseInt(s);
 		                        	s = sc.nextLine();
 		                        	columnas = Integer.parseInt(s);
-		                        	tm2 = new DefaultTableModel();
-		                        	panelTabulado.add("Matriz2", damePanelTabla(tm2));
-		                        	tm3 = new DefaultTableModel();
-		                        	panelTabulado.add("Resultado", damePanelTabla(tm3));
-		                        	inicializarMatrices(tm3);
-		                        	activarMenus();
-		    						guardarMenu.setEnabled(true);
 		                        	
+		                        	if (tm2 == null){
+		                        		tm2 = new DefaultTableModel();
+		                        		panelTabulado.add("Matriz 2", damePanelTabla(tm2));
+		                        		if (tm3 == null){
+			                        		tm3 = new DefaultTableModel();
+			                        		panelTabulado.add("Resultado", damePanelTabla(tm3));	
+		                        		}
+		                        	}
+		                        	
+		                        	activarMenus();	                     	
 		                        	while(sc.hasNext()){
 		                        		s = sc.nextLine();
 		                        		procesalinea(s,linea,tm2);
@@ -459,8 +465,17 @@ public class ClasePrincipal extends JFrame {
 		                        	filas = Integer.parseInt(s);
 		                        	s = sc.nextLine();
 		                        	columnas = Integer.parseInt(s);
-		                        	tm1 = new DefaultTableModel();
-		                        	panelTabulado.add("Matriz1", damePanelTabla(tm1));
+		                        	
+		                        	if (tm1 == null){
+		                        		tm1 = new DefaultTableModel();
+		                        		panelTabulado.add("Matriz 1", damePanelTabla(tm1));
+		                        		/*if (tm3 == null){
+			                        		tm3 = new DefaultTableModel();
+			                        		panelTabulado.add("Resultado", damePanelTabla(tm3));	
+		                        		}*/
+		                        	}
+		                        	
+		                        	activarMenus();
 		                        	while(sc.hasNext()){
 		                        		s = sc.nextLine();
 		                        		procesalinea(s,linea,tm1);
@@ -526,11 +541,12 @@ public class ClasePrincipal extends JFrame {
 						if ((tm1 != null) || (tm2 != null) || (tm3 != null)) 
 							panelTabulado.removeAll();
 						
-						m1 = new Matriz(1);
-						m2 = new Matriz(2);
-						
 						filas = 5;
 						columnas = 5;
+						
+						m1 = new Matriz(1);
+						m2 = new Matriz(2);
+						resultado = new Matriz(filas,columnas);
 						
 						tm1 = new DefaultTableModel();
 						tm2 = new DefaultTableModel();
@@ -545,7 +561,6 @@ public class ClasePrincipal extends JFrame {
 						escribirMatriz(m2, tm2);
 						
 						activarMenus();
-						guardarMenu.setEnabled(true);
 						
 					}
 				});
@@ -609,8 +624,8 @@ public class ClasePrincipal extends JFrame {
 
 				/*Matriz m1 = convertirEnMatriz(tm1);
 				Matriz m2 = convertirEnMatriz(tm2);*/
-				Matriz m3 = new Matriz(filas, columnas);
-				resultado = m3.multiplica(m1, m2);
+				//Matriz m3 = new Matriz(filas, columnas);
+				resultado.multiplica(m1, m2);
 				muestraResultado(resultado);
 
 			}
@@ -627,11 +642,7 @@ public class ClasePrincipal extends JFrame {
 		restarMenuItem.setEnabled(false);
 		restarMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
-				/*Matriz m1 = convertirEnMatriz(tm1);
-				Matriz m2 = convertirEnMatriz(tm2);*/
-				Matriz m3 = new Matriz(filas, columnas);
-				resultado = m3.resta(m1, m2);
+				resultado.resta(m1, m2);
 				muestraResultado(resultado);
 
 			}
@@ -647,11 +658,7 @@ public class ClasePrincipal extends JFrame {
 		sumarMenuItem.setEnabled(false);
 		sumarMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
-				/*Matriz m1 = convertirEnMatriz(tm1);
-				Matriz m2 = convertirEnMatriz(tm2);*/
-				Matriz m3 = new Matriz(filas, columnas);
-				resultado = m3.suma(m1, m2);
+				resultado.suma(m1, m2);
 				muestraResultado(resultado);
 
 			}
@@ -667,13 +674,24 @@ public class ClasePrincipal extends JFrame {
 	}
 
 	/******************************************************************************************************/
-	private Matriz convertirEnMatriz(DefaultTableModel tm) {
-		Matriz resultado = new Matriz(filas, columnas);
-		for (int i = 0; i < filas; i++)
-			for (int j = 0; j < columnas; j++)
-				resultado.setIJ(i, j, (Integer) tm.getValueAt(i, j));
+	private void convertirEnMatriz(DefaultTableModel tm, Matriz m) {
 
-		return resultado;
+		for (int i=0; i < filas; i++)
+		  for (int j=0; j < columnas; j++){
+			int value=0;
+			String valor=(String)(tm.getValueAt(i,j));
+			if (valor != null){	
+				try {
+					value =Integer.parseInt(valor);
+				} catch (NumberFormatException ex) {
+					if (ex != null) 
+						JOptionPane.showMessageDialog(null, "AVISO: TIENES QUE INTRODUCIR NUMEROS!");
+
+					}
+				m.setIJ(i,j,value);	
+				}
+		  }
+
 	}
 
 	/******************************************************************************************************/
@@ -692,7 +710,7 @@ public class ClasePrincipal extends JFrame {
 				
 				}
 				
-				desactivarMenus();
+				//desactivarMenus();
 			}
 		});
 		return inicializarMenuItem;
@@ -706,10 +724,12 @@ public class ClasePrincipal extends JFrame {
 		cargarMenuItem.setVisible(true);
 		cargarMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				convertirEnMatriz(tm1,m1);
+				convertirEnMatriz(tm2,m2);
 
-				Matriz m1 = convertirEnMatriz(tm1);
-				Matriz m2 = convertirEnMatriz(tm2);
-			}
+					}
+
+	
 		});
 		return cargarMenuItem;
 	}
@@ -880,6 +900,7 @@ public class ClasePrincipal extends JFrame {
 			multiplicarMenu.setEnabled(true);
 			inicializarMenuItem.setEnabled(true);
 			cargarMenuItem.setEnabled(true);
+			guardarMenu.setEnabled(true);
 		}
 	}
 	
@@ -922,5 +943,6 @@ public class ClasePrincipal extends JFrame {
 		}
 		
 	}
+	
 
 }
