@@ -623,19 +623,12 @@ public class ClasePrincipal extends JFrame {
 		multiplicaSMenuItem.setVisible(true);
 		multiplicaSMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
-				/*
-				 * 
-				 * 
-				 * 
-				 */
-				// cargarMenuItem.setEnabled(true);
-
-				/*
-				 * 
-				 * 
-				 */
-
+				if (filas == columnas) {
+				Matriz mAux = new Matriz(filas,columnas);
+				resultado = mAux.multiplicarStrassen(m1,m2);
+				muestraResultado(resultado);
+				}
+				else JOptionPane.showMessageDialog(null, "AVISO: TIENEN QUE SER MATRICES CUADRADAS!");
 			}
 		});
 
