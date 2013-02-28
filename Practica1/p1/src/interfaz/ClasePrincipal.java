@@ -362,15 +362,31 @@ public class ClasePrincipal extends JFrame {
 		                        	s = sc.nextLine();
 		                        	columnas = Integer.parseInt(s);
 		                        	
-		                        	if (tm2 == null){
-		                        		tm2 = new DefaultTableModel();
-		                        		panelTabulado.add("Matriz 2", damePanelTabla(tm2));
-		                        		if (tm3 == null){
-			                        		tm3 = new DefaultTableModel();
-			                        		panelTabulado.add("Resultado", damePanelTabla(tm3));	
-		                        		}
-		                        	}
+		        					if (filas > 0 && filas <= 20 && columnas > 0
+		        							&& columnas <= 20) {
+		        						m1 = new Matriz(filas, columnas);
+		        						m2 = new Matriz(filas, columnas);
+		        						resultado = new Matriz(filas, columnas);
+		        					}
 		                        	
+		                        	if (tm2 != null){
+		    							int filAux=(tm2.getRowCount())-1;
+		    							for (int k=filAux; k >= 0 ; k--)
+		    								tm2.removeRow(k);
+		    							int filAux2=(tm3.getRowCount())-1;
+		    							for (int k=filAux2; k >= 0 ; k--)
+		    								tm3.removeRow(k);
+		    							damePanelTabla(tm2);
+		    							damePanelTabla(tm3);
+		    						}
+		    						else{
+		    							tm2=new DefaultTableModel();
+		    							panelTabulado.add("Matriz 2", damePanelTabla(tm2));
+		    							tm3=new DefaultTableModel();
+		    							panelTabulado.add("Resultado", damePanelTabla(tm3));
+		    						}
+		    						panelTabulado.validate();
+
 		                        	activarMenus();	                     	
 		                        	while(sc.hasNext()){
 		                        		s = sc.nextLine();
@@ -466,15 +482,25 @@ public class ClasePrincipal extends JFrame {
 		                        	s = sc.nextLine();
 		                        	columnas = Integer.parseInt(s);
 		                        	
-		                        	if (tm1 == null){
-		                        		tm1 = new DefaultTableModel();
-		                        		panelTabulado.add("Matriz 1", damePanelTabla(tm1));
-		                        		/*if (tm3 == null){
-			                        		tm3 = new DefaultTableModel();
-			                        		panelTabulado.add("Resultado", damePanelTabla(tm3));	
-		                        		}*/
-		                        	}
+		        					if (filas > 0 && filas <= 20 && columnas > 0
+		        							&& columnas <= 20) {
+		        						m1 = new Matriz(filas, columnas);
+		        						m2 = new Matriz(filas, columnas);
+		        						resultado = new Matriz(filas, columnas);
+		        					}
 		                        	
+		                        	if (tm1 != null){
+		    							int filAux=(tm1.getRowCount())-1;
+		    							for (int k=filAux; k >= 0 ; k--)
+		    								tm1.removeRow(k);
+		    							damePanelTabla(tm1);
+		    						}
+		    						else{
+		    							tm1 = new DefaultTableModel();
+		    							panelTabulado.add("Matriz 1", damePanelTabla(tm1));
+		    						}
+		    						panelTabulado.validate();
+		                        			                        	
 		                        	activarMenus();
 		                        	while(sc.hasNext()){
 		                        		s = sc.nextLine();
@@ -573,9 +599,10 @@ public class ClasePrincipal extends JFrame {
 	private void escribirMatriz(Matriz m, DefaultTableModel tm) {
 
 		for (int i = 0; i < filas; i++)
-			for (int j = 0; j < columnas; j++)
-				tm.setValueAt(m.getIJ(i, j), i, j);
-
+			for (int j = 0; j < columnas; j++) {
+				String valorS = String.valueOf(m.getIJ(i, j));
+				tm.setValueAt(valorS, i, j);
+			}
 	}
 
 	/******************************************************************************************************/
@@ -669,8 +696,10 @@ public class ClasePrincipal extends JFrame {
 	/******************************************************************************************************/
 	private void muestraResultado(Matriz m) {
 		for (int i = 0; i < filas; i++)
-			for (int j = 0; j < columnas; j++)
-				tm3.setValueAt(m.getIJ(i, j), i, j);
+			for (int j = 0; j < columnas; j++){
+				String valorS = String.valueOf(m.getIJ(i, j));
+				tm3.setValueAt(valorS, i, j);
+			}
 	}
 
 	/******************************************************************************************************/
@@ -678,17 +707,17 @@ public class ClasePrincipal extends JFrame {
 
 		for (int i=0; i < filas; i++)
 		  for (int j=0; j < columnas; j++){
-			int value=0;
-			String valor=(String)(tm.getValueAt(i,j));
-			if (valor != null){	
+			int valor=0;
+			String valorS=(String)(tm.getValueAt(i,j));
+			if (valorS != null){	
 				try {
-					value =Integer.parseInt(valor);
+					valor =Integer.parseInt(valorS);
 				} catch (NumberFormatException ex) {
 					if (ex != null) 
 						JOptionPane.showMessageDialog(null, "AVISO: TIENES QUE INTRODUCIR NUMEROS!");
 
 					}
-				m.setIJ(i,j,value);	
+				m.setIJ(i,j,valor);	
 				}
 		  }
 
@@ -857,6 +886,7 @@ public class ClasePrincipal extends JFrame {
 
 	/******************************************************************************************************/
 	private JPanel damePanelTabla(DefaultTableModel tm) {
+		
 		JPanel pAux = new JPanel();
 		pAux.setLayout(new BorderLayout());
 		
@@ -934,7 +964,8 @@ public class ClasePrincipal extends JFrame {
 			else{
 				int numero = Integer.parseInt(num);
 				if (numNeg) numero = -numero;
-				tm.setValueAt(numero, fila, posicion);
+				String numS = String.valueOf(numero);
+				tm.setValueAt(numS, fila, posicion);
 				numNeg = false;
 				num="";
 				posicion++;
