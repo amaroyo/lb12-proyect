@@ -619,7 +619,6 @@ public class ClasePrincipal extends JFrame {
 	/******************************************************************************************************/
 	private JMenuItem dameMultiplicaStrassen() {
 		JMenuItem multiplicaSMenuItem = new JMenuItem("Multiplicacion Strassen");
-		multiplicaSMenuItem.setEnabled(false);
 		multiplicaSMenuItem.setVisible(true);
 		multiplicaSMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -642,11 +641,13 @@ public class ClasePrincipal extends JFrame {
 		multiplicaMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				/*Matriz m1 = convertirEnMatriz(tm1);
-				Matriz m2 = convertirEnMatriz(tm2);*/
-				//Matriz m3 = new Matriz(filas, columnas);
-				resultado.multiplica(m1, m2);
+				 	
+				Matriz m3 = new Matriz(filas,columnas); 	
+				resultado = m3.multiplica(m1, m2); 
 				muestraResultado(resultado);
+				
+				
+				
 
 			}
 		});
