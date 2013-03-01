@@ -32,8 +32,8 @@ public class ClasePrincipal extends JFrame {
 
 	private JTabbedPane panelTabulado;
 
-	private int filas;
-	private int columnas;
+	private int filas =0;
+	private int columnas=0;
 
 	private JTextField botonFil;
 	private JTextField botonCol;
@@ -55,6 +55,8 @@ public class ClasePrincipal extends JFrame {
 	
 	private JMenu multiplicarMenu;
 	private JMenu guardarMenu;
+	
+	private boolean tablasCargadas=false;
 	
 
 	/******************************************************************************************************/
@@ -180,7 +182,8 @@ public class ClasePrincipal extends JFrame {
 	                    
 	                    for (int i = 0; i < filas; i++){
 	                    	for (int j = 0; j < columnas; j++){
-	                    		printwriter.print((Integer) tm3.getValueAt(i, j));
+	                    		if (tm3.getValueAt(i,j)== null) printwriter.print(0);
+	                    		else printwriter.print((Integer) resultado.getIJ(i, j));
 	                    		printwriter.print(" ");
 	                    	}
 	                    	printwriter.println();
@@ -224,14 +227,14 @@ public class ClasePrincipal extends JFrame {
 	                    File JFC = fileChooser.getSelectedFile();
 	                    String PATH = JFC.getAbsolutePath();//obtenemos el path del archivo a guardar
 	                    PrintWriter printwriter = new PrintWriter(JFC);
-	                    
-	                    
+	                   
 	                    printwriter.println(filas);
 	                    printwriter.println(columnas);
 	                    
 	                    for (int i = 0; i < filas; i++){
 	                    	for (int j = 0; j < columnas; j++){
-	                    		printwriter.print((Integer) tm2.getValueAt(i, j));
+	                    		if (tm2.getValueAt(i,j)== null) printwriter.print(0);
+	                    		else printwriter.print((Integer) m2.getIJ(i, j));
 	                    		printwriter.print(" ");
 	                    	}
 	                    	printwriter.println();
@@ -250,6 +253,7 @@ public class ClasePrincipal extends JFrame {
 	                    
 	                    JOptionPane.showMessageDialog(null,"Guardado con exito!", "Guardado con exito!", JOptionPane.INFORMATION_MESSAGE);
 	                }
+	                
 	            }catch (Exception ex){//por alguna excepcion salta un mensaje de error
 	                JOptionPane.showMessageDialog(null,"Error al guardar el archivo!", "Oops! Error", JOptionPane.ERROR_MESSAGE);
 	            }
@@ -282,7 +286,8 @@ public class ClasePrincipal extends JFrame {
 	                    
 	                    for (int i = 0; i < filas; i++){
 	                    	for (int j = 0; j < columnas; j++){
-	                    		printwriter.print((Integer) tm1.getValueAt(i, j));
+	                    		if (tm1.getValueAt(i,j)== null) printwriter.print(0);
+	                    		else printwriter.print((Integer) m1.getIJ(i, j));
 	                    		printwriter.print(" ");
 	                    	}
 	                    	printwriter.println();
@@ -304,8 +309,7 @@ public class ClasePrincipal extends JFrame {
 	            }catch (Exception ex){//por alguna excepcion salta un mensaje de error
 	                JOptionPane.showMessageDialog(null,"Error al guardar el archivo!", "Oops! Error", JOptionPane.ERROR_MESSAGE);
 	            }
-	        		
-				
+	        						
 			}
 		});
 
@@ -622,12 +626,14 @@ public class ClasePrincipal extends JFrame {
 		multiplicaSMenuItem.setVisible(true);
 		multiplicaSMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (filas == columnas) {
-				Matriz mAux = new Matriz(filas,columnas);
-				resultado = mAux.multiplicarStrassen(m1,m2);
-				muestraResultado(resultado);
+				if (tablasCargadas){
+					if ((tm1.getRowCount()==tm1.getColumnCount()) && (tm2.getRowCount()==tm2.getColumnCount())){
+						Matriz mAux = new Matriz(filas,columnas);
+						resultado = mAux.multiplicarStrassen(m1,m2);
+						muestraResultado(resultado);
+					} else JOptionPane.showMessageDialog(null, "AVISO: Para multiplicar tienen que ser matrices cuadradas");
 				}
-				else JOptionPane.showMessageDialog(null, "AVISO: TIENEN QUE SER MATRICES CUADRADAS!");
+				else JOptionPane.showMessageDialog(null, "AVISO: Tienes que cargar primero las tablas");
 			}
 		});
 
@@ -640,15 +646,13 @@ public class ClasePrincipal extends JFrame {
 		multiplicaMenuItem.setVisible(true);
 		multiplicaMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
-				 	
-				Matriz m3 = new Matriz(filas,columnas); 	
-				resultado = m3.multiplica(m1, m2); 
-				muestraResultado(resultado);
-				
-				
-				
-
+				if (tablasCargadas){
+					if ((tm1.getRowCount()==tm1.getColumnCount()) && (tm2.getRowCount()==tm2.getColumnCount())){
+						resultado.multiplica(m1, m2);
+						muestraResultado(resultado);
+					} else JOptionPane.showMessageDialog(null, "AVISO: Para multiplicar tienen que ser matrices cuadradas");
+				}
+				else JOptionPane.showMessageDialog(null, "AVISO: Tienes que cargar primero las tablas");
 			}
 		});
 
@@ -663,10 +667,12 @@ public class ClasePrincipal extends JFrame {
 		restarMenuItem.setEnabled(false);
 		restarMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				resultado.resta(m1, m2);
-				muestraResultado(resultado);
-
-			}
+				if (tablasCargadas){
+					resultado.resta(m1, m2);
+					muestraResultado(resultado);
+				}
+				else JOptionPane.showMessageDialog(null, "AVISO: Tienes que cargar primero las tablas");
+				}
 		});
 		return restarMenuItem;
 	}
@@ -679,10 +685,12 @@ public class ClasePrincipal extends JFrame {
 		sumarMenuItem.setEnabled(false);
 		sumarMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				resultado.suma(m1, m2);
-				muestraResultado(resultado);
-
-			}
+				if (tablasCargadas){
+					resultado.suma(m1, m2);
+					muestraResultado(resultado);
+				}
+				else JOptionPane.showMessageDialog(null, "AVISO: Tienes que cargar primero las tablas");
+				}
 		});
 		return sumarMenuItem;
 	}
@@ -699,21 +707,27 @@ public class ClasePrincipal extends JFrame {
 	/******************************************************************************************************/
 	private void convertirEnMatriz(DefaultTableModel tm, Matriz m) {
 
+		try {
 		for (int i=0; i < filas; i++)
 		  for (int j=0; j < columnas; j++){
 			int valor=0;
 			String valorS=(String)(tm.getValueAt(i,j));
 			if (valorS != null){	
-				try {
+				//try {
 					valor =Integer.parseInt(valorS);
-				} catch (NumberFormatException ex) {
+				/*} catch (NumberFormatException ex) {
 					if (ex != null) 
 						JOptionPane.showMessageDialog(null, "AVISO: TIENES QUE INTRODUCIR NUMEROS!");
 
-					}
+					}*/
 				m.setIJ(i,j,valor);	
 				}
 		  }
+		} catch (NumberFormatException ex) {
+			if (ex != null) 
+				JOptionPane.showMessageDialog(null, "AVISO: TIENES QUE INTRODUCIR NUMEROS!");
+
+			}
 
 	}
 
@@ -747,11 +761,13 @@ public class ClasePrincipal extends JFrame {
 		cargarMenuItem.setVisible(true);
 		cargarMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				convertirEnMatriz(tm1,m1);
-				convertirEnMatriz(tm2,m2);
-
-					}
-
+				if ((tm1.getRowCount()==tm2.getRowCount()) && (tm1.getColumnCount()==tm2.getColumnCount())){
+					convertirEnMatriz(tm1,m1);
+					convertirEnMatriz(tm2,m2);
+					tablasCargadas=true;
+				}
+				else JOptionPane.showMessageDialog(null, "AVISO: LAS MATRICES TIENEN QUE SER DEL MISMO TAMAÑO!");
+				}
 	
 		});
 		return cargarMenuItem;
@@ -770,18 +786,6 @@ public class ClasePrincipal extends JFrame {
 				ventanaFijarTamanyo.setEnabled(true);
 				ventanaFijarTamanyo.setSize(300, 100);
 				ventanaFijarTamanyo.setContentPane(damePanelTamanyo());
-				/*
-				 * 
-				 * 
-				 * 
-				 */
-				// tamanyoItem.setEnabled(true);
-
-				/*
-				 * 
-				 * crear el panel tabulado
-				 */
-
 			}
 		});
 		return tamanyoItem;
@@ -829,44 +833,47 @@ public class ClasePrincipal extends JFrame {
 				String s1 = botonFil.getText();
 				String s2 = botonCol.getText();
 
-				if ((s1 != "") && (s2 != "")) {
+				if ((s1 !="") && (s2 !="")) {
+					
 					try {
 						filas = Integer.parseInt(s1);
 						columnas = Integer.parseInt(s2);
+						
+						
+						if (filas > 0 && filas <= 20 && columnas > 0
+								&& columnas <= 20) {
+							m1 = new Matriz(filas, columnas);
+							m2 = new Matriz(filas, columnas);
+							resultado = new Matriz(filas, columnas);
+							
+							tm1 = new DefaultTableModel();
+							tm2 = new DefaultTableModel();
+							tm3 = new DefaultTableModel();
+							
+							panelTabulado.add("Matriz1", damePanelTabla(tm1));
+							panelTabulado.add("Matriz2", damePanelTabla(tm2));
+							panelTabulado.add("Resultado", damePanelTabla(tm3));
+							panelTabulado.validate();
+							
+						} else
+							JOptionPane.showMessageDialog(null,"AVISO: Filas o columnas fuera de rango, solo entre 1 y 20!");
+						
+						activarMenus();
+						
+						ventanaFijarTamanyo.setAlwaysOnTop(false);
+						ventanaFijarTamanyo.setVisible(false);
+						ventanaFijarTamanyo.setEnabled(false);
+						ventanaFijarTamanyo.dispose();
+						ventanaFijarTamanyo=null;
+						
 					} catch (NumberFormatException ex) {
 						if (ex != null) {
 							JOptionPane.showMessageDialog(null, "AVISO: TIENES QUE INTRODUCIR NUMEROS!");
 						}
 					}
 
-					if (filas > 0 && filas <= 20 && columnas > 0
-							&& columnas <= 20) {
-						m1 = new Matriz(filas, columnas);
-						m2 = new Matriz(filas, columnas);
-						resultado = new Matriz(filas, columnas);
-						
-						tm1 = new DefaultTableModel();
-						tm2 = new DefaultTableModel();
-						tm3 = new DefaultTableModel();
-						
-						panelTabulado.add("Matriz1", damePanelTabla(tm1));
-						panelTabulado.add("Matriz2", damePanelTabla(tm2));
-						panelTabulado.add("Resultado", damePanelTabla(tm3));
-						panelTabulado.validate();
-						
-					} else
-						JOptionPane.showMessageDialog(null,"AVISO: Filas o columnas fuera de rango, solo entre 1 y 20!");
-
 				} else
 					JOptionPane.showMessageDialog(null, "AVISO: Introducir filas y columnas!");
-			
-				activarMenus();
-				
-				ventanaFijarTamanyo.setAlwaysOnTop(false);
-				ventanaFijarTamanyo.setVisible(false);
-				ventanaFijarTamanyo.setEnabled(false);
-				ventanaFijarTamanyo.dispose();
-				ventanaFijarTamanyo=null;
 			}
 			
 
@@ -889,7 +896,7 @@ public class ClasePrincipal extends JFrame {
 		for (int i = 0; i < filas; i++)
 			tm.addRow(new String [columnas]);
 
-	    JTable tabla = new JTable(tm);
+	    JTable tabla = new JTable(tm);	   
 		pAux.add("Center", tabla);
 		pAux.validate();
 		return pAux;
@@ -905,8 +912,10 @@ public class ClasePrincipal extends JFrame {
 		panelTabulado.add("Matriz1", damePanelTabla(tm1));
 		panelTabulado.add("Matriz2", damePanelTabla(tm2));
 		panelTabulado.add("Resultado", damePanelTabla(tm3));
-		panelTabulado.validate();	
-	
+		panelTabulado.validate();
+		m1= new Matriz(filas,columnas);
+		m2 = new Matriz(filas,columnas);
+		resultado = new Matriz(filas,columnas);
 	}
 
 	/******************************************************************************************************/
