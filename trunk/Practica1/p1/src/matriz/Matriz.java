@@ -44,6 +44,10 @@ public class Matriz {
 		return filas;
 	}
 	
+	public int getColumnas(){
+		return columnas;
+	}
+	
 	public void suma(Matriz m1, Matriz m2){
 		//Matriz resul = new Matriz(filas,columnas);
 		
@@ -66,9 +70,9 @@ public class Matriz {
 				
 	}
 	
-	public Matriz multiplica(Matriz m1, Matriz m2){
+	public void multiplica(Matriz m1, Matriz m2){
 		
-		Matriz resul = new Matriz(m1.getFilas(),m1.getFilas());
+		//Matriz resul = new Matriz(m1.getFilas(),m1.getFilas());
 		int suma = 0;
 		
 		for(int i = 0; i < m1.getFilas(); i++){
@@ -77,10 +81,11 @@ public class Matriz {
 				for(int k = 0; k < m1.getFilas(); k++){
 					suma += m1.getIJ(i, k) * m2.getIJ(k, j);
 				}
-				resul.setIJ(i, j, suma);
+				//resul.setIJ(i, j, suma);
+				matriz[i][j]=suma;
 			}
 		}
-		return resul;
+		//return resul;
 		
 	}
 
@@ -89,7 +94,8 @@ public class Matriz {
 		Matriz resul = new Matriz(a.getFilas(),a.getFilas());
 		
 		 if (a.getFilas()%2 == 1) {
-			 resul = multiplica(a,b);
+			 //resul = multiplica(a,b);
+			 resul.multiplica(a, b);
 		 	 return resul;
 		 }
 		 else {
@@ -163,6 +169,7 @@ public class Matriz {
 			 X1.suma(m1, m7);
 			 Matriz X2 = new Matriz(posMedia,posMedia);
 			 X2.resta(m4, m5);
+			 
 			 Matriz C11 = new Matriz(posMedia,posMedia);
 			 C11.suma(X1, X2);
 			 
@@ -176,6 +183,7 @@ public class Matriz {
 			 X3.suma(m1, m6);
 			 Matriz X4 = new Matriz(posMedia,posMedia);
 			 X4.resta(m3, m2);
+			 
 			 Matriz C22 = new Matriz(posMedia,posMedia);
 			 C22.suma(X3, X4);
 			 
