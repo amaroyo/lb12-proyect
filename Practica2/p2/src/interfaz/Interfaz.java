@@ -2,6 +2,7 @@ package interfaz;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
@@ -33,13 +34,9 @@ public class Interfaz extends JFrame {
 	
 	TableroCanvas canvas;
 	JFrame f;
-	
-	
+		
 	
 	//REUTILIZABLE
-	private JPanel panelPrincipal;
-
-	private JTabbedPane panelTabulado;
 
 	private int filas;
 	private int columnas;
@@ -71,18 +68,13 @@ public class Interfaz extends JFrame {
 	/******************************************************************************************************/
 	public void inicializarInterfaz() {
 
-		f=this;
-		JPanel pt = new JPanel();
-		canvas = new TableroCanvas();
-		pt.add(canvas);
-		this.setContentPane(pt);
-		
-		this.setTitle("NONOGRAMA");
-		this.setVisible(true);
-		this.setEnabled(true);
-		this.setSize(750, 750);
-		this.setJMenuBar(dameBarraMenu()); // crea la barra de menu y la adjunta al jframe
-		this.validate();
+		f=this;	
+		f.setTitle("NONOGRAMA");
+		f.setVisible(true);
+		f.setEnabled(true);
+		f.setSize(500, 500);
+		f.setJMenuBar(dameBarraMenu()); // crea la barra de menu y la adjunta al jframe
+		f.validate();
 
 	}
 	
@@ -167,6 +159,16 @@ public class Interfaz extends JFrame {
 		nuevoMenuItem = new JMenuItem("Nuevo");
 		nuevoMenuItem.setEnabled(true);
 		nuevoMenuItem.setVisible(true);
+		nuevoMenuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+				ventanaFijarTamanyo = new JFrame();
+				ventanaFijarTamanyo.setVisible(true);
+				ventanaFijarTamanyo.setEnabled(true);
+				ventanaFijarTamanyo.setSize(300, 100);
+				ventanaFijarTamanyo.setContentPane(damePanelTamanyo());
+			}
+		});
 	
 		/*	abrirMenu.add(dameCargarMatrizA());
 		abrirMenu.add(dameCargarMatrizB());
@@ -174,6 +176,7 @@ public class Interfaz extends JFrame {
 		return nuevoMenuItem;
 	}
 
+	/******************************************************************************************************/
 	private JMenuItem getEjemplosMenuItem() {
 
 		ejemploMenuItem = new JMenuItem("Ejemplos");
@@ -803,42 +806,8 @@ public class Interfaz extends JFrame {
 	}
 */
 	/******************************************************************************************************/	
-	/*private JMenuItem getTamanyoMenuItem() {
-		
-		JMenuItem tamanyoItem = new JMenuItem("Fijar Tamanyo");
-		tamanyoItem.setEnabled(true);
-		tamanyoItem.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
 
-				ventanaFijarTamanyo = new JFrame();
-				ventanaFijarTamanyo.setVisible(true);
-				ventanaFijarTamanyo.setEnabled(true);
-				ventanaFijarTamanyo.setSize(300, 100);
-				ventanaFijarTamanyo.setContentPane(damePanelTamanyo());
-				
-				 * 
-				 * 
-				 * 
-				 
-				// tamanyoItem.setEnabled(true);
-
-				
-				 * 
-				 * crear el panel tabulado
-				 
-
-			}
-		});
-		return tamanyoItem;
-	}
-	*/
-	/******************************************************************************************************/
-	/**
-	 * 
-	 * @Matriz
-	 */
-
-	/*private JPanel damePanelTamanyo() {
+	private JPanel damePanelTamanyo() {
 	    JPanel panelTamanyo = new JPanel();
 		panelTamanyo.setLayout(new BorderLayout());
 		panelTamanyo.add("North", new JLabel("Introduce las filas y las columnas"));
@@ -866,52 +835,40 @@ public class Interfaz extends JFrame {
 		JButton botonAceptar = new JButton("Aceptar");
 		panelCentro.add(botonAceptar);
 		botonAceptar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-				if ((tm1 != null) || (tm2 != null) || (tm3 != null)) 
-					panelTabulado.removeAll();
+public void actionPerformed(ActionEvent e) {
 				
 				String s1 = botonFil.getText();
 				String s2 = botonCol.getText();
 
-				if ((s1 != "") && (s2 != "")) {
+				if ((s1 !="") && (s2 !="")) {
+					
 					try {
 						filas = Integer.parseInt(s1);
 						columnas = Integer.parseInt(s2);
+						
+						
+						if (filas > 0 && filas <= 20 && columnas > 0
+								&& columnas <= 20) {
+							modificarFrame(filas,columnas);
+							
+						} else
+							JOptionPane.showMessageDialog(null,"AVISO: Filas o columnas fuera de rango, solo entre 1 y 20!");
+						
+						
+						ventanaFijarTamanyo.setAlwaysOnTop(false);
+						ventanaFijarTamanyo.setVisible(false);
+						ventanaFijarTamanyo.setEnabled(false);
+						ventanaFijarTamanyo.dispose();
+						ventanaFijarTamanyo=null;
+						
 					} catch (NumberFormatException ex) {
 						if (ex != null) {
 							JOptionPane.showMessageDialog(null, "AVISO: TIENES QUE INTRODUCIR NUMEROS!");
 						}
 					}
 
-					if (filas > 0 && filas <= 20 && columnas > 0
-							&& columnas <= 20) {
-						m1 = new Matriz(filas, columnas);
-						m2 = new Matriz(filas, columnas);
-						resultado = new Matriz(filas, columnas);
-						
-						tm1 = new DefaultTableModel();
-						tm2 = new DefaultTableModel();
-						tm3 = new DefaultTableModel();
-						
-						panelTabulado.add("Matriz1", damePanelTabla(tm1));
-						panelTabulado.add("Matriz2", damePanelTabla(tm2));
-						panelTabulado.add("Resultado", damePanelTabla(tm3));
-						panelTabulado.validate();
-						
-					} else
-						JOptionPane.showMessageDialog(null,"AVISO: Filas o columnas fuera de rango, solo entre 1 y 20!");
-
 				} else
 					JOptionPane.showMessageDialog(null, "AVISO: Introducir filas y columnas!");
-			
-				activarMenus();
-				
-				ventanaFijarTamanyo.setAlwaysOnTop(false);
-				ventanaFijarTamanyo.setVisible(false);
-				ventanaFijarTamanyo.setEnabled(false);
-				ventanaFijarTamanyo.dispose();
-				ventanaFijarTamanyo=null;
 			}
 			
 
@@ -922,37 +879,35 @@ public class Interfaz extends JFrame {
 		return panelTamanyo;
 
 	}
-*/
-	/******************************************************************************************************/
-/*	private JPanel damePanelTabla(DefaultTableModel tm) {
-		
-		JPanel pAux = new JPanel();
-		pAux.setLayout(new BorderLayout());
-		
-		tm.setColumnCount(columnas);
-		
-		for (int i = 0; i < filas; i++)
-			tm.addRow(new String [columnas]);
-
-	    JTable tabla = new JTable(tm);
-		pAux.add("Center", tabla);
-		pAux.validate();
-		return pAux;
-	}*/
-
-	/******************************************************************************************************/
-/*	private void inicializarMatrices(DefaultTableModel tm) {
-		
-		panelTabulado.removeAll();
-		tm1 = new DefaultTableModel();
-		tm2 = new DefaultTableModel();
-		tm3 = new DefaultTableModel();
-		panelTabulado.add("Matriz1", damePanelTabla(tm1));
-		panelTabulado.add("Matriz2", damePanelTabla(tm2));
-		panelTabulado.add("Resultado", damePanelTabla(tm3));
-		panelTabulado.validate();	
 	
-	}*/
+	/******************************************************************************************************/
+	private void modificarFrame(int filas, int columnas) {
+		// TODO Auto-generated method stub
+			f.dispose();
+			f = new JFrame();
+			canvas = new TableroCanvas(filas,columnas);
+			JPanel pt = new JPanel();
+			pt.setLayout(new BorderLayout());
+			if ((filas>10) ||(columnas>10)) {
+				canvas.cambiaTamCelda(25);
+			}
+			pt.add(canvas);
+			pt.setVisible(true);
+			f.setContentPane(pt);
+			f.setJMenuBar(dameBarraMenu());
+			if (columnas<5){
+				f.setSize(500, 60+2*canvas.getK()+canvas.getMaxCols()*canvas.getCelda()+canvas.getnFilas()*canvas.getCelda());
+			}
+			else{
+				f.setSize(15 + 2*canvas.getK() + canvas.getMaxFilas()*canvas.getCelda() + canvas.getnCols()*canvas.getCelda(),
+					60 + 2*canvas.getK() + canvas.getMaxCols()*canvas.getCelda() + canvas.getnFilas()*canvas.getCelda());
+			}
+			f.setVisible(true);
+			canvas.addMouseListener(canvas);
+			f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		
+	}
 
 	/******************************************************************************************************/
 	public static void main(String[] args) {
@@ -960,59 +915,6 @@ public class Interfaz extends JFrame {
 		Interfaz i = new Interfaz();
 
 	}
-	
-/*	private void activarMenus(){
-		if ((tm1 != null) || (tm2 != null) || (tm3 != null)) 
-		{
-			sumarMenuItem.setEnabled(true);
-			restarMenuItem.setEnabled(true);
-			multiplicarMenu.setEnabled(true);
-			inicializarMenuItem.setEnabled(true);
-			cargarMenuItem.setEnabled(true);
-			guardarMenu.setEnabled(true);
-		}
-	}*/
-	
-/*	private void desactivarMenus(){
-		if ((tm1 != null) || (tm2 != null) || (tm3 != null)) 
-		{
-			sumarMenuItem.setEnabled(false);
-			restarMenuItem.setEnabled(false);
-			multiplicarMenu.setEnabled(false);
-			inicializarMenuItem.setEnabled(false);
-		}
-	}
-	
-	private void procesalinea(String s, int fila, DefaultTableModel tm){
-		int i = 0;
-		int posicion = 0;
-		String num="";
-		boolean numNeg = false;
-		char[] array = s.toCharArray();
-		
-		while (i!= array.length){
-			
-			if(array[i] == '-'){
-				numNeg = true;
-				i++;
-			}
-			else if(array[i]!= ' '){
-				num += array[i];
-				i++;
-			}
-			else{
-				int numero = Integer.parseInt(num);
-				if (numNeg) numero = -numero;
-				String numS = String.valueOf(numero);
-				tm.setValueAt(numS, fila, posicion);
-				numNeg = false;
-				num="";
-				posicion++;
-				i++;
-			}
-		}
-		
-	}*/
 	
 
 }
