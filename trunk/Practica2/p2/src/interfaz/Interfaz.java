@@ -80,7 +80,7 @@ public class Interfaz extends JFrame {
 		this.setTitle("NONOGRAMA");
 		this.setVisible(true);
 		this.setEnabled(true);
-		this.setSize(1000, 1000);
+		this.setSize(750, 750);
 		this.setJMenuBar(dameBarraMenu()); // crea la barra de menu y la adjunta al jframe
 		this.validate();
 
