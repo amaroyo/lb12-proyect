@@ -80,10 +80,10 @@ public class TableroCanvas extends Canvas implements MouseListener{
 					valor = restC[fila][columna] + "";
 					g.setColor(new Color(23, 6, 128));//(Azul oscuro)
 					g.setFont(new Font("ComicSans", Font.BOLD, 16));
-					g.drawString(valor, x+12, i+20);//Muestro el valor de la celda 
+					g.drawString(valor, x+15, i+25);//Muestro el valor de la celda 
 				}
 				else{//La celda no contienen ningun valor
-					g.setColor(new Color(255, 255, 255));
+					g.setColor(new Color(75, 141, 221));
 					g.fillRect(x, i, celda, celda); 
 				}
 			}
@@ -107,10 +107,10 @@ public class TableroCanvas extends Canvas implements MouseListener{
 						valor = restF[fila][columna] + "";
 						g.setColor(new Color(23, 6, 128));//(Azul oscuro)
 						g.setFont(new Font("ComicSans", Font.BOLD, 16));
-						g.drawString(valor, x+12, i+20);//Muestro el valor de la celda 
+						g.drawString(valor, x+15, i+25);//Muestro el valor de la celda 
 					}
 					else{//La celda no contienen ningun valor
-						g.setColor(new Color(255, 255, 255));
+						g.setColor(new Color(75, 141, 221));
 						g.fillRect(x, i, celda, celda);
 					}
 			}

@@ -30,7 +30,7 @@ public class Interfaz extends JFrame {
 
 	
 	int restricciones_filas[][];
-	int restricciones_col[][];
+	int restricciones_cols[][];
 	
 	TableroCanvas canvas;
 	JFrame f;
@@ -176,7 +176,8 @@ public class Interfaz extends JFrame {
 					                    
 					                    //leyendo el archivo
 					                   String s = "";
-					                   int linea = 0;
+					                  
+					                   int posLinea=0;
 					                   boolean esLinea=false;
 					                   boolean primeraVez = false;
 					                    if(path.compareTo(archivo.getAbsolutePath())==0){
@@ -193,23 +194,27 @@ public class Interfaz extends JFrame {
 					        					if (filas > 0 && filas <= 20 && columnas > 0
 					        							&& columnas <= 20) {
 					        						modificarFrame(filas,columnas);
+					        						restricciones_filas = new int[filas][3]; 
+					        						restricciones_cols = new int[columnas][3];
 					        					}
 					                        
 					                        	while(sc.hasNext()){
 					                        		s = sc.nextLine();
-					                        		if(s == "Filas") {
-					                        			linea++;
+					                        		if(s.equals("Filas")) {
+					                        			s=sc.nextLine();
 					                        			esLinea = true;
 					                        			primeraVez = true;
+					                        			posLinea=0;
 					                        		}
 					                        		else if (!primeraVez) throw new NumberFormatException();
 					                        		
-					                        		if(s == "Columnas"){
-					                        			linea++;
+					                        		if(s.equals("Columnas")){
+					                        			s=sc.nextLine();
+					                        			posLinea=0;
 					                        			esLinea = false;
 					                        		}
-					                        		procesalinea(s,linea,esLinea);
-					                        		linea++;
+					                        		procesalinea(s,posLinea,esLinea);
+					                        		posLinea++;
 					                        	}
 					                        	
 					                        }
@@ -906,28 +911,34 @@ public void actionPerformed(ActionEvent e) {
 		
 		int i = 0;
 		int posicion = 0;
-		String num="";
-		boolean numNeg = false;
+		String num = "";
+		
 		char[] array = s.toCharArray();
 		
 		while (i != array.length){
 			
 			if(array[i] == '-'){
-				numNeg = true;
-				i++;
+				throw new NumberFormatException();
 			}
-			else if(array[i]!= ' '){
-				num += array[i];
+			else if(array[i] == ' '){
 				i++;
 			}
 			else{
+				num += array[i];
 				int numero = Integer.parseInt(num);
-				if (numNeg) numero = -numero;
-				String numS = String.valueOf(numero);
-				tm.setValueAt(numS, fila, posicion);
-				numNeg = false;
-				num="";
-				posicion++;
+				
+				if (b) {
+						restricciones_filas[fila][posicion] = numero;
+						canvas.setRestF(restricciones_filas);
+						posicion++;
+				}
+				else {
+					restricciones_cols[fila][posicion] = numero;
+					canvas.setRestC(restricciones_cols);
+					posicion++;
+				}
+				num = "";
+				
 				i++;
 			}
 		}
