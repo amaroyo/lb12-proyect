@@ -69,7 +69,7 @@ public class Interfaz extends JFrame {
 		f.setTitle("NONOGRAMA");
 		f.setVisible(true);
 		f.setEnabled(true);
-		f.setSize(500, 500);
+		f.setSize(600, 600);
 		f.setJMenuBar(dameBarraMenu()); // crea la barra de menu y la adjunta al jframe
 		f.validate();
 
@@ -144,9 +144,116 @@ public class Interfaz extends JFrame {
 		abrirMenuItem.setEnabled(true);
 		abrirMenuItem.setVisible(true);
 	
-		/*	abrirMenu.add(dameCargarMatrizA());
-		abrirMenu.add(dameCargarMatrizB());
-		*/
+		abrirMenuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			
+							String path="";
+
+							//empezamos implementando la clase JFileChooser para abrir archivos
+					        JFileChooser JFC = new JFileChooser();
+					        //filtro que muestra solo los archivos con extension *.edu
+					        JFC.setFileFilter(new FileNameExtensionFilter("todos los archivos *.TXT", "txt","TXT"));
+					        //se comprueba si se ha dado al boton aceptar
+					        int abrir = JFC.showDialog(null, "Abrir");
+					        if (abrir == JFileChooser.APPROVE_OPTION) {
+					            FileReader FR = null;
+					            //BufferedReader BR = null;
+					            Scanner sc = null;
+					           
+
+					            try {
+					                //abro el fichero y creo un BufferedReader para hacer
+					                //una lectura comoda (tener el metodo readLine();)
+					                File archivo = JFC.getSelectedFile();//abre un archivo .lengf
+					                
+					                //evitar abrir archivo con otra extension que no sea *.LFP
+					                String PATH = JFC.getSelectedFile().getAbsolutePath();
+					                if(PATH.endsWith(".txt")||PATH.endsWith(".TXT")){
+					                    
+					                    FR = new FileReader(archivo);
+					                   // BR = new BufferedReader(FR);
+					                    sc = new Scanner(FR);
+					                    
+					                    //leyendo el archivo
+					                   String s = "";
+					                   int linea = 0;
+					                   boolean esLinea=false;
+					                   boolean primeraVez = false;
+					                    if(path.compareTo(archivo.getAbsolutePath())==0){
+					                        JOptionPane.showMessageDialog(null, "Archivo Abierto","Oops! Error", JOptionPane.ERROR_MESSAGE);
+					                    }else{
+					                        path = archivo.getAbsolutePath();
+					                        try{
+					                        	s = sc.nextLine();
+					                        	filas = Integer.parseInt(s);
+					                        	s = sc.nextLine();
+					                        	columnas = Integer.parseInt(s);
+					                        	
+					                        	
+					        					if (filas > 0 && filas <= 20 && columnas > 0
+					        							&& columnas <= 20) {
+					        						modificarFrame(filas,columnas);
+					        					}
+					                        
+					                        	while(sc.hasNext()){
+					                        		s = sc.nextLine();
+					                        		if(s == "Filas") {
+					                        			linea++;
+					                        			esLinea = true;
+					                        			primeraVez = true;
+					                        		}
+					                        		else if (!primeraVez) throw new NumberFormatException();
+					                        		
+					                        		if(s == "Columnas"){
+					                        			linea++;
+					                        			esLinea = false;
+					                        		}
+					                        		procesalinea(s,linea,esLinea);
+					                        		linea++;
+					                        	}
+					                        	
+					                        }
+					                        
+					                       catch (NumberFormatException ex) {
+					    						if (ex != null) {
+					    							JOptionPane.showMessageDialog(null, "AVISO: LECTURA INCORRECTA!");
+					    						}
+					    					}
+					                        
+					                        
+					                       
+					                    }
+					                    
+					                }else{
+					                    JOptionPane.showMessageDialog(null, "Archivo no soportado","Oops! Error", JOptionPane.ERROR_MESSAGE);
+					                    //open();
+					                }
+
+					            } catch (FileNotFoundException ex) {
+					                ex.printStackTrace();
+					                
+					            //cerramos el fichero, para asegurar que se cierra tanto
+					            // si todo va bien si salta una excepcion
+					            } finally {
+					                try {
+					                    if(null!= FR){
+					                        FR.close();
+					                    }
+
+					                } catch (IOException ex) {
+					                    ex.printStackTrace();
+					                
+					                }
+					            }
+					        }
+
+
+						}
+					});
+
+			
+		
+		
 		return abrirMenuItem;
 	}
 	
@@ -464,120 +571,7 @@ public class Interfaz extends JFrame {
 		return cargaBMenuItem;
 	}*/
 
-	/******************************************************************************************************/
-/*	private JMenuItem dameCargarMatrizA() {
-		JMenuItem cargaAMenuItem = new JMenuItem("Cargar Matriz A");
-		cargaAMenuItem.setEnabled(true);
-		cargaAMenuItem.setVisible(true);
-		cargaAMenuItem.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				String path="";
 
-				//empezamos implementando la clase JFileChooser para abrir archivos
-		        JFileChooser JFC = new JFileChooser();
-		        //filtro que muestra solo los archivos con extension *.edu
-		        JFC.setFileFilter(new FileNameExtensionFilter("todos los archivos *.TXT", "txt","TXT"));
-		        //se comprueba si se ha dado al boton aceptar
-		        int abrir = JFC.showDialog(null, "Abrir");
-		        if (abrir == JFileChooser.APPROVE_OPTION) {
-		            FileReader FR = null;
-		            //BufferedReader BR = null;
-		            Scanner sc = null;
-		           
-
-		            try {
-		                //abro el fichero y creo un BufferedReader para hacer
-		                //una lectura comoda (tener el metodo readLine();)
-		                File archivo = JFC.getSelectedFile();//abre un archivo .lengf
-		                
-		                //evitar abrir archivo con otra extension que no sea *.LFP
-		                String PATH = JFC.getSelectedFile().getAbsolutePath();
-		                if(PATH.endsWith(".txt")||PATH.endsWith(".TXT")){
-		                    
-		                    FR = new FileReader(archivo);
-		                   // BR = new BufferedReader(FR);
-		                    sc = new Scanner(FR);
-		                    
-		                    //leyendo el archivo
-		                   String s = "";
-		                   int linea = 0;
-		                    if(path.compareTo(archivo.getAbsolutePath())==0){
-		                        JOptionPane.showMessageDialog(null, "Archivo Abierto","Oops! Error", JOptionPane.ERROR_MESSAGE);
-		                    }else{
-		                        path = archivo.getAbsolutePath();
-		                        try{
-		                        	s = sc.nextLine();
-		                        	filas = Integer.parseInt(s);
-		                        	s = sc.nextLine();
-		                        	columnas = Integer.parseInt(s);
-		                        	
-		        					if (filas > 0 && filas <= 20 && columnas > 0
-		        							&& columnas <= 20) {
-		        						m1 = new Matriz(filas, columnas);
-		        						m2 = new Matriz(filas, columnas);
-		        						resultado = new Matriz(filas, columnas);
-		        					}
-		                        	
-		                        	if (tm1 != null){
-		    							int filAux=(tm1.getRowCount())-1;
-		    							for (int k=filAux; k >= 0 ; k--)
-		    								tm1.removeRow(k);
-		    							damePanelTabla(tm1);
-		    						}
-		    						else{
-		    							tm1 = new DefaultTableModel();
-		    							panelTabulado.add("Matriz 1", damePanelTabla(tm1));
-		    						}
-		    						panelTabulado.validate();
-		                        			                        	
-		                        	activarMenus();
-		                        	while(sc.hasNext()){
-		                        		s = sc.nextLine();
-		                        		procesalinea(s,linea,tm1);
-		                        		linea++;
-		                        	}
-		                        	
-		                        }
-		                        
-		                       catch (NumberFormatException ex) {
-		    						if (ex != null) {
-		    							JOptionPane.showMessageDialog(null, "AVISO: LECTURA INCORRECTA!");
-		    						}
-		    					}
-		                        
-		                        
-		                       
-		                    }
-		                    
-		                }else{
-		                    JOptionPane.showMessageDialog(null, "Archivo no soportado","Oops! Error", JOptionPane.ERROR_MESSAGE);
-		                    //open();
-		                }
-
-		            } catch (FileNotFoundException ex) {
-		                ex.printStackTrace();
-		                
-		            //cerramos el fichero, para asegurar que se cierra tanto
-		            // si todo va bien si salta una excepcion
-		            } finally {
-		                try {
-		                    if(null!= FR){
-		                        FR.close();
-		                    }
-
-		                } catch (IOException ex) {
-		                    ex.printStackTrace();
-		                
-		                }
-		            }
-		        }
-
-
-			}
-		});
-
-		return cargaAMenuItem;
-	}*/
 	
 	/******************************************************************************************************/
 	/**
@@ -805,6 +799,7 @@ public class Interfaz extends JFrame {
 	/******************************************************************************************************/	
 
 	private JPanel damePanelTamanyo() {
+		
 	    JPanel panelTamanyo = new JPanel();
 		panelTamanyo.setLayout(new BorderLayout());
 		panelTamanyo.add("North", new JLabel("Introduce las filas y las columnas"));
@@ -879,7 +874,7 @@ public void actionPerformed(ActionEvent e) {
 	
 	/******************************************************************************************************/
 	private void modificarFrame(int filas, int columnas) {
-		// TODO Auto-generated method stub
+		
 			f.dispose();
 			f = new JFrame();
 			canvas = new TableroCanvas(filas,columnas);
@@ -903,6 +898,39 @@ public void actionPerformed(ActionEvent e) {
 			canvas.addMouseListener(canvas);
 			f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
+		
+	}
+	/******************************************************************************************************/
+
+	private void procesalinea(String s, int fila, boolean b){
+		
+		int i = 0;
+		int posicion = 0;
+		String num="";
+		boolean numNeg = false;
+		char[] array = s.toCharArray();
+		
+		while (i != array.length){
+			
+			if(array[i] == '-'){
+				numNeg = true;
+				i++;
+			}
+			else if(array[i]!= ' '){
+				num += array[i];
+				i++;
+			}
+			else{
+				int numero = Integer.parseInt(num);
+				if (numNeg) numero = -numero;
+				String numS = String.valueOf(numero);
+				tm.setValueAt(numS, fila, posicion);
+				numNeg = false;
+				num="";
+				posicion++;
+				i++;
+			}
+		}
 		
 	}
 

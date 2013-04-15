@@ -252,10 +252,11 @@ public class TableroCanvas extends Canvas implements MouseListener{
 		// TODO Auto-generated method stub
 		int y = e.getY();
 		int x = e.getX();
-		int f = queFila(x);
-		int c = queCol(y);
+		int f = queFila(y);	//SEGUN ELVIRA AL REVES, PERO ASI FUNCIONA
+		int c = queCol(x);
 		if ((f > -1) && (f < nfilas) && (c > -1) && (c < ncols)){
 			asignarColorCasilla(f, c);
+			//asignarColorCasilla(c,f);
 			repaint();
 		}
 		
