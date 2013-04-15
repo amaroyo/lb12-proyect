@@ -80,7 +80,7 @@ public class TableroCanvas extends Canvas implements MouseListener{
 					valor = restC[fila][columna] + "";
 					g.setColor(new Color(23, 6, 128));//(Azul oscuro)
 					g.setFont(new Font("ComicSans", Font.BOLD, 16));
-					g.drawString(valor, x+15, i+25);//Muestro el valor de la celda 
+					g.drawString(valor, x+15, i+25);//Muestro el valor de la celda y la posicion respecto a la casilla
 				}
 				else{//La celda no contienen ningun valor
 					g.setColor(new Color(75, 141, 221));
@@ -150,12 +150,12 @@ public class TableroCanvas extends Canvas implements MouseListener{
 	/******************************************************************************************************/
 	private void pintarTablero(Graphics g) {
 		//g.setColor(Color.GRAY); //Por defecto
-		pintarCeldas(g);//Relleno		
+		pintarFichas(g);//Relleno		
 		pintarCuadri(g);
 	}
 
 	/******************************************************************************************************/
-	public void pintarCeldas(Graphics g) {
+	public void pintarFichas(Graphics g) {
 		for(int i = 0; i < (nfilas*celda); i = i + celda){ //Voy pintando verticalmente
 			pintarFila(g, (k+(max_rest_fil*celda)), ((k+(max_rest_col*celda))+i));
 		}
