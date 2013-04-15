@@ -34,9 +34,6 @@ public class Interfaz extends JFrame {
 	
 	TableroCanvas canvas;
 	JFrame f;
-		
-	
-	//REUTILIZABLE
 
 	private int filas;
 	private int columnas;
@@ -889,18 +886,18 @@ public void actionPerformed(ActionEvent e) {
 			JPanel pt = new JPanel();
 			pt.setLayout(new BorderLayout());
 			if ((filas>10) ||(columnas>10)) {
-				canvas.cambiaTamCelda(25);
+				canvas.setTamCelda(25);
 			}
 			pt.add(canvas);
 			pt.setVisible(true);
 			f.setContentPane(pt);
 			f.setJMenuBar(dameBarraMenu());
 			if (columnas<5){
-				f.setSize(500, 60+2*canvas.getK()+canvas.getMaxCols()*canvas.getCelda()+canvas.getnFilas()*canvas.getCelda());
+				f.setSize(500, 60+2*canvas.getK()+canvas.getMax_rest_col()*canvas.getTamCelda()+canvas.getNfilas()*canvas.getTamCelda());
 			}
 			else{
-				f.setSize(15 + 2*canvas.getK() + canvas.getMaxFilas()*canvas.getCelda() + canvas.getnCols()*canvas.getCelda(),
-					60 + 2*canvas.getK() + canvas.getMaxCols()*canvas.getCelda() + canvas.getnFilas()*canvas.getCelda());
+				f.setSize(15 + 2*canvas.getK() + canvas.getMax_rest_fil()*canvas.getTamCelda() + canvas.getNcols()*canvas.getTamCelda(),
+					60 + 2*canvas.getK() + canvas.getMax_rest_col()*canvas.getTamCelda() + canvas.getNfilas()*canvas.getTamCelda());
 			}
 			f.setVisible(true);
 			canvas.addMouseListener(canvas);

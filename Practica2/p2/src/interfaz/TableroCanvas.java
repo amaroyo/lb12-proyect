@@ -15,7 +15,7 @@ public class TableroCanvas extends Canvas implements MouseListener{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	private int nfilas, ncols, max_rest_col, max_rest_fil;
 	private int tablero[][];
 	private int k=50;
@@ -34,32 +34,35 @@ public class TableroCanvas extends Canvas implements MouseListener{
 	
 	/******************************************************************************************************/
 	public void paint(Graphics g){//Se ejecuta inicialmente. Se ejecuta cada vez que modificas.
-		//Le asignamos color al contexto actual new Color(r,g,b)
 		super.paint(g);
-		this.setBackground(new Color(141, 0, 141));
-		pintarRestricciones(g);
+		this.setBackground(new Color(141, 0, 141));//Le asignamos color de fondo al frame actual new Color(r,g,b)
+		pintarRest(g);
 		pintarTablero(g);
 		
 	}
 	
 	/******************************************************************************************************/
-	private void pintarRestricciones(Graphics g) {
-		g.setColor(new Color(116, 176, 248));
+	private void pintarRest(Graphics g) {
 		pintarCeldasRest(g); //El relleno
 		pintarCuadriRest(g);//Los bordes
 	}
 
 	/******************************************************************************************************/
 	private void pintarCeldasRest(Graphics g) {
-		int x = k+max_rest_fil*celda;//El ancho
+		//Las restricciones de la parte superior
+		int x = k+max_rest_fil*celda;//Asigno donde debe empezar por la izqda
 		int y = k;
-		for(int i = 0; i < ncols; i++){
+		
+		for(int i = 0; i < ncols; i++){//Voy pintando de forma horizontal
 			pintaRestCols(i, g, x, y);
 			x = x + celda;
 		}
+		
+		//Las restricciones del lateral izquierdo
 		x = k;
 		y = k + max_rest_col*celda;
-		for(int j = 0; j < max_rest_fil;j++){
+		
+		for(int j = 0; j < max_rest_fil;j++){//Voy pintando de forma horizontal
 			pintaRestFilas(j, g, x, y);
 			x = x + celda; 
 		}
@@ -69,23 +72,23 @@ public class TableroCanvas extends Canvas implements MouseListener{
 	private void pintaRestCols(int fila, Graphics g, int x, int y){	
 		int columna = 0;
 		String valor;
-		for(int i = y; i < y + max_rest_col*celda; i = i+celda){
-			if(restC != null){
-				if(restC[fila][columna] != 0){
-					g.setColor(new Color(116, 176, 248));
-					g.fillRect(x, i, celda, celda);
+		for(int i = y; i < y + max_rest_col*celda; i = i+celda){//Voy pintando de forma vertical
+			if(restC != null){//Si hay restricciones
+				if(restC[fila][columna] != 0){//La celda contiene un valor
+					g.setColor(new Color(116, 176, 248));//(Azul cielo claro)
+					g.fillRect(x, i, celda, celda); //Lo relleno del color de casilla ocupada
 					valor = restC[fila][columna] + "";
-					g.setColor(new Color(23, 6, 128));
+					g.setColor(new Color(23, 6, 128));//(Azul oscuro)
 					g.setFont(new Font("ComicSans", Font.BOLD, 16));
-					g.drawString(valor, x+12, i+20);
+					g.drawString(valor, x+12, i+20);//Muestro el valor de la celda 
 				}
-				else{
-					g.setColor(new Color(141, 0, 141));
-					g.fillRect(x, i, celda, celda);
+				else{//La celda no contienen ningun valor
+					g.setColor(new Color(255, 255, 255));
+					g.fillRect(x, i, celda, celda); 
 				}
 			}
-			else{
-				g.setColor(new Color(116, 176, 248));
+			else{//Si no hay nada
+				g.setColor(new Color(116, 176, 248));//(Azul cielo claro)
 				g.fillRect(x, i, celda, celda);
 			}
 			columna++;
@@ -96,23 +99,23 @@ public class TableroCanvas extends Canvas implements MouseListener{
 	private void pintaRestFilas(int columna,Graphics g,int x,int y){
 		int fila = 0;
 		String valor;
-		for(int i = y; i < y + nfilas*celda; i = i+celda){
-			if(restF != null){
-					if(restF[fila][columna] != 0){
-						g.setColor(new Color(116, 176, 248));
-						g.fillRect(x, i, celda, celda);
+		for(int i = y; i < y + nfilas*celda; i = i+celda){//Voy pintando de forma vertical
+			if(restF != null){//Si hay restricciones
+					if(restF[fila][columna] != 0){//La celda contiene un valor
+						g.setColor(new Color(116, 176, 248));//(Azul cielo claro)
+						g.fillRect(x, i, celda, celda);//Lo relleno del color de casilla ocupada
 						valor = restF[fila][columna] + "";
-						g.setColor(new Color(23, 6, 128));
+						g.setColor(new Color(23, 6, 128));//(Azul oscuro)
 						g.setFont(new Font("ComicSans", Font.BOLD, 16));
-						g.drawString(valor, x+12, i+20);
+						g.drawString(valor, x+12, i+20);//Muestro el valor de la celda 
 					}
-					else{
-						g.setColor(new Color(141, 0, 141));
+					else{//La celda no contienen ningun valor
+						g.setColor(new Color(255, 255, 255));
 						g.fillRect(x, i, celda, celda);
 					}
 			}
-			else{
-				g.setColor(new Color(116, 176, 248));
+			else{//Si no hay nada
+				g.setColor(new Color(116, 176, 248));//(Azul cielo claro)
 				g.fillRect(x, i, celda, celda);
 			}
 			fila++;
@@ -121,31 +124,39 @@ public class TableroCanvas extends Canvas implements MouseListener{
 
 	/******************************************************************************************************/
 	private void pintarCuadriRest(Graphics g) {
-		g.setColor(new Color(0,0,0));
-		for(int cl = k; cl <= k+(max_rest_col*celda); cl = cl+celda){
-			g.drawLine(k+(max_rest_fil*celda), cl, k+max_rest_fil*celda+ncols*celda, cl);
+		g.setColor(new Color(0,0,0));//(Negro)
+		
+		//Pinto las lineas horizontales de las restricciones superiores
+		for(int col = k; col <= k+(max_rest_col*celda); col = col+celda){
+			g.drawLine(k+(max_rest_fil*celda), col, k+max_rest_fil*celda+ncols*celda, col);
 		}
-		for(int cl = k+(max_rest_col*celda); cl <= k+(max_rest_col*celda)+(nfilas*celda); cl = cl+celda){
-			g.drawLine(k, cl, k+max_rest_fil*celda, cl);
+		
+		//Pinto las lineas horizontales de las restricciones laterales
+		for(int col = k+(max_rest_col*celda); col <= k+(max_rest_col*celda)+(nfilas*celda); col = col+celda){
+			g.drawLine(k, col, k+max_rest_fil*celda, col);
 		}
-		for(int fl = k+(max_rest_fil*celda); fl <= k+(max_rest_fil*celda)+(ncols*celda); fl = fl+celda){
-			g.drawLine(fl, k, fl, k+(max_rest_col*celda));
+		
+		//Pinto las lineas verticales de las restricciones superiores
+		for(int fil = k+(max_rest_fil*celda); fil <= k+(max_rest_fil*celda)+(ncols*celda); fil = fil+celda){
+			g.drawLine(fil, k, fil, k+(max_rest_col*celda));
 		}
-		for(int fl = k; fl <= k+(max_rest_fil*celda); fl = fl+celda){
-			g.drawLine(fl, k+(max_rest_col*celda), fl, k+(max_rest_col*celda)+(nfilas*celda));
+		
+		//Pinto las lineas verticales de las restricciones laterales
+		for(int fil = k; fil <= k+(max_rest_fil*celda); fil = fil+celda){
+			g.drawLine(fil, k+(max_rest_col*celda), fil, k+(max_rest_col*celda)+(nfilas*celda));
 		}
 	}
 	
 	/******************************************************************************************************/
 	private void pintarTablero(Graphics g) {
-		g.setColor(Color.GRAY);
-		pintarCeldas(g);		
-		pintarCuadriculas(g);
+		//g.setColor(Color.GRAY); //Por defecto
+		pintarCeldas(g);//Relleno		
+		pintarCuadri(g);
 	}
 
 	/******************************************************************************************************/
 	public void pintarCeldas(Graphics g) {
-		for(int i = 0; i < (nfilas*celda); i = i + celda){
+		for(int i = 0; i < (nfilas*celda); i = i + celda){ //Voy pintando verticalmente
 			pintarFila(g, (k+(max_rest_fil*celda)), ((k+(max_rest_col*celda))+i));
 		}
 	}
@@ -153,7 +164,9 @@ public class TableroCanvas extends Canvas implements MouseListener{
 	/******************************************************************************************************/
 	private void pintarFila(Graphics g, int inix, int iniy) {
 		int f = (iniy - (k + max_rest_col*celda)) / celda;
-		for(int i = 0; i < ncols; i++){
+		
+		//Parte desde la esquina superior izqda
+		for(int i = 0; i < ncols; i++){ //Voy pintando horizontalmente
 			if(tablero[f][i] > 0){ //pintar negro
 				g.setColor(Color.BLACK);
 				g.fillRect(inix, iniy, celda, celda);
@@ -173,15 +186,15 @@ public class TableroCanvas extends Canvas implements MouseListener{
 	}
 
 	/******************************************************************************************************/
-	public void pintarCuadriculas(Graphics g) {
-		g.setColor(new Color(0, 0, 0));
-		//pinta las filas
-		for(int cl = k+(max_rest_col*celda); cl <= k+(max_rest_col*celda)+nfilas * celda; cl = cl+celda){
-			g.drawLine(k+(max_rest_fil*celda), cl, k+max_rest_fil*celda+ncols*celda, cl);
+	public void pintarCuadri(Graphics g) {
+		g.setColor(new Color(0, 0, 0));//(Negro)
+		//Pinta las lineas horizontales
+		for(int col = k+(max_rest_col*celda); col <= k+(max_rest_col*celda)+nfilas * celda; col = col+celda){
+			g.drawLine(k+(max_rest_fil*celda), col, k+max_rest_fil*celda+ncols*celda, col);
 		}
-		//pinta las lineas de las columnas
-		for(int fl = k+(max_rest_fil*celda); fl <= k+(max_rest_fil*celda)+ncols * celda; fl = fl+celda){
-			g.drawLine(fl, k+(max_rest_col*celda), fl, k+(max_rest_col*celda)+nfilas*celda);
+		//Pinta las lineas verticales
+		for(int fil = k+(max_rest_fil*celda); fil <= k+(max_rest_fil*celda)+ncols * celda; fil = fil+celda){
+			g.drawLine(fil, k+(max_rest_col*celda), fil, k+(max_rest_col*celda)+nfilas*celda);
 		}
 	}
 	
@@ -199,7 +212,7 @@ public class TableroCanvas extends Canvas implements MouseListener{
 	}
 
 	/******************************************************************************************************/
-	private int queColumnaEs(int x) {
+	private int queCol(int x) {
 		int cont = 0;
 		int aux;
 		aux = k + max_rest_fil*celda; 
@@ -212,7 +225,7 @@ public class TableroCanvas extends Canvas implements MouseListener{
 	}
 
 	/******************************************************************************************************/
-	private int queFilaEs(int y) {
+	private int queFila(int y) {
 		int cont = 0;
 		int aux;
 		aux = k + max_rest_col*celda; 
@@ -229,22 +242,114 @@ public class TableroCanvas extends Canvas implements MouseListener{
 		restF = restriccionesFilas;
 		restC = restriccionesCols;		
 	}
+	
+	/******************************************************************************************************/
 
-	public void setnCols(int nCols) {this.ncols = nCols;}
-	public int getnCols() {return ncols;}
-	public void setnFilas(int nFilas) {this.nfilas = nFilas;}
-	public int getnFilas() {return nfilas;}
-	public void setMaxCols(int maxCols) {this.max_rest_col = maxCols;}
-	public int getMaxCols() {return max_rest_col;}
-	public void setMaxFilas(int maxFilas) {this.max_rest_fil = maxFilas;}
-	public int getMaxFilas() {return max_rest_fil;}
-	public void setTablero(int tablero[][]) {this.tablero = tablero;}
-	public int[][] getTablero() {return tablero;}
-	public int getTablero(int f, int c){return tablero[f][c];}
-	public void setEnTablero(int f, int c,int contenido) {tablero[f][c] = contenido;}
-	public int getCelda(){return celda;}
-	public int getK(){return k;}
+	
+	/******************************************************************************************************/
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		int y = e.getY();
+		int x = e.getX();
+		int f = queFila(x);
+		int c = queCol(y);
+		if ((f > -1) && (f < nfilas) && (c > -1) && (c < ncols)){
+			asignarColorCasilla(f, c);
+			repaint();
+		}
+		
+	}
+	
+	/******************************************************************************************************/
+										/*GETTERS AND SETTERS*/
+	/******************************************************************************************************/
+	public int getNfilas() {
+		return nfilas;
+	}
 
+	public void setNfilas(int nfilas) {
+		this.nfilas = nfilas;
+	}
+
+	public int getNcols() {
+		return ncols;
+	}
+
+	public void setNcols(int ncols) {
+		this.ncols = ncols;
+	}
+
+	public int getMax_rest_col() {
+		return max_rest_col;
+	}
+
+	public void setMax_rest_col(int max_rest_col) {
+		this.max_rest_col = max_rest_col;
+	}
+
+	public int getMax_rest_fil() {
+		return max_rest_fil;
+	}
+
+	public void setMax_rest_fil(int max_rest_fil) {
+		this.max_rest_fil = max_rest_fil;
+	}
+
+	public int[][] getRestF() {
+		return restF;
+	}
+
+	public void setRestF(int[][] restF) {
+		this.restF = restF;
+	}
+
+	public int[][] getRestC() {
+		return restC;
+	}
+
+	public void setRestC(int[][] restC) {
+		this.restC = restC;
+	}
+
+	public void setCelda(int celda) {
+		this.celda = celda;
+	}
+	
+	public void setTablero(int tablero[][]) {
+		this.tablero = tablero;
+	}
+	
+	public int[][] getTablero() {
+		return tablero;
+	}
+	
+	public int getValorPosTablero(int f, int c){
+		return tablero[f][c];
+	}
+	
+	public void setValorPosTablero(int f, int c,int val) {
+		tablero[f][c] = val;
+	}
+	
+	public int getTamCelda(){
+		return celda;
+	}
+	
+	public void setTamCelda(int val) {
+		this.celda=val;
+	}
+	
+	public int getK(){
+		return k;
+	}
+	
+	public void setK(int k) {
+		this.k = k;
+	}
+	/******************************************************************************************************/
+										/*AUTO-GENERATED METHODS*/ 
+	/******************************************************************************************************/
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
 		// TODO Auto-generated method stub
@@ -264,38 +369,10 @@ public class TableroCanvas extends Canvas implements MouseListener{
 	}
 
 	@Override
-	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-		int y = e.getY();
-		int x = e.getX();
-		int f = queFila(x);
-		int c = queCol(y);
-		if ((f!=-1)&&(c!=-1)){
-			asignarColorCasilla(f, c);
-			repaint();
-		}
-		
-	}
-
-	private int queCol(int y) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	private int queFila(int x) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
 	public void mouseReleased(MouseEvent arg0) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	public void cambiaTamCelda(int i) {
-		// TODO Auto-generated method stub
-		celda=i;
-	}
 
 }
