@@ -25,11 +25,11 @@ public class TableroCanvas extends Canvas implements MouseListener{
 	
 	/******************************************************************************************************/
 	public TableroCanvas(int filas, int cols){
-		nfilas=filas;
-		ncols=cols;
-		max_rest_fil = 3;
-		max_rest_col = 3;
-		tablero = new int[nfilas][ncols];
+		this.nfilas=filas;
+		this.ncols=cols;
+		this.max_rest_fil = ((ncols / 2) + (ncols % 2));
+		this.max_rest_col = ((nfilas / 2) + (nfilas % 2));
+		this.tablero = new int[nfilas][ncols];
 	}
 	
 	/******************************************************************************************************/
