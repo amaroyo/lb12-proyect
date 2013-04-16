@@ -3,6 +3,7 @@ package interfaz;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
@@ -12,6 +13,9 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.Scanner;
 
 import javax.swing.*;
@@ -40,17 +44,20 @@ public class Interfaz extends JFrame {
 
 	private JTextField botonFil;
 	private JTextField botonCol;
-
+	private String ejemElegido ="";
 
 	private JFrame ventanaFijarTamanyo;
 	
 	
-	private JMenu directoMenu;
+	private JMenuItem directoMenu;
 	private JMenuItem inversoMenuItem;
 	private JMenuItem guardarMenuItem;
 	private JMenuItem abrirMenuItem;
 	private JMenuItem nuevoMenuItem;
 	private JMenuItem ejemploMenuItem;
+	private JMenuItem infoNonograma;
+	private JFrame ventanaElegirEjemplo;
+	private JComboBox ejemplos;
 	
 
 	/******************************************************************************************************/
@@ -117,11 +124,48 @@ public class Interfaz extends JFrame {
 	private JMenu getMenuAyuda() {
 
 		JMenu ayudaMenu = new JMenu("Ayuda");
+		ayudaMenu.add(getInfoNonograma());
 		ayudaMenu.setVisible(true);
 		ayudaMenu.setEnabled(true);
-		
 		return ayudaMenu;
 	}
+	
+	private JMenuItem getInfoNonograma() {		
+	
+		infoNonograma= new JMenuItem("Acerca de Nonograma");
+		infoNonograma.setEnabled(true);
+		infoNonograma.setVisible(true);
+		
+		infoNonograma.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				openURL("http://es.wikipedia.org/wiki/Nomograma");
+				//JOptionPane.showMessageDialog(null, "Please open a browser and go to ");
+			}
+		});
+		return infoNonograma;
+	}
+
+	/******************************************************************************************************/
+		public static  void openURL(String url) {
+	        String osName = System.getProperty("os.name");
+	        try {
+	            if (osName.startsWith("Windows")) {
+	                Runtime.getRuntime().exec("rundll32 url.dll,FileProtocolHandler " + url);
+	            } else if (osName.startsWith("Mac OS X")) {
+	                // Runtime.getRuntime().exec("open -a safari " + url);
+	                // Runtime.getRuntime().exec("open " + url + "/index.html");
+	                Runtime.getRuntime().exec("open " + url);
+	            } else {
+	                //System.out.println("Please open a browser and go to "+ url);
+	                JOptionPane.showMessageDialog(null, "Please open a browser and go to "+ url);
+	            }
+	        } catch (IOException e) {
+	            //System.out.println("Failed to start a browser to open the url " + url);
+	            JOptionPane.showMessageDialog(null, "Failed to start a browser to open the url " + url);
+	            e.printStackTrace();
+	        }
+	    }
+		
 	/******************************************************************************************************/
 	private JMenuItem getGuardarMenuItem() {
 
@@ -190,12 +234,13 @@ public class Interfaz extends JFrame {
 					                        	s = sc.nextLine();
 					                        	columnas = Integer.parseInt(s);
 					                        	
-					                        	
 					        					if (filas > 0 && filas <= 20 && columnas > 0
 					        							&& columnas <= 20) {
 					        						modificarFrame(filas,columnas);
-					        						restricciones_filas = new int[filas][3]; 
-					        						restricciones_cols = new int[columnas][3];
+					        						restricciones_filas = new int[filas][canvas.getMax_rest_fil()]; 
+					        						restricciones_cols = new int[columnas][canvas.getMax_rest_col()];
+					        						/*restricciones_filas = new int[filas][3]; 
+					        						restricciones_cols = new int[columnas][3];*/
 					        					}
 					                        
 					                        	while(sc.hasNext()){
@@ -215,8 +260,7 @@ public class Interfaz extends JFrame {
 					                        		}
 					                        		procesalinea(s,posLinea,esLinea);
 					                        		posLinea++;
-					                        	}
-					                        	
+					                        	}	
 					                        }
 					                        
 					                       catch (NumberFormatException ex) {
@@ -224,9 +268,6 @@ public class Interfaz extends JFrame {
 					    							JOptionPane.showMessageDialog(null, "AVISO: LECTURA INCORRECTA!");
 					    						}
 					    					}
-					                        
-					                        
-					                       
 					                    }
 					                    
 					                }else{
@@ -256,9 +297,6 @@ public class Interfaz extends JFrame {
 						}
 					});
 
-			
-		
-		
 		return abrirMenuItem;
 	}
 	
@@ -291,7 +329,16 @@ public class Interfaz extends JFrame {
 		ejemploMenuItem = new JMenuItem("Ejemplos");
 		ejemploMenuItem.setEnabled(true);
 		ejemploMenuItem.setVisible(true);
-	
+		ejemploMenuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+				ventanaElegirEjemplo = new JFrame();
+				ventanaElegirEjemplo.setVisible(true);
+				ventanaElegirEjemplo.setEnabled(true);
+				ventanaElegirEjemplo.setSize(300, 150);
+				ventanaElegirEjemplo.setContentPane(damePanelEjemplos());
+			}
+		});
 		/*	abrirMenu.add(dameCargarMatrizA());
 		abrirMenu.add(dameCargarMatrizB());
 		*/
@@ -634,9 +681,9 @@ public class Interfaz extends JFrame {
 	}*/
 
 	/******************************************************************************************************/
-	private JMenu getDirectoMenu() {
+	private JMenuItem getDirectoMenu() {
 
-		directoMenu = new JMenu("Directo");
+		directoMenu = new JMenuItem("Directo");
 		directoMenu.setEnabled(true);
 		directoMenu.setVisible(true);
 		directoMenu.add(damePrimera());
@@ -832,7 +879,7 @@ public class Interfaz extends JFrame {
 		JButton botonAceptar = new JButton("Aceptar");
 		panelCentro.add(botonAceptar);
 		botonAceptar.addActionListener(new ActionListener() {
-public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent e) {
 				
 				String s1 = botonFil.getText();
 				String s2 = botonCol.getText();
@@ -905,46 +952,149 @@ public void actionPerformed(ActionEvent e) {
 		
 		
 	}
+	
 	/******************************************************************************************************/
+	private JPanel damePanelEjemplos() {
+		
+		String[] listaEjem = {"cuadrado","triangulo","cara"};
+		
+		ejemplos = new JComboBox(listaEjem);
+		JButton botonAceptar = new JButton("Aceptar");
+	    JPanel panelEjem = new JPanel();
+	    panelEjem.setLayout(new GridLayout(4,0));
+	    panelEjem.add(botonAceptar,1,0);
+	    panelEjem.add(new JLabel(""),2,0);
+	    panelEjem.add(ejemplos,3,0);
+	    panelEjem.add(new JLabel("Selecciona el nonograma a cargar"),4,0);
+	    ejemplos.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				ejemElegido =(String) ejemplos.getSelectedItem();
+			}
+	    	
+	    });
+	    
+		botonAceptar.addActionListener(new ActionListener() {
+			File archivo = null;
+		    FileReader fr = null;
+		    BufferedReader br = null;
+		    
+			public void actionPerformed(ActionEvent e) {
+				ventanaElegirEjemplo.setAlwaysOnTop(false);
+				ventanaElegirEjemplo.setVisible(false);
+				ventanaElegirEjemplo.setEnabled(false);
+				ventanaElegirEjemplo.dispose();
+				ventanaElegirEjemplo=null;
+				
+				try {
+			         // Apertura del fichero y creacion de BufferedReader para poder
+			         // hacer una lectura comoda (disponer del metodo readLine()).
+					 archivo = new File(ejemElegido);
+			         //archivo = new File ("C:\\Users\\Semiramis\\Documents\\test1.txt");
+			         fr = new FileReader (archivo.getAbsoluteFile());
+			         BufferedReader br = new BufferedReader(fr);
+			 
+			         // Lectura del fichero
+			         String linea;
+			         
+			         	 linea=br.readLine();
+		        		 if (linea!=null) filas = Integer.parseInt(linea);
+		        		 
+		        		 linea=br.readLine();
+		        		 if (linea!=null)columnas = Integer.parseInt(linea);
+		        		 
+		        		 if (filas > 0 && filas <= 20 && columnas > 0
+		 							&& columnas <= 20) {
+		 						modificarFrame(filas,columnas);
+		 						restricciones_filas = new int[filas][canvas.getMax_rest_fil()]; 
+		 						restricciones_cols = new int[columnas][canvas.getMax_rest_col()];
+		        	 }
+				
+		         	boolean primeraVez = false;
+		         	boolean esLinea = false;
+		         	int posLinea = 0;
+		         
+			         while((linea=br.readLine())!=null){
+			        	 //JOptionPane.showMessageDialog(null, linea);
+			        	 
+			        	 if(linea.equals("Filas")) {
+			        		 	linea=br.readLine();
+	                 			esLinea = true;
+	                 			primeraVez = true;
+	                 			posLinea=0;
+	                 		} else if (!primeraVez) throw new NumberFormatException();
+	                 		
+	                 	if(linea.equals("Columnas")){
+	                 			linea=br.readLine();
+	                 			posLinea=0;
+	                 			esLinea = false;
+	                 		}
+	                 		procesalinea(linea,posLinea,esLinea);
+	                 		posLinea++;
+	                 	}	         
+                 	
+			      }
+			      catch(Exception ex){
+			         ex.printStackTrace();
+			      }finally{
+			         // En el finally cerramos el fichero, para asegurarnos
+			         // que se cierra tanto si todo va bien como si salta 
+			         // una excepcion.
+			         try{                    
+			            if( null != fr ){   
+			               fr.close();     
+			            }                  
+			         }catch (Exception e2){ 
+			            e2.printStackTrace();
+			         }
+			      }
+	           
 
-	private void procesalinea(String s, int fila, boolean b){
-		
-		int i = 0;
-		int posicion = 0;
-		String num = "";
-		
-		char[] array = s.toCharArray();
-		
-		while (i != array.length){
-			
-			if(array[i] == '-'){
-				throw new NumberFormatException();
-			}
-			else if(array[i] == ' '){
-				i++;
-			}
-			else{
-				num += array[i];
-				int numero = Integer.parseInt(num);
-				
-				if (b) {
-						restricciones_filas[fila][posicion] = numero;
-						canvas.setRestF(restricciones_filas);
-						posicion++;
 				}
-				else {
-					restricciones_cols[fila][posicion] = numero;
-					canvas.setRestC(restricciones_cols);
-					posicion++;
-				}
-				num = "";
-				
-				i++;
-			}
-		}
+		});
+		return panelEjem;
 		
 	}
 
+	/******************************************************************************************************/
+
+    private void procesalinea(String s, int fila, boolean b){
+            
+            
+            int posicion = canvas.getMax_rest_col()-1;
+            String num = "";
+            
+            char[] array = s.toCharArray();
+            int i = array.length-1;
+            
+            while (i>=0 ){
+                    
+                    if(array[i] == '-'){
+                            throw new NumberFormatException();
+                    }
+                    else if((array[i] == ' ')||(array[i]=='0')){
+                            i--;
+                    }
+                    else{
+                            num += array[i];
+                            int numero = Integer.parseInt(num);
+                            
+                            if (b) {
+                                            restricciones_filas[fila][posicion] = numero;
+                                            canvas.setRestF(restricciones_filas);
+                                            posicion--;
+                            }
+                            else {
+                                    restricciones_cols[fila][posicion] = numero;
+                                    canvas.setRestC(restricciones_cols);
+                                    posicion--;
+                            }
+                            num = "";
+                            
+                            i--;
+                    }
+            }
+            
+    }
 	/******************************************************************************************************/
 	public static void main(String[] args) {
 
