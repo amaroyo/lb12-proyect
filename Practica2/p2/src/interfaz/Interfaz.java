@@ -152,8 +152,8 @@ public class Interfaz extends JFrame {
 	            if (osName.startsWith("Windows")) {
 	                Runtime.getRuntime().exec("rundll32 url.dll,FileProtocolHandler " + url);
 	            } else if (osName.startsWith("Mac OS X")) {
-	                // Runtime.getRuntime().exec("open -a safari " + url);
-	                // Runtime.getRuntime().exec("open " + url + "/index.html");
+	                Runtime.getRuntime().exec("open -a safari " + url);
+	                Runtime.getRuntime().exec("open " + url + "/index.html");
 	                Runtime.getRuntime().exec("open " + url);
 	            } else {
 	                //System.out.println("Please open a browser and go to "+ url);
@@ -988,7 +988,7 @@ public class Interfaz extends JFrame {
 				try {
 			         // Apertura del fichero y creacion de BufferedReader para poder
 			         // hacer una lectura comoda (disponer del metodo readLine()).
-					 archivo = new File("ejemplosNonograma\\"+ejemElegido);
+					 archivo = new File("src\\ejemplosNonograma\\"+ejemElegido);
 			         //archivo = new File ("C:\\Users\\Semiramis\\Documents\\test1.txt");
 			         fr = new FileReader (archivo.getAbsoluteFile());
 			         BufferedReader br = new BufferedReader(fr);
