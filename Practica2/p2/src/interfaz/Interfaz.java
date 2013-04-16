@@ -138,7 +138,7 @@ public class Interfaz extends JFrame {
 		
 		infoNonograma.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
-				openURL("http://es.wikipedia.org/wiki/Nomograma");
+				openURL("http://en.wikipedia.org/wiki/Nonogram");
 				//JOptionPane.showMessageDialog(null, "Please open a browser and go to ");
 			}
 		});
