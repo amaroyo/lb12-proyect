@@ -969,8 +969,7 @@ public class Interfaz extends JFrame {
 	    ejemplos.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				ejemElegido =(String) ejemplos.getSelectedItem();
-				int i = 2*2;
-				i = 2;
+			
 			}
 	    	
 	    });
