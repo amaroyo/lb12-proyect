@@ -988,7 +988,7 @@ public class Interfaz extends JFrame {
 				try {
 			         // Apertura del fichero y creacion de BufferedReader para poder
 			         // hacer una lectura comoda (disponer del metodo readLine()).
-					 archivo = new File(ejemElegido);
+					 archivo = new File("ejemplosNonograma\\"+ejemElegido);
 			         //archivo = new File ("C:\\Users\\Semiramis\\Documents\\test1.txt");
 			         fr = new FileReader (archivo.getAbsoluteFile());
 			         BufferedReader br = new BufferedReader(fr);
