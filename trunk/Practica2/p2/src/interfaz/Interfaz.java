@@ -49,7 +49,7 @@ public class Interfaz extends JFrame {
 	private JFrame ventanaFijarTamanyo;
 	
 	
-	private JMenuItem directoMenu;
+	private JMenu directoMenu;
 	private JMenuItem inversoMenuItem;
 	private JMenuItem guardarMenuItem;
 	private JMenuItem abrirMenuItem;
@@ -681,9 +681,9 @@ public class Interfaz extends JFrame {
 	}*/
 
 	/******************************************************************************************************/
-	private JMenuItem getDirectoMenu() {
+	private JMenu getDirectoMenu() {
 
-		directoMenu = new JMenuItem("Directo");
+		directoMenu = new JMenu("Directo");
 		directoMenu.setEnabled(true);
 		directoMenu.setVisible(true);
 		directoMenu.add(damePrimera());
@@ -737,7 +737,7 @@ public class Interfaz extends JFrame {
 
 				 	
 			
-				
+			//LISTENER	
 				
 
 			}

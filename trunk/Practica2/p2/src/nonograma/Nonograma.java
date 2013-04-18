@@ -2,42 +2,48 @@ package nonograma;
 
 import java.util.LinkedList;
 import java.util.ListIterator;
+import java.util.Stack;
 
 import interfaz.TableroCanvas;
 
 public class Nonograma {
 
-	TableroCanvas canvas;
-	int[][] restriccionesFilas;
-	int[][] restriccionesCols;
-	int nfils,ncols;
-	int[][] tablero;
-	LinkedList<int[]> solFilas[];
-	LinkedList<int[]> solCols[];
-	int[][] solActual;
-	int lineaActual;
-	boolean primero = true;
-	ListIterator<int[]> iterSolFilas[];
-	ListIterator<int[]> iterSolCols[];
+	private TableroCanvas canvas;
+	private int[][] restriccionesFilas;
+	private int[][] restriccionesCols;
+	private int nfils,ncols;
+	private int[][] tablero;
+	private LinkedList<int[]> solFilas[];
+	private LinkedList<int[]> solCols[];
+	private int[][] solActual;
+	private int lineaActual;
+	private boolean primero = true;
+	private boolean forzado = false;
+	private ListIterator<int[]> iterSolFilas[];
+	private ListIterator<int[]> iterSolCols[];
+	private Stack<int[][]> pilaForzado = null;
 	
 	
 	
-	public  Nonograma(TableroCanvas c, int[][] restF, int[][] restC){
-		canvas = c;
-		restriccionesFilas = restF;
-		restriccionesCols = restC;
-		nfils = c.getNfilas();
-		ncols = c.getNcols();
-		tablero = new int[nfils][ncols];
+	public  Nonograma(TableroCanvas c, int[][] restF, int[][] restC, boolean b){
+		this.canvas = c;
+		this.restriccionesFilas = restF;
+		this.restriccionesCols = restC;
+		this.nfils = c.getNfilas();
+		this.ncols = c.getNcols();
+		this.tablero = new int[nfils][ncols];
 		for(int i = 0; i < nfils; i++)
 			for(int j = 0; j < ncols; j++)
 				tablero[i][j] = c.getValorPosTablero(i, j);
+		
+		forzado = b;
+		pilaForzado = new Stack<int[][]>();
 	}
 	
 	/******************************************************************************************************/
 
 	public boolean nonograma(){
-		if(primero){
+		if(primero){//La primera vez?
 			calcularSolFilas();
 			calcularSolCols();
 			solActual = new int[nfils][]; //para no malgastar la memoria
