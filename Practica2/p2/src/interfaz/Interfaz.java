@@ -49,7 +49,7 @@ public class Interfaz extends JFrame {
 
 	private JTextField botonFil;
 	private JTextField botonCol;
-	private String ejemElegido ="cuadrado";
+	private String ejemElegido ="rombo";
 
 	private JFrame ventanaFijarTamanyo;
 	
@@ -740,7 +740,6 @@ public class Interfaz extends JFrame {
 		
 		primeraMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				n = new Nonograma(canvas,restricciones_filas,restricciones_cols,false);
 				 	if(n.nonograma() == false){
 				 		if (miCont == 0)
 				 			JOptionPane.showMessageDialog(null, "NO EXISTEN SOLUCIONES!");
@@ -965,7 +964,7 @@ public class Interfaz extends JFrame {
 	/******************************************************************************************************/
 	private JPanel damePanelEjemplos() {
 		
-		String[] listaEjem = {"cuadrado","triangulo","cara"};
+		String[] listaEjem = {"rombo","cinco","cara"};
 		
 		ejemplos = new JComboBox(listaEjem);
 		JButton botonAceptar = new JButton("Aceptar");
@@ -999,7 +998,7 @@ public class Interfaz extends JFrame {
 			         // Apertura del fichero y creacion de BufferedReader para poder
 			         // hacer una lectura comoda (disponer del metodo readLine()).
 					
-					 archivo = new File("src/ejemplosNonograma/"+ejemElegido);
+					 archivo = new File("src/ejemplosNonograma/"+ejemElegido+".txt");
 			         //archivo = new File ("C:\\Users\\Semiramis\\Documents\\test1.txt");
 			         fr = new FileReader (archivo.getAbsoluteFile());
 			         BufferedReader br = new BufferedReader(fr);
@@ -1018,6 +1017,8 @@ public class Interfaz extends JFrame {
 		 						modificarFrame(filas,columnas);
 		 						restricciones_filas = new int[filas][canvas.getMax_rest_fil()]; 
 		 						restricciones_cols = new int[columnas][canvas.getMax_rest_col()];
+		 						n = new Nonograma(canvas,restricciones_filas,restricciones_cols,false);
+		 						
 		        	 }
 				
 		         	boolean primeraVez = false;

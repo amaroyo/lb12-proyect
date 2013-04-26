@@ -65,8 +65,9 @@ public class Nonograma {
 		for (int i = 0; i<nfils; i++){
 			solFilas[i] = new LinkedList<int[]>();
 			iterSolFilas[i] = null;
-			int unaSol[] = new int[restriccionesFilas[i].length];
+			int[] unaSol = new int[restriccionesFilas[i].length];
 			calcularSolucionesDeFila(i,0,0,unaSol,solFilas[i]);
+			
 		}
 	}
 	
