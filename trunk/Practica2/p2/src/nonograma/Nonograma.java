@@ -92,9 +92,19 @@ public class Nonograma {
 			lista.add(sol.clone());
 		}
 		else{
-			/*				FALTA TODO
+			
+			int aux = restriccionesFilas[fila][cont];
+			if((col+aux) <= ncols){
+				sol[cont]=col;
+				calcularSolucionesDeFila(fila,col+aux+1,cont+1,sol,lista);
+				
+				
+				if(tablero[fila][col]<=0)
+					calcularSolucionesDeFila(fila,col+1,cont,sol,lista);
+			}
+			/*				
 			 * 		2.1)
-			 * 			a)empezamos en col si es posible(si el tamanyo del bloke connt + la col
+			 * 			a)empezamos en col si es posible(si el tamanyo del bloke cont + la col
 			 * 			  en la q estoy se sale del tamanyo -> return, se descarta
 			 * 			b) SI a partir del col hay tamanyo de bloque posiciones libres
 			 * 				*anotar en sol[cont] la columna en la q se situa col
@@ -105,6 +115,7 @@ public class Nonograma {
 			 * 				calcularSolucionesDeFila(fila,col+1,cont,sol,lista)	
 			 * 		
 			 */
+	
 		}
 	}
 	/******************************************************************************************************/

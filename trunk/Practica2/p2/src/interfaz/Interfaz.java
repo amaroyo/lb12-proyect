@@ -24,6 +24,8 @@ import javax.swing.event.TableModelListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 
+import nonograma.Nonograma;
+
 
 public class Interfaz extends JFrame {
 
@@ -35,6 +37,9 @@ public class Interfaz extends JFrame {
 	
 	int restricciones_filas[][];
 	int restricciones_cols[][];
+	int miCont = 0;
+	
+	Nonograma n;
 	
 	TableroCanvas canvas;
 	JFrame f;
@@ -72,7 +77,7 @@ public class Interfaz extends JFrame {
 	/******************************************************************************************************/
 	public void inicializarInterfaz() {
 
-		f=this;	
+		f=this;
 		f.setTitle("NONOGRAMA");
 		f.setVisible(true);
 		f.setEnabled(true);
@@ -732,14 +737,18 @@ public class Interfaz extends JFrame {
 		JMenuItem primeraMenuItem = new JMenuItem("Primera");
 		primeraMenuItem.setVisible(true);
 		primeraMenuItem.setEnabled(true);
+		
 		primeraMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
-				 	
-			
-			//LISTENER	
-				
-
+				/*n = new Nonograma(canvas,restricciones_filas,restricciones_cols,false);
+				 	if(n.nonograma() == false){
+				 		if (miCont == 0)
+				 			JOptionPane.showMessageDialog(null, "NO EXISTEN SOLUCIONES!");
+				 		else
+				 			JOptionPane.showMessageDialog(null, "YA NO HAY MAS SOLUCIONES!");
+				 	}
+				 	else
+				 		miCont++;*/
 			}
 		});
 
@@ -1052,7 +1061,9 @@ public class Interfaz extends JFrame {
 	           
 
 				}
+
 		});
+		
 		return panelEjem;
 		
 	}
