@@ -65,12 +65,13 @@ public class Nonograma {
 		for (int i = 0; i<nfils; i++){
 			solFilas[i] = new LinkedList<int[]>();
 			iterSolFilas[i] = null;
-			//int[] unaSol = new int[restriccionesFilas[i].length];
 			int[] unaSol = new int[numeroRF(i)];
 			calcularSolucionesDeFila(i,0,0,unaSol,solFilas[i]);
 			
 		}
 	}
+	
+	/******************************************************************************************************/
 	
 	public int numeroRF(int i){
 		int c = 0;
@@ -80,7 +81,14 @@ public class Nonograma {
 		return c;
 	}
 	/******************************************************************************************************/
-
+	public int numeroRC(int i){
+		int c = 0;
+		for(int j=0; j<restriccionesCols[i].length;j++){
+			if(restriccionesCols[i][j]>0) c++;
+		}
+		return c;
+	}
+	/******************************************************************************************************/
 	
 	public void calcularSolCols(){
 		solCols = (LinkedList<int[]>[]) new LinkedList[ncols];
@@ -88,17 +96,32 @@ public class Nonograma {
 		for (int i = 0; i<ncols; i++){
 			solCols[i] = new LinkedList<int[]>();
 			iterSolCols[i] = null;
-			int unaSol[] = new int[restriccionesCols[i].length];
-			calcularSolucionesDeColumna(i,0,0,unaSol,solCols[i]);
+			int unaSol[] = new int[numeroRC(i)];
+			calcularSolucionesDeColumna(0,i,0,unaSol,solCols[i]);
 		}
 	}
 	
+	/******************************************************************************************************/
 	public int[] resSinF(int f){
 		int[] respuesta = new int[numeroRF(f)];
 		int k = 0;
 		for(int j=0; j<restriccionesFilas[f].length;j++){
 			if(restriccionesFilas[f][j]>0){
 				respuesta[k]=restriccionesFilas[f][j];
+				k++;
+			}
+		}
+		return respuesta;
+		
+	}
+	
+	/******************************************************************************************************/
+	public int[] resSinC(int f){
+		int[] respuesta = new int[numeroRC(f)];
+		int k = 0;
+		for(int j=0; j<restriccionesCols[f].length;j++){
+			if(restriccionesCols[f][j]>0){
+				respuesta[k]=restriccionesCols[f][j];
 				k++;
 			}
 		}
@@ -125,8 +148,7 @@ public class Nonograma {
 				calcularSolucionesDeFila(fila,col+miRestriccion+1,cont+1,sol,lista);
 				
 				
-				if(tablero[fila][col]<=0){
-					sol=new int[numeroRF(fila)];
+				if(tablero[fila][col]>=0){//o gris o negro
 					calcularSolucionesDeFila(fila,col+1,cont,sol,lista);
 				}
 			}
@@ -148,12 +170,26 @@ public class Nonograma {
 	}
 	/******************************************************************************************************/
 	void calcularSolucionesDeColumna(int fila, int col, int cont, int sol[], LinkedList<int[]> lista){
+		
+		int[] aux = resSinC(col);
+		
 		if(cont == sol.length){ //CASO BASE
 			//anyadir la sol a la lista
 			lista.add(sol.clone());
 		}
 		else{
-					//FALTA TODO
+			
+			int miRestriccion = aux[cont];
+				
+			if((fila+miRestriccion) <= nfils){
+				sol[cont]=fila;
+				calcularSolucionesDeColumna(fila+miRestriccion+1,col,cont+1,sol,lista);
+				
+				
+				if(tablero[fila][col]>=0){//o gris o negro
+					calcularSolucionesDeColumna(fila+1,col,cont,sol,lista);
+				}
+			}
 		}
 	}
 	
