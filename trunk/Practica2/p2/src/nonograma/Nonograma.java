@@ -65,12 +65,20 @@ public class Nonograma {
 		for (int i = 0; i<nfils; i++){
 			solFilas[i] = new LinkedList<int[]>();
 			iterSolFilas[i] = null;
-			int[] unaSol = new int[restriccionesFilas[i].length];
+			//int[] unaSol = new int[restriccionesFilas[i].length];
+			int[] unaSol = new int[numeroRF(i)];
 			calcularSolucionesDeFila(i,0,0,unaSol,solFilas[i]);
 			
 		}
 	}
 	
+	public int numeroRF(int i){
+		int c = 0;
+		for(int j=0; j<restriccionesFilas[i].length;j++){
+			if(restriccionesFilas[i][j]>0) c++;
+		}
+		return c;
+	}
 	/******************************************************************************************************/
 
 	
@@ -85,23 +93,42 @@ public class Nonograma {
 		}
 	}
 	
+	public int[] resSinF(int f){
+		int[] respuesta = new int[numeroRF(f)];
+		int k = 0;
+		for(int j=0; j<restriccionesFilas[f].length;j++){
+			if(restriccionesFilas[f][j]>0){
+				respuesta[k]=restriccionesFilas[f][j];
+				k++;
+			}
+		}
+		return respuesta;
+		
+	}
 	/******************************************************************************************************/
 
 	void calcularSolucionesDeFila(int fila, int col, int cont, int sol[], LinkedList<int[]> lista){
+		
+		int[] aux = resSinF(fila);
+		
 		if(cont == sol.length){ //CASO BASE
 			//anyadir la sol a la lista
 			lista.add(sol.clone());
 		}
 		else{
 			
-			int aux = restriccionesFilas[fila][cont];
-			if((col+aux) <= ncols){
+			
+			int miRestriccion = aux[cont];
+				
+			if((col+miRestriccion) <= ncols){
 				sol[cont]=col;
-				calcularSolucionesDeFila(fila,col+aux+1,cont+1,sol,lista);
+				calcularSolucionesDeFila(fila,col+miRestriccion+1,cont+1,sol,lista);
 				
 				
-				if(tablero[fila][col]<=0)
+				if(tablero[fila][col]<=0){
+					sol=new int[numeroRF(fila)];
 					calcularSolucionesDeFila(fila,col+1,cont,sol,lista);
+				}
 			}
 			/*				
 			 * 		2.1)
