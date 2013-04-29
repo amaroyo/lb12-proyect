@@ -63,6 +63,11 @@ public class Interfaz extends JFrame {
 	private JMenuItem infoNonograma;
 	private JFrame ventanaElegirEjemplo;
 	private JComboBox ejemplos;
+	private JMenuItem conForzado;
+	private JMenuItem sinForzado;
+	protected boolean forzado=false;
+	private JMenuItem primeraMenuItem;
+	private JMenuItem siguienteMenuItem;
 	
 
 	/******************************************************************************************************/
@@ -120,9 +125,37 @@ public class Interfaz extends JFrame {
 		JMenu nonogramaMenu = new JMenu("Nonograma");
 		nonogramaMenu.add(getDirectoMenu());
 		nonogramaMenu.add(getInversoMenuItem());
+		nonogramaMenu.add(getSinForzado());
+		nonogramaMenu.add(getConForzado());
 		nonogramaMenu.setVisible(true);
 		nonogramaMenu.setEnabled(true);
 		return nonogramaMenu;
+	}
+	/******************************************************************************************************/
+	private JMenuItem getConForzado() {
+		conForzado= new JMenuItem("Forzado");
+		conForzado.setEnabled(false);
+		conForzado.setVisible(true);
+		
+		conForzado.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				forzado = true;
+			}
+		});
+		return conForzado;
+	}
+	/******************************************************************************************************/
+	private JMenuItem getSinForzado() {
+		sinForzado= new JMenuItem("Sin Forzado");
+		sinForzado.setEnabled(false);
+		sinForzado.setVisible(true);
+		
+		sinForzado.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				forzado = false;
+			}
+		});
+		return sinForzado;
 	}
 
 	/******************************************************************************************************/
@@ -135,6 +168,7 @@ public class Interfaz extends JFrame {
 		return ayudaMenu;
 	}
 	
+	/******************************************************************************************************/	
 	private JMenuItem getInfoNonograma() {		
 	
 		infoNonograma= new JMenuItem("Acerca de Nonograma");
@@ -175,7 +209,7 @@ public class Interfaz extends JFrame {
 	private JMenuItem getGuardarMenuItem() {
 
 		guardarMenuItem = new JMenuItem("Guardar");
-		guardarMenuItem.setEnabled(true);
+		guardarMenuItem.setEnabled(false);
 		guardarMenuItem.setVisible(true);
 		
 		guardarMenuItem.addActionListener(new ActionListener(){
@@ -297,6 +331,7 @@ public class Interfaz extends JFrame {
 					        						modificarFrame(filas,columnas);
 					        						restricciones_filas = new int[filas][canvas.getMax_rest_fil()]; 
 					        						restricciones_cols = new int[columnas][canvas.getMax_rest_col()];
+					        						n = new Nonograma(canvas,restricciones_filas,restricciones_cols,forzado);
 					        						/*restricciones_filas = new int[filas][3]; 
 					        						restricciones_cols = new int[columnas][3];*/
 					        					}
@@ -319,6 +354,12 @@ public class Interfaz extends JFrame {
 					                        		procesalinea(s,posLinea,esLinea);
 					                        		posLinea++;
 					                        	}	
+					                        	
+					                        	 directoMenu.setEnabled(true);
+					        			         primeraMenuItem.setEnabled(true);
+					        			         guardarMenuItem.setEnabled(true);
+					        			         conForzado.setEnabled(true);
+					        			         sinForzado.setEnabled(true);
 					                        }
 					                        
 					                       catch (NumberFormatException ex) {
@@ -374,10 +415,6 @@ public class Interfaz extends JFrame {
 				ventanaFijarTamanyo.setContentPane(damePanelTamanyo());
 			}
 		});
-	
-		/*	abrirMenu.add(dameCargarMatrizA());
-		abrirMenu.add(dameCargarMatrizB());
-		*/
 		return nuevoMenuItem;
 	}
 
@@ -405,65 +442,12 @@ public class Interfaz extends JFrame {
 
 
 	/******************************************************************************************************/
-	/*private JMenuItem dameGuardarMatrizA() {
-		JMenuItem guardarAMenuItem = new JMenuItem("Guardar Matriz A");
-		guardarAMenuItem.setVisible(true);
-		guardarAMenuItem.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-
-
-				JFileChooser fileChooser = new JFileChooser();
-	            fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("todos los archivos *.TXT", "txt","TXT"));//filtro para ver solo archivos .txt
-	            int seleccion = fileChooser.showSaveDialog(null);
-	            try{
-	                if (seleccion == JFileChooser.APPROVE_OPTION){//comprueba si ha presionado el boton de aceptar
-	                    File JFC = fileChooser.getSelectedFile();
-	                    String PATH = JFC.getAbsolutePath();//obtenemos el path del archivo a guardar
-	                    PrintWriter printwriter = new PrintWriter(JFC);
-	                    
-	                    
-	                    printwriter.println(filas);
-	                    printwriter.println(columnas);
-	                    
-	                    for (int i = 0; i < filas; i++){
-	                    	for (int j = 0; j < columnas; j++){
-	                    		printwriter.print((Integer) tm1.getValueAt(i, j));
-	                    		printwriter.print(" ");
-	                    	}
-	                    	printwriter.println();
-	                    }
-	                    
-	                    
-	                    printwriter.close();//cierra el archivo
-	                    
-	                    
-	                    
-	                    //comprobamos si a la hora de guardar obtuvo la extension y si no se la asignamos
-	                    if(!(PATH.endsWith(".txt"))){
-	                        File temp = new File(PATH+".txt");
-	                        JFC.renameTo(temp);//renombramos el archivo
-	                    }
-	                    
-	                    JOptionPane.showMessageDialog(null,"Guardado con exito!", "Guardado con exito!", JOptionPane.INFORMATION_MESSAGE);
-	                }
-	            }catch (Exception ex){//por alguna excepcion salta un mensaje de error
-	                JOptionPane.showMessageDialog(null,"Error al guardar el archivo!", "Oops! Error", JOptionPane.ERROR_MESSAGE);
-	            }
-	        		
-				
-			}
-		});
-
-		return guardarAMenuItem;
-	}
-*/
-
 
 	/******************************************************************************************************/
 	private JMenu getDirectoMenu() {
 
 		directoMenu = new JMenu("Directo");
-		directoMenu.setEnabled(true);
+		directoMenu.setEnabled(false);
 		directoMenu.setVisible(true);
 		directoMenu.add(damePrimera());
 		directoMenu.add(dameSiguiente());
@@ -474,7 +458,7 @@ public class Interfaz extends JFrame {
 	private JMenuItem getInversoMenuItem() {
 
 		inversoMenuItem = new JMenuItem("Inverso");
-		inversoMenuItem.setEnabled(true);
+		inversoMenuItem.setEnabled(false);
 		inversoMenuItem.setVisible(true);
 		inversoMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -486,6 +470,7 @@ public class Interfaz extends JFrame {
 					procesaFila(i,tableroAux);
 					procesaCol(i,tableroAux);
 				}
+				n = new Nonograma(canvas,restricciones_filas,restricciones_cols,forzado);
 				canvas.setRestF(restricciones_filas);
 				canvas.setRestC(restricciones_cols);
 				canvas.repaint();
@@ -552,15 +537,14 @@ public class Interfaz extends JFrame {
 
 	/******************************************************************************************************/
 	private JMenuItem dameSiguiente() {
-		JMenuItem siguienteMenuItem = new JMenuItem("Siguiente");
+		siguienteMenuItem = new JMenuItem("Siguiente");
 		siguienteMenuItem.setVisible(true);
-		siguienteMenuItem.setEnabled(true);
+		siguienteMenuItem.setEnabled(false);
 		siguienteMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
-			
-			//LISTENER!!!!
-				
+				if(n.nonograma() == false){
+		 			JOptionPane.showMessageDialog(null, "YA NO HAY MAS SOLUCIONES!");
+				}
 			}
 		});
 
@@ -569,20 +553,21 @@ public class Interfaz extends JFrame {
 
 	/******************************************************************************************************/
 	private JMenuItem damePrimera() {
-		JMenuItem primeraMenuItem = new JMenuItem("Primera");
+		primeraMenuItem = new JMenuItem("Primera");
 		primeraMenuItem.setVisible(true);
-		primeraMenuItem.setEnabled(true);
+		primeraMenuItem.setEnabled(false);
 		
 		primeraMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				 	if(n.nonograma() == false){
 				 		if (miCont == 0)
 				 			JOptionPane.showMessageDialog(null, "NO EXISTEN SOLUCIONES!");
-				 		else
-				 			JOptionPane.showMessageDialog(null, "YA NO HAY MAS SOLUCIONES!");
 				 	}
-				 	else
-				 		miCont++;
+				 	else {//Ha encontrado una solucion
+				 			miCont++;
+				 			siguienteMenuItem.setEnabled(true);
+				 			primeraMenuItem.setEnabled(true);
+				 	}
 			}
 		});
 
@@ -647,6 +632,10 @@ public class Interfaz extends JFrame {
 						ventanaFijarTamanyo.setEnabled(false);
 						ventanaFijarTamanyo.dispose();
 						ventanaFijarTamanyo=null;
+						
+						guardarMenuItem.setEnabled(true);
+						inversoMenuItem.setEnabled(true);
+						
 						
 					} catch (NumberFormatException ex) {
 						if (ex != null) {
@@ -752,7 +741,7 @@ public class Interfaz extends JFrame {
 		 						modificarFrame(filas,columnas);
 		 						restricciones_filas = new int[filas][canvas.getMax_rest_fil()]; 
 		 						restricciones_cols = new int[columnas][canvas.getMax_rest_col()];
-		 						n = new Nonograma(canvas,restricciones_filas,restricciones_cols,false);
+		 						n = new Nonograma(canvas,restricciones_filas,restricciones_cols,forzado);
 		 						
 		        	 }
 				
@@ -779,6 +768,12 @@ public class Interfaz extends JFrame {
 	                 		posLinea++;
 	                 	}	         
                  	
+			         directoMenu.setEnabled(true);
+			         primeraMenuItem.setEnabled(true);
+			         guardarMenuItem.setEnabled(true);
+			         conForzado.setEnabled(true);
+			         sinForzado.setEnabled(true);
+			         
 			      }
 			      catch(Exception ex){
 			         ex.printStackTrace();
