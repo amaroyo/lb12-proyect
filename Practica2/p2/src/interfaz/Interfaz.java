@@ -35,14 +35,14 @@ public class Interfaz extends JFrame {
 	 ***********************/
 
 	
-	int restricciones_filas[][];
-	int restricciones_cols[][];
-	int miCont = 0;
+	private int restricciones_filas[][];
+	private int restricciones_cols[][];
+	private int miCont = 0;
 	
-	Nonograma n;
+	private Nonograma n;
 	
-	TableroCanvas canvas;
-	JFrame f;
+	private TableroCanvas canvas;
+	private JFrame f;
 
 	private int filas;
 	private int columnas;
@@ -178,10 +178,63 @@ public class Interfaz extends JFrame {
 		guardarMenuItem.setEnabled(true);
 		guardarMenuItem.setVisible(true);
 		
-		/*guardarMenu.add(dameGuardarMatrizA());
-		guardarMenu.add(dameGuardarMatrizB());
-		guardarMenu.add(dameGuardarResultado());
-		*/
+		guardarMenuItem.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				
+				JFileChooser fileChooser = new JFileChooser();
+	            fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("todos los archivos *.TXT", "txt","TXT"));//filtro para ver solo archivos .txt
+	            int seleccion = fileChooser.showSaveDialog(null);
+	            try{
+	                if (seleccion == JFileChooser.APPROVE_OPTION){//comprueba si ha presionado el boton de aceptar
+	                    File JFC = fileChooser.getSelectedFile();
+	                    String PATH = JFC.getAbsolutePath();//obtenemos el path del archivo a guardar
+	                    PrintWriter printwriter = new PrintWriter(JFC);
+	                    
+	                    printwriter.println(filas);
+	                    printwriter.println(columnas);
+	                    
+	                    printwriter.println("Filas");
+	                    for (int i = 0; i < filas; i++){
+	                    	for (int j = 0; j < canvas.getMax_rest_fil(); j++){
+	                    		if (restricciones_filas[i][j]!=0) {
+	                    			printwriter.print(restricciones_filas[i][j]);
+	                    			printwriter.print(" ");
+	                    			}
+	                    	}
+	                    	printwriter.println();
+	                    }
+	                    
+	                    printwriter.println("Columnas");
+	                    for (int i = 0; i < filas; i++){
+	                    	for (int j = 0; j < canvas.getMax_rest_col(); j++){
+	                    		if (restricciones_cols[i][j]!=0) {
+	                    			printwriter.print(restricciones_cols[i][j]);
+	                    			printwriter.print(" ");
+	                    			}
+	                    	}
+	                    	printwriter.println();
+	                    }
+	                    
+	                    
+	                    printwriter.close();//cierra el archivo
+	                    
+	                    //comprobamos si a la hora de guardar obtuvo la extension y si no se la asignamos
+	                    if(!(PATH.endsWith(".txt"))){
+	                        File temp = new File(PATH+".txt");
+	                        JFC.renameTo(temp);//renombramos el archivo
+	                    }
+	                    
+	                    JOptionPane.showMessageDialog(null,"Guardado con exito!", "Guardado con exito!", JOptionPane.INFORMATION_MESSAGE);
+	                }
+	            }catch (Exception ex){//por alguna excepcion salta un mensaje de error
+	                JOptionPane.showMessageDialog(null,"Error al guardar el archivo!", "Oops! Error", JOptionPane.ERROR_MESSAGE);
+	            }
+	        		
+				
+			}
+			
+		});
+
 		
 		return guardarMenuItem;
 	}
@@ -350,107 +403,6 @@ public class Interfaz extends JFrame {
 		return ejemploMenuItem;
 	}
 
-	/******************************************************************************************************/
-	/*private JMenuItem dameGuardarResultado() {
-		JMenuItem guardarRMenuItem = new JMenuItem("Guardar Matriz Resultado");
-
-		guardarRMenuItem.setVisible(true);
-		guardarRMenuItem.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-
-				JFileChooser fileChooser = new JFileChooser();
-	            fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("todos los archivos *.TXT", "txt","TXT"));//filtro para ver solo archivos .txt
-	            int seleccion = fileChooser.showSaveDialog(null);
-	            try{
-	                if (seleccion == JFileChooser.APPROVE_OPTION){//comprueba si ha presionado el boton de aceptar
-	                    File JFC = fileChooser.getSelectedFile();
-	                    String PATH = JFC.getAbsolutePath();//obtenemos el path del archivo a guardar
-	                    PrintWriter printwriter = new PrintWriter(JFC);
-	                    
-	                    
-	                    printwriter.println(filas);
-	                    printwriter.println(columnas);
-	                    
-	                    for (int i = 0; i < filas; i++){
-	                    	for (int j = 0; j < columnas; j++){
-	                    		printwriter.print((Integer) tm3.getValueAt(i, j));
-	                    		printwriter.print(" ");
-	                    	}
-	                    	printwriter.println();
-	                    }
-	                    
-	                    
-	                    printwriter.close();//cierra el archivo
-	                    
-	                    
-	                    
-	                    //comprobamos si a la hora de guardar obtuvo la extension y si no se la asignamos
-	                    if(!(PATH.endsWith(".txt"))){
-	                        File temp = new File(PATH+".txt");
-	                        JFC.renameTo(temp);//renombramos el archivo
-	                    }
-	                    
-	                    JOptionPane.showMessageDialog(null,"Guardado con exito!", "Guardado con exito!", JOptionPane.INFORMATION_MESSAGE);
-	                }
-	            }catch (Exception ex){//por alguna excepcion salta un mensaje de error
-	                JOptionPane.showMessageDialog(null,"Error al guardar el archivo!", "Oops! Error", JOptionPane.ERROR_MESSAGE);
-	            }
-
-			}
-		});
-
-		return guardarRMenuItem;
-	}*/
-
-	/******************************************************************************************************/
-	/*private JMenuItem dameGuardarMatrizB() {
-		JMenuItem guardarBMenuItem = new JMenuItem("Guardar Matriz B");
-		guardarBMenuItem.setVisible(true);
-		guardarBMenuItem.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-
-				JFileChooser fileChooser = new JFileChooser();
-	            fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("todos los archivos *.TXT", "txt","TXT"));//filtro para ver solo archivos .txt
-	            int seleccion = fileChooser.showSaveDialog(null);
-	            try{
-	                if (seleccion == JFileChooser.APPROVE_OPTION){//comprueba si ha presionado el boton de aceptar
-	                    File JFC = fileChooser.getSelectedFile();
-	                    String PATH = JFC.getAbsolutePath();//obtenemos el path del archivo a guardar
-	                    PrintWriter printwriter = new PrintWriter(JFC);
-	                    
-	                    
-	                    printwriter.println(filas);
-	                    printwriter.println(columnas);
-	                    
-	                    for (int i = 0; i < filas; i++){
-	                    	for (int j = 0; j < columnas; j++){
-	                    		printwriter.print((Integer) tm2.getValueAt(i, j));
-	                    		printwriter.print(" ");
-	                    	}
-	                    	printwriter.println();
-	                    }
-	                    
-	                    
-	                    printwriter.close();//cierra el archivo
-	                    
-	                    
-	                    
-	                    //comprobamos si a la hora de guardar obtuvo la extension y si no se la asignamos
-	                    if(!(PATH.endsWith(".txt"))){
-	                        File temp = new File(PATH+".txt");
-	                        JFC.renameTo(temp);//renombramos el archivo
-	                    }
-	                    
-	                    JOptionPane.showMessageDialog(null,"Guardado con exito!", "Guardado con exito!", JOptionPane.INFORMATION_MESSAGE);
-	                }
-	            }catch (Exception ex){//por alguna excepcion salta un mensaje de error
-	                JOptionPane.showMessageDialog(null,"Error al guardar el archivo!", "Oops! Error", JOptionPane.ERROR_MESSAGE);
-	            }
-			}
-		});
-
-		return guardarBMenuItem;
-	}*/
 
 	/******************************************************************************************************/
 	/*private JMenuItem dameGuardarMatrizA() {
@@ -505,185 +457,7 @@ public class Interfaz extends JFrame {
 		return guardarAMenuItem;
 	}
 */
-	/******************************************************************************************************/
-	/* Leer de Ficheros */
 
-	/*private JMenuItem dameCargarMatrizB() {
-		JMenuItem cargaBMenuItem = new JMenuItem("Cargar Matriz B");
-		cargaBMenuItem.setEnabled(true);
-		cargaBMenuItem.setVisible(true);
-		cargaBMenuItem.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-
-				String path="";
-
-				//empezamos implementando la clase JFileChooser para abrir archivos
-		        JFileChooser JFC = new JFileChooser();
-		        //filtro que muestra solo los archivos con extension *.edu
-		        JFC.setFileFilter(new FileNameExtensionFilter("todos los archivos *.TXT", "txt","TXT"));
-		        //se comprueba si se ha dado al boton aceptar
-		        int abrir = JFC.showDialog(null, "Abrir");
-		        if (abrir == JFileChooser.APPROVE_OPTION) {
-		            FileReader FR = null;
-		            //BufferedReader BR = null;
-		            Scanner sc = null;
-		           
-
-		            try {
-		                //abro el fichero y creo un BufferedReader para hacer
-		                //una lectura comoda (tener el metodo readLine();)
-		                File archivo = JFC.getSelectedFile();//abre un archivo .lengf
-		                
-		                //evitar abrir archivo con otra extension que no sea *.LFP
-		                String PATH = JFC.getSelectedFile().getAbsolutePath();
-		                if(PATH.endsWith(".txt")||PATH.endsWith(".TXT")){
-		                    
-		                    FR = new FileReader(archivo);
-		                   // BR = new BufferedReader(FR);
-		                    sc = new Scanner(FR);
-		                    
-		                    //leyendo el archivo
-		                   String s = "";
-		                   int linea = 0;
-		                    if(path.compareTo(archivo.getAbsolutePath())==0){
-		                        JOptionPane.showMessageDialog(null, "Archivo Abierto","Oops! Error", JOptionPane.ERROR_MESSAGE);
-		                    }else{
-		                        path = archivo.getAbsolutePath();
-		                        try{
-		                        	s = sc.nextLine();
-		                        	filas = Integer.parseInt(s);
-		                        	s = sc.nextLine();
-		                        	columnas = Integer.parseInt(s);
-		                        	
-		        					if (filas > 0 && filas <= 20 && columnas > 0
-		        							&& columnas <= 20) {
-		        						m1 = new Matriz(filas, columnas);
-		        						m2 = new Matriz(filas, columnas);
-		        						resultado = new Matriz(filas, columnas);
-		        					}
-		                        	
-		                        	if (tm2 != null){
-		    							int filAux=(tm2.getRowCount())-1;
-		    							for (int k=filAux; k >= 0 ; k--)
-		    								tm2.removeRow(k);
-		    							int filAux2=(tm3.getRowCount())-1;
-		    							for (int k=filAux2; k >= 0 ; k--)
-		    								tm3.removeRow(k);
-		    							damePanelTabla(tm2);
-		    							damePanelTabla(tm3);
-		    						}
-		    						else{
-		    							tm2=new DefaultTableModel();
-		    							panelTabulado.add("Matriz 2", damePanelTabla(tm2));
-		    							tm3=new DefaultTableModel();
-		    							panelTabulado.add("Resultado", damePanelTabla(tm3));
-		    						}
-		    						panelTabulado.validate();
-
-		                        	activarMenus();	                     	
-		                        	while(sc.hasNext()){
-		                        		s = sc.nextLine();
-		                        		procesalinea(s,linea,tm2);
-		                        		linea++;
-		                        	}
-		                        	
-		                        }
-		                        
-		                       catch (NumberFormatException ex) {
-		    						if (ex != null) {
-		    							JOptionPane.showMessageDialog(null, "AVISO: LECTURA INCORRECTA!");
-		    						}
-		    					}
-		                        
-		                        
-		                       
-		                    }
-		                    
-		                }else{
-		                    JOptionPane.showMessageDialog(null, "Archivo no soportado","Oops! Error", JOptionPane.ERROR_MESSAGE);
-		                    //open();
-		                }
-
-		            } catch (FileNotFoundException ex) {
-		                ex.printStackTrace();
-		                
-		            //cerramos el fichero, para asegurar que se cierra tanto
-		            // si todo va bien si salta una excepcion
-		            } finally {
-		                try {
-		                    if(null!= FR){
-		                        FR.close();
-		                    }
-
-		                } catch (IOException ex) {
-		                    ex.printStackTrace();
-		                
-		                }
-		            }
-		        }
-
-			}
-		});
-
-		return cargaBMenuItem;
-	}*/
-
-
-	
-	/******************************************************************************************************/
-	/**
-	 * 
-	 * @Matriz
-	 */
-
-/*	private JMenuItem getDefaultMenuItem() {
-		JMenuItem defaultSMenuItem = new JMenuItem("Matrices por defecto");
-		defaultSMenuItem.setEnabled(true);
-		defaultSMenuItem.setVisible(true);
-
-		defaultSMenuItem.addActionListener(new ActionListener() { // Implementamos el oyente
-					public void actionPerformed(ActionEvent e) {
-						
-						if ((tm1 != null) || (tm2 != null) || (tm3 != null)) 
-							panelTabulado.removeAll();
-						
-						filas = 5;
-						columnas = 5;
-						
-						m1 = new Matriz(1);
-						m2 = new Matriz(2);
-						resultado = new Matriz(filas,columnas);
-						
-						tm1 = new DefaultTableModel();
-						tm2 = new DefaultTableModel();
-						tm3 = new DefaultTableModel();
-						
-						panelTabulado.add("Matriz1", damePanelTabla(tm1));
-						panelTabulado.add("Matriz2", damePanelTabla(tm2));
-						panelTabulado.add("Resultado", damePanelTabla(tm3));
-						panelTabulado.validate();
-						
-						escribirMatriz(m1, tm1);
-						escribirMatriz(m2, tm2);
-						
-						activarMenus();
-						
-					}
-				});
-
-		defaultSMenuItem.validate();
-		return defaultSMenuItem;
-	}
-*/
-	/******************************************************************************************************/
-	/*private void escribirMatriz(Matriz m, DefaultTableModel tm) {
-
-		for (int i = 0; i < filas; i++)
-			for (int j = 0; j < columnas; j++) {
-				String valorS = String.valueOf(m.getIJ(i, j));
-				tm.setValueAt(valorS, i, j);
-			}
-	}*/
 
 	/******************************************************************************************************/
 	private JMenu getDirectoMenu() {
@@ -705,7 +479,16 @@ public class Interfaz extends JFrame {
 		inversoMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-			
+				restricciones_filas = new int[filas][canvas.getMax_rest_fil()]; 
+				restricciones_cols = new int[columnas][canvas.getMax_rest_col()];
+				int[][] tableroAux = canvas.getTablero();
+				for (int i=0; i<filas;i++){
+					procesaFila(i,tableroAux);
+					procesaCol(i,tableroAux);
+				}
+				canvas.setRestF(restricciones_filas);
+				canvas.setRestC(restricciones_cols);
+				canvas.repaint();
 			//LISTENER!!!!
 				
 			}
@@ -714,7 +497,59 @@ public class Interfaz extends JFrame {
 		return inversoMenuItem;
 	}
 	
+	/******************************************************************************************************/
+	protected void procesaCol(int i, int[][] t) {
+		int j = filas-1;
+		int cont =0;
+		int indice=canvas.getMax_rest_col()-1;
+		
+		while (j>=0){
+			if (t[j][i]!=1){
+				if (cont!=0){
+					restricciones_cols[i][indice]= cont;
+					indice--;
+				}
+				cont=0;
+			}else{
+					if ((t[j][i]==1)){
+						cont++;
+						if (j==0){//He acabado la fila
+							restricciones_cols[i][indice]= cont;
+						}
+					}
+				}
+			j--;
+		}
+		
+	}
+
+	/******************************************************************************************************/
 	
+	protected void procesaFila(int i, int [][] t) {
+		int j = columnas-1;
+		int cont =0;
+		int indice=canvas.getMax_rest_fil()-1;
+		
+		while (j>=0){
+			if (t[i][j]!=1){
+				if (cont!=0){
+					restricciones_filas[i][indice]= cont;
+					indice--;
+				}
+				cont=0;
+			}else{
+					if ((t[i][j]==1)){
+						cont++;
+						if (j==0){//He acabado la fila
+							restricciones_filas[i][indice]= cont;
+						}
+					}
+				}
+			j--;
+		}
+		
+	}
+
 	/******************************************************************************************************/
 	private JMenuItem dameSiguiente() {
 		JMenuItem siguienteMenuItem = new JMenuItem("Siguiente");
@@ -755,107 +590,7 @@ public class Interfaz extends JFrame {
 	}
 
 	/******************************************************************************************************/
-/*	private JMenuItem getRestaMenuItem() {
 
-		restarMenuItem = new JMenuItem("Restar");
-		restarMenuItem.setVisible(true);
-		restarMenuItem.setEnabled(false);
-		restarMenuItem.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				resultado.resta(m1, m2);
-				muestraResultado(resultado);
-
-			}
-		});
-		return restarMenuItem;
-	}*/
-
-	/******************************************************************************************************/
-/*	private JMenuItem getSumaMenuItem() {
-
-		sumarMenuItem = new JMenuItem("Sumar");
-		sumarMenuItem.setVisible(true);
-		sumarMenuItem.setEnabled(false);
-		sumarMenuItem.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				resultado.suma(m1, m2);
-				muestraResultado(resultado);
-
-			}
-		});
-		return sumarMenuItem;
-	}*/
-
-	/******************************************************************************************************/
-/*	private void muestraResultado(Matriz m) {
-		for (int i = 0; i < filas; i++)
-			for (int j = 0; j < columnas; j++){
-				String valorS = String.valueOf(m.getIJ(i, j));
-				tm3.setValueAt(valorS, i, j);
-			}
-	}*/
-
-	/******************************************************************************************************/
-/*	private void convertirEnMatriz(DefaultTableModel tm, Matriz m) {
-
-		for (int i=0; i < filas; i++)
-		  for (int j=0; j < columnas; j++){
-			int valor=0;
-			String valorS=(String)(tm.getValueAt(i,j));
-			if (valorS != null){	
-				try {
-					valor =Integer.parseInt(valorS);
-				} catch (NumberFormatException ex) {
-					if (ex != null) 
-						JOptionPane.showMessageDialog(null, "AVISO: TIENES QUE INTRODUCIR NUMEROS!");
-
-					}
-				m.setIJ(i,j,valor);	
-				}
-		  }
-
-	}
-*/
-	/******************************************************************************************************/
-/*	private JMenuItem getInicializarMenuItem() {
-
-		inicializarMenuItem = new JMenuItem("Inicializar");
-		inicializarMenuItem.setVisible(true);
-		inicializarMenuItem.setEnabled(false);
-		inicializarMenuItem.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-				if ((tm1 != null) && (tm2!= null) && (tm3!= null)){
-				inicializarMatrices(tm1);
-				inicializarMatrices(tm2);
-				inicializarMatrices(tm3);
-				
-				}
-				
-				//desactivarMenus();
-			}
-		});
-		return inicializarMenuItem;
-	}*/
-
-	/******************************************************************************************************/
-/*	private JMenuItem getCargarMenuItem() {
-
-		cargarMenuItem = new JMenuItem("Cargar Tablas");
-		cargarMenuItem.setEnabled(false);
-		cargarMenuItem.setVisible(true);
-		cargarMenuItem.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				convertirEnMatriz(tm1,m1);
-				convertirEnMatriz(tm2,m2);
-
-					}
-
-	
-		});
-		return cargarMenuItem;
-	}
-*/
 	/******************************************************************************************************/	
 
 	private JPanel damePanelTamanyo() {
@@ -964,7 +699,7 @@ public class Interfaz extends JFrame {
 	/******************************************************************************************************/
 	private JPanel damePanelEjemplos() {
 		
-		String[] listaEjem = {"prueba","rombo","cinco","cara"};
+		String[] listaEjem = {"prueba","rombo","cinco","cara","ejem"};
 		
 		ejemplos = new JComboBox(listaEjem);
 		JButton botonAceptar = new JButton("Aceptar");
@@ -1110,7 +845,8 @@ public class Interfaz extends JFrame {
             
     }
 	/******************************************************************************************************/
-	public static void main(String[] args) {
+    /******************************************************************************************************/
+    public static void main(String[] args) {
 
 		Interfaz i = new Interfaz();
 
