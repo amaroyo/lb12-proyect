@@ -222,6 +222,7 @@ public class Nonograma {
 		if(lineaActual == nfils) lineaActual--;
 		while(lineaActual >= 0 && lineaActual < nfils){
 			if(iterSolFilas[lineaActual] == null){
+				if(forzado) aplicarForzado();
 				iterSolFilas[lineaActual] = solFilas[lineaActual].listIterator();
 			}	
 			if(solFilas[lineaActual]!=null) quitarFilaTablero(lineaActual, solActual[lineaActual]);
@@ -246,6 +247,7 @@ public class Nonograma {
 						if(lineaActual >= 0){
 							quitarFilaTablero(lineaActual, solActual[lineaActual]);
 							solActual[lineaActual] = null;
+							if(forzado) deshacerForzado();
 						}
 			}//FIN ELSE - FIN BACK
 			
@@ -283,7 +285,7 @@ public class Nonograma {
 		}
 		
 		
-		int[][] auxSinCeros = restSinCeros();
+		int[][] auxSinCeros = restSinCerosC();
 		for(int i=0; i<ncols; i++){
 			if (rest_col[i].length==auxSinCeros[i].length){
 				for(int j=0; j<rest_col[i].length; j++)
@@ -295,10 +297,18 @@ public class Nonograma {
 	}
 
 	
-	public int[][] restSinCeros(){
+	public int[][] restSinCerosC(){
 		int[][] respuesta = new int[ncols][];
 		for (int i = 0; i<ncols;i++)
 			respuesta[i]=resSinC(i);
+		
+		return respuesta;
+	}
+	
+	public int[][] restSinCerosF(){
+		int[][] respuesta = new int[nfils][];
+		for (int i = 0; i<nfils;i++)
+			respuesta[i]=resSinF(i);
 		
 		return respuesta;
 	}
@@ -363,4 +373,143 @@ public class Nonograma {
 	public int[][] getSolActual(){
 		return solActual;
 	}
+	
+	
+	private void deshacerForzado() {
+		int[][] forzado = pilaForzado.pop();//Coge la cima de la pila que tiene el ultimo forzado aplicado
+		for(int i=0; i < nfils; i++)
+			for(int j=0; j < ncols; j++){
+				if(forzado[i][j] == 1)
+					tablero[i][j] = 0;
+				if(forzado[i][j] == -1)
+					tablero[i][j] = 0;
+			}
+	}
+
+	private void aplicarForzado() {
+		int[][] forzadas = new int[nfils][ncols];
+		boolean negrasForzado[] = new boolean[Math.max(nfils, ncols)];
+		boolean blancasForzado[] = new boolean[Math.max(nfils,ncols)];
+		
+		//FILAS
+		for(int i=lineaActual; i<nfils; i++){
+			forzadoFila(i, negrasForzado, blancasForzado);
+			for(int j=0; j<ncols; j++){
+				if(negrasForzado[j]==true && tablero[i][j]==0)
+					tablero[i][j]=forzadas[i][j]=1;
+				if(blancasForzado[j]==true && tablero[i][j]==0)
+					tablero[i][j]=forzadas[i][j]=-1;
+			}
+		}
+		
+
+		//COLUMNAS
+		for(int i=0; i<ncols; i++){
+			forzadoColumna(i, negrasForzado, blancasForzado);
+			for(int j=lineaActual; j<nfils; j++){
+				if(negrasForzado[j]==true && tablero[j][i]==0)
+					tablero[j][i]=forzadas[j][i]=1;
+				if(blancasForzado[j]==true && tablero[j][i]==0)
+					tablero[j][i]=forzadas[j][i]=-1;
+			}
+		}
+      
+		pilaForzado.push(forzadas);
+	}
+
+	private void forzadoColumna(int i, boolean[] negrasForzado, boolean[] blancasForzado) {
+				//Forzado negro
+				for(int j=0; j<negrasForzado.length;j++)
+					negrasForzado[j]=true;
+				
+				iterSolCols[i]=solCols[i].listIterator();
+				while (iterSolCols[i].hasNext()){
+					int[] solAux=iterSolCols[i].next();
+					if(solAux.length>0 ){//&& esAplicable(i,solAux)){
+						//a.1 hasta primer lugar en blanco
+						for(int j=0;j<solAux[0];j++)
+							negrasForzado[j]=false;
+						//a.2 desde el ultimo bloque hasta el final
+						int[][] auxSinCeros = restSinCerosC();
+						int inicio=solAux[(solAux.length-1)]+auxSinCeros[i][(solAux.length-1)];
+						for(int j=inicio; j<negrasForzado.length;j++)
+							negrasForzado[j]=false;
+						//a.3
+						for(int j=0;j<(solAux.length-1);j++)
+							for(int k=solAux[j];k<solAux[j+1];k++)
+								negrasForzado[k]=false;
+					}else for(int j=0; j<negrasForzado.length;j++)
+						negrasForzado[j]=false;
+				}
+				iterSolCols[i]=null;
+				//Forzado blanco
+				for(int j=0; j<blancasForzado.length;j++)
+					blancasForzado[j]=true;
+				
+				iterSolCols[i]=solCols[i].listIterator();
+				while (iterSolCols[i].hasNext()){
+					int[] solAux=iterSolCols[i].next();
+					if(solAux.length>0){ // esAplicable(i,solAux)){
+						//ponemos la solucion
+						int[][] auxSinCeros = restSinCerosC();
+						for(int j=0;j<solAux.length;j++)
+							for(int k=solAux[j];k<solAux[j]+auxSinCeros[i][j];k++)
+								blancasForzado[k]=false;		
+					}
+				}
+				iterSolCols[i]=null;
+	}
+
+	private void forzadoFila(int i, boolean[] negrasForzado, boolean[] blancasForzado) {
+		//Forzado negro
+		for(int j=0; j<negrasForzado.length;j++)
+			negrasForzado[j]=true;
+		
+		iterSolFilas[i]=solFilas[i].listIterator();
+		while (iterSolFilas[i].hasNext()){
+			int[] solAux=iterSolFilas[i].next();
+			if(solAux.length>0){
+			if(esAplicable(i,solAux)){
+				//a.1 hasta primer lugar en blanco
+				for(int j=0;j<solAux[0];j++)
+					negrasForzado[j]=false;
+				//a.2 desde el ultimo bloque hasta el final
+				int[][] auxSinCeros = restSinCerosF();
+				int inicio=solAux[(solAux.length-1)]+auxSinCeros[i][(solAux.length-1)];
+				for(int j=inicio; j<ncols;j++)
+					negrasForzado[j]=false;
+				//a.3 blancos entre bloques 
+				for(int j=0;j<(solAux.length-1);j++){
+					int rest = auxSinCeros[i][j];
+					int limit = solAux[j+1];
+					for(int k=solAux[j]+rest;k<limit;k++)
+						negrasForzado[k]=false;
+				}
+			}
+			} else for(int j=0; j<negrasForzado.length;j++)
+				negrasForzado[j]=false;
+		}
+		iterSolFilas[i]=null;
+		
+		//Forzado blanco
+		for(int j=0; j<blancasForzado.length;j++)
+			blancasForzado[j]=true;
+		
+		iterSolFilas[i]=solFilas[i].listIterator();
+		while (iterSolFilas[i].hasNext()){
+			int[] solAux=iterSolFilas[i].next();
+			if(solAux.length>0){
+			if(esAplicable(i,solAux)){
+				//ponemos la solucion
+				int[][] auxSinCeros = restSinCerosF();
+				for(int j=0;j<solAux.length;j++)
+					for(int k=solAux[j];k<solAux[j]+auxSinCeros[i][j];k++)
+						blancasForzado[k]=false;		
+			}
+			} else for(int j=0; j<blancasForzado.length;j++)
+			blancasForzado[j]=true;
+		}
+		iterSolFilas[i]=null;
+	}
+	
 }//fin de clase

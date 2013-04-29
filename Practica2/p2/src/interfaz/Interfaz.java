@@ -695,7 +695,7 @@ public class Interfaz extends JFrame {
 	private JPanel damePanelEjemplos() {
 		
 		String[] listaEjem = {"alce","barco","caballo", "dog", "ejem", "flor",
-								"jirafa","lunaElvira","p","prueba","rombo","tabAjedrez","tabDamas"};
+								"jirafa","lunaElvira","p","prueba","rombo","tabAjedrez"};
 		
 		ejemplos = new JComboBox(listaEjem);
 		JButton botonAceptar = new JButton("Aceptar");
