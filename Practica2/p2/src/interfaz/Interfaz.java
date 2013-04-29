@@ -564,6 +564,8 @@ public class Interfaz extends JFrame {
 				 			JOptionPane.showMessageDialog(null, "NO EXISTEN SOLUCIONES!");
 				 	}
 				 	else {//Ha encontrado una solucion
+				 			canvas.setTablero(n.getSolActual());
+				 			canvas.repaint();
 				 			miCont++;
 				 			siguienteMenuItem.setEnabled(true);
 				 			primeraMenuItem.setEnabled(true);
@@ -742,7 +744,6 @@ public class Interfaz extends JFrame {
 		 						restricciones_filas = new int[filas][canvas.getMax_rest_fil()]; 
 		 						restricciones_cols = new int[columnas][canvas.getMax_rest_col()];
 		 						n = new Nonograma(canvas,restricciones_filas,restricciones_cols,forzado);
-		 						
 		        	 }
 				
 		         	boolean primeraVez = false;
@@ -766,7 +767,7 @@ public class Interfaz extends JFrame {
 	                 		}
 	                 		procesalinea(linea,posLinea,esLinea);
 	                 		posLinea++;
-	                 	}	         
+	                 	}
                  	
 			         directoMenu.setEnabled(true);
 			         primeraMenuItem.setEnabled(true);
