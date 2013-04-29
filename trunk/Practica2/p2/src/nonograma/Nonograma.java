@@ -13,6 +13,7 @@ public class Nonograma {
 	private int[][] restriccionesCols;
 	private int nfils,ncols;
 	private int[][] tablero;
+	int[][] tableroInicial;
 	private LinkedList<int[]> solFilas[];
 	private LinkedList<int[]> solCols[];
 	private int[][] solActual;
@@ -36,10 +37,12 @@ public class Nonograma {
 		this.tablero = new int[nfils][ncols];
 		this.max_rest_fil = ((ncols / 2) + (ncols % 2));
 		this.max_rest_col = ((nfils / 2) + (nfils % 2));
+
 		for(int i = 0; i < nfils; i++)
 			for(int j = 0; j < ncols; j++)
 				tablero[i][j] = c.getValorPosTablero(i, j);
-		
+	
+		tableroInicial=clonar(canvas.getTablero());
 		forzado = b;
 		pilaForzado = new Stack<int[][]>();
 	}
@@ -214,29 +217,6 @@ public class Nonograma {
 	
 	/******************************************************************************************************/
 	public boolean funcionaConUna(int col, int[] is){
-		/*
-		for (int i=0; i<nfils; i++){
-			LinkedList<int[]> aux = solFilas[i];
-			int problemas = 0;
-			int nsoluciones = aux.size();
-			
-			for(int k = 0; k<aux.size();k++){
-				int[] lista = aux.get(k);
-				for(int j = 0; j<lista.length;j++){
-					for(int x=0;x<is.length;x++){
-						if(lista[j] <=col) {
-							if (lista[j] != is[x]) problemas++;
-						}
-					}
-				}
-			}
-			
-			if(problemas>=nsoluciones) return false;
-		}
-			
-		
-		return true;*/
-		
 		int[] solAux = new int[nfils];
 		for(int i=0; i<is.length; i++){
 			for(int j=is[i]; j<(restriccionesCols[col][i]+is[i]); j++)
@@ -249,7 +229,7 @@ public class Nonograma {
 	}
 	
 	/******************************************************************************************************/
-
+				    
 	public boolean busquedaBack(){
 		if(lineaActual == nfils) lineaActual--;
 		while(lineaActual >= 0 && lineaActual < nfils){
@@ -267,11 +247,11 @@ public class Nonograma {
 				if(aplicable){
 					ponerFilaTablero(lineaActual,solActual[lineaActual]);
 					if((lineaActual < nfils-1 && !conflicto()
-							|| lineaActual == nfils && esValida()))
+							|| lineaActual == nfils-1 && esValida()))
 						lineaActual++; //el else vacio es hacer backtracking al hermano
 				
 				}//FIN APLICABLE
-					else { //BACKTRACKING HACIA ARRIBA
+				else { //BACKTRACKING HACIA ARRIBA
 						iterSolFilas[lineaActual] = null;
 						solActual[lineaActual] = null;
 						lineaActual--;
@@ -326,18 +306,25 @@ public class Nonograma {
 
 	
 	private void ponerFilaTablero(int fil, int[] is) {
+		int[] aux = resSinF(fil);
 		for(int i=0; i<is.length; i++){
-			for(int j=is[i]; j<(restriccionesFilas[fil][i]+is[i]); j++)
+			for(int j=is[i]; j<(aux[i]+is[i]); j++)
 				tablero[fil][j]=1;
 		}
 		for(int i=0; i<ncols; i++)
 			if(tablero[fil][i]!=1) tablero[fil][i]=-1;
 		
 	}
+	
+	private void quitarFilaTablero(int fil, int[] is) {
+		tablero[fil]=clonaSol(tableroInicial[fil]);
+		
+	}
 
 	private boolean esAplicable(int fil, int[] is) {
-		int solAux[]= new int[ncols];// se genera inicializado a cero
 		
+		int solAux[]= new int[ncols];// se genera inicializado a cero
+
 		for(int i=0; i<is.length; i++){
 			for(int j=is[i]; j<(restriccionesFilas[fil][i]+is[i]); j++)
 				solAux[j]=1;
@@ -351,15 +338,21 @@ public class Nonograma {
 		return true;
 	}
 
-	private void quitarFilaTablero(int fil, int[] is) {
-		tablero[fil]=clonaSol(tablero[fil]);
-		
-	}
+	
 	
 	private int[] clonaSol(int[] is) {
 		int sol[] = new int[is.length];
 		for (int i=0; i < is.length; i++){
 			sol[i] = is[i];
+		}
+		return sol;
+	}
+	
+	private int[][] clonar(int[][] tabla){
+		int[][] sol = new int[nfils][ncols];
+		for (int i=0; i < nfils; i++){
+			for(int j=0; j<ncols; j++)
+				sol[i][j]=tabla[i][j];
 		}
 		return sol;
 	}

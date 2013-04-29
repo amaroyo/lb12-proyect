@@ -543,7 +543,13 @@ public class Interfaz extends JFrame {
 		siguienteMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(n.nonograma() == false){
+					miCont = 0;
 		 			JOptionPane.showMessageDialog(null, "YA NO HAY MAS SOLUCIONES!");
+				}
+				else{
+					canvas.setTablero(n.getTablero());
+		 			canvas.repaint();
+		 			miCont++;
 				}
 			}
 		});
@@ -565,7 +571,7 @@ public class Interfaz extends JFrame {
 				 			JOptionPane.showMessageDialog(null, "NO EXISTEN SOLUCIONES!");
 				 	}
 				 	else {//Ha encontrado una solucion
-				 			canvas.setTablero(n.getSolActual());
+				 			canvas.setTablero(n.getTablero());
 				 			canvas.repaint();
 				 			miCont++;
 				 			siguienteMenuItem.setEnabled(true);
