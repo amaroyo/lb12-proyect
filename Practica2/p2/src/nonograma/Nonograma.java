@@ -24,7 +24,6 @@ public class Nonograma {
 	private Stack<int[][]> pilaForzado = null;
 	private int max_rest_fil;
 	private int max_rest_col;
-	private int[][] tableroInicial;
 	
 	
 	
@@ -37,7 +36,6 @@ public class Nonograma {
 		this.tablero = new int[nfils][ncols];
 		this.max_rest_fil = ((ncols / 2) + (ncols % 2));
 		this.max_rest_col = ((nfils / 2) + (nfils % 2));
-		this.tableroInicial = c.getTablero();
 		for(int i = 0; i < nfils; i++)
 			for(int j = 0; j < ncols; j++)
 				tablero[i][j] = c.getValorPosTablero(i, j);
@@ -254,7 +252,7 @@ public class Nonograma {
 
 	public boolean busquedaBack(){
 		if(lineaActual == nfils) lineaActual--;
-		while(lineaActual > 0 && lineaActual < nfils){
+		while(lineaActual >= 0 && lineaActual < nfils){
 			if(iterSolFilas[lineaActual] == null){
 				iterSolFilas[lineaActual] = solFilas[lineaActual].listIterator();
 			}	
@@ -354,7 +352,7 @@ public class Nonograma {
 	}
 
 	private void quitarFilaTablero(int fil, int[] is) {
-		tablero[fil]=clonaSol(tableroInicial[fil]);
+		tablero[fil]=clonaSol(tablero[fil]);
 		
 	}
 	
@@ -364,10 +362,6 @@ public class Nonograma {
 			sol[i] = is[i];
 		}
 		return sol;
-	}
-
-	public int[][] getInicial() {
-		return tableroInicial;
 	}
 
 	public int[][] getTablero(){
