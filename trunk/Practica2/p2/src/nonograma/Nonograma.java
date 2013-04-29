@@ -197,7 +197,6 @@ public class Nonograma {
 	public boolean conflicto(){
 		for(int i = 0; i<ncols;i++)
 			if (conflictoCol(i)) return true;
-		
 		return false;
 	}
 	
@@ -206,15 +205,34 @@ public class Nonograma {
 		ListIterator<int[]> solsCols = solCols[col].listIterator();
 		while(solsCols.hasNext())
 			if (funcionaConUna(col,solsCols.next())) return false;
-		
 		return true;
 	}
 	
 	/******************************************************************************************************/
 	public boolean funcionaConUna(int col, int[] is){
 		
-		//POR HACER!! TODO 
-		return false;
+		
+		for (int i=0; i<nfils; i++){
+			LinkedList<int[]> aux = solFilas[i];
+			int problemas = 0;
+			int nsoluciones = aux.size();
+			
+			for(int k = 0; k<aux.size();k++){
+				int[] lista = aux.get(k);
+				for(int j = 0; j<lista.length;j++){
+					for(int x=0;x<is.length;x++){
+						if(lista[j] <=col) {
+							if (lista[j] != is[x]) problemas++;
+						}
+					}
+				}
+			}
+			
+			if(problemas>=nsoluciones) return false;
+		}
+			
+		
+		return true;
 	}
 	
 	/******************************************************************************************************/
