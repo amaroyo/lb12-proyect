@@ -22,6 +22,8 @@ public class TableroCanvas extends Canvas implements MouseListener{
 	private int celda=40;
 	private int restF[][];
 	private int restC[][];
+	private int posStringX = 15;
+	private int posStringY = 25;
 	
 	/******************************************************************************************************/
 	public TableroCanvas(int filas, int cols){
@@ -80,7 +82,7 @@ public class TableroCanvas extends Canvas implements MouseListener{
 					valor = restC[fila][columna] + "";
 					g.setColor(new Color(23, 6, 128));//(Azul oscuro)
 					g.setFont(new Font("ComicSans", Font.BOLD, 16));
-					g.drawString(valor, x+15, i+25);//Muestro el valor de la celda y la posicion respecto a la casilla
+					g.drawString(valor, x+posStringX, i+posStringY);//Muestro el valor de la celda y la posicion respecto a la casilla
 				}
 				else{//La celda no contienen ningun valor
 					g.setColor(new Color(75, 141, 221));
@@ -95,6 +97,7 @@ public class TableroCanvas extends Canvas implements MouseListener{
 		}
 	}
  	
+
 	/******************************************************************************************************/
 	private void pintaRestFilas(int columna,Graphics g,int x,int y){
 		int fila = 0;
@@ -107,7 +110,7 @@ public class TableroCanvas extends Canvas implements MouseListener{
 						valor = restF[fila][columna] + "";
 						g.setColor(new Color(23, 6, 128));//(Azul oscuro)
 						g.setFont(new Font("ComicSans", Font.BOLD, 16));
-						g.drawString(valor, x+15, i+25);//Muestro el valor de la celda 
+						g.drawString(valor, x+posStringX, i+posStringY);//Muestro el valor de la celda 
 					}
 					else{//La celda no contienen ningun valor
 						g.setColor(new Color(75, 141, 221));
@@ -347,6 +350,14 @@ public class TableroCanvas extends Canvas implements MouseListener{
 	
 	public void setK(int k) {
 		this.k = k;
+	}
+	
+	public void setPosStringX(int posStringX) {
+		this.posStringX = posStringX;
+	}
+
+	public void setPosStringY(int posStringY) {
+		this.posStringY = posStringY;
 	}
 	/******************************************************************************************************/
 										/*AUTO-GENERATED METHODS*/ 
