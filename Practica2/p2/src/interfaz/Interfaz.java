@@ -49,7 +49,7 @@ public class Interfaz extends JFrame {
 
 	private JTextField botonFil;
 	private JTextField botonCol;
-	private String ejemElegido ="prueba";
+	private String ejemElegido ="rombo";
 
 	private JFrame ventanaFijarTamanyo;
 	
@@ -695,7 +695,7 @@ public class Interfaz extends JFrame {
 	/******************************************************************************************************/
 	private JPanel damePanelEjemplos() {
 		
-		String[] listaEjem = {"prueba","rombo","cinco","cara","ejem"};
+		String[] listaEjem = {"rombo","prueba","cinco","p","ejem"};
 		
 		ejemplos = new JComboBox(listaEjem);
 		JButton botonAceptar = new JButton("Aceptar");

@@ -218,8 +218,9 @@ public class Nonograma {
 	/******************************************************************************************************/
 	public boolean funcionaConUna(int col, int[] is){
 		int[] solAux = new int[nfils];
+		int[] aux = resSinC(col);
 		for(int i=0; i<is.length; i++){
-			for(int j=is[i]; j<(restriccionesCols[col][i]+is[i]); j++)
+			for(int j=is[i]; j<(aux[i]+is[i]); j++)
 				solAux[j]=1;
 		}
 		if(tablero[lineaActual][col]>0 && solAux[lineaActual]>0 ) return true;
@@ -294,16 +295,26 @@ public class Nonograma {
 			rest_col[i]=restric;
 		}
 		
+		
+		int[][] auxSinCeros = restSinCeros();
 		for(int i=0; i<ncols; i++){
-			if (rest_col[i].length==restriccionesCols[i].length){
+			if (rest_col[i].length==auxSinCeros[i].length){
 				for(int j=0; j<rest_col[i].length; j++)
-					if (rest_col[i][j]!=restriccionesCols[i][j]) return false;
+					if (rest_col[i][j]!=auxSinCeros[i][j]) return false;
 			} 
 			else return false;
 		}
 		return true;
 	}
 
+	
+	public int[][] restSinCeros(){
+		int[][] respuesta = new int[ncols][];
+		for (int i = 0; i<ncols;i++)
+			respuesta[i]=resSinC(i);
+		
+		return respuesta;
+	}
 	
 	private void ponerFilaTablero(int fil, int[] is) {
 		int[] aux = resSinF(fil);
@@ -324,9 +335,10 @@ public class Nonograma {
 	private boolean esAplicable(int fil, int[] is) {
 		
 		int solAux[]= new int[ncols];// se genera inicializado a cero
-
+		int[] aux = resSinF(fil);
+		
 		for(int i=0; i<is.length; i++){
-			for(int j=is[i]; j<(restriccionesFilas[fil][i]+is[i]); j++)
+			for(int j=is[i]; j<(aux[i]+is[i]); j++)
 				solAux[j]=1;
 		}
 		
