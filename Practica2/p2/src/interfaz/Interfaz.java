@@ -434,9 +434,6 @@ public class Interfaz extends JFrame {
 				ventanaElegirEjemplo.setContentPane(damePanelEjemplos());
 			}
 		});
-		/*	abrirMenu.add(dameCargarMatrizA());
-		abrirMenu.add(dameCargarMatrizB());
-		*/
 		return ejemploMenuItem;
 	}
 
@@ -673,6 +670,8 @@ public class Interfaz extends JFrame {
 			pt.setLayout(new BorderLayout());
 			if ((filas>10) ||(columnas>10)) {
 				canvas.setTamCelda(25);
+				canvas.setPosStringX(7);
+				canvas.setPosStringY(20);
 			}
 			pt.add(canvas);
 			pt.setVisible(true);
@@ -811,7 +810,9 @@ public class Interfaz extends JFrame {
     private void procesalinea(String s, int fila, boolean b){
             
             
-            int posicion = canvas.getMax_rest_col()-1;
+            int posicionC = canvas.getMax_rest_col()-1;
+            int posicionF = canvas.getMax_rest_fil()-1;
+            
             String num = "";
             
             char[] array = s.toCharArray();
@@ -830,14 +831,14 @@ public class Interfaz extends JFrame {
                             int numero = Integer.parseInt(num);
                             
                             if (b) {
-                                            restricciones_filas[fila][posicion] = numero;
+                                            restricciones_filas[fila][posicionF] = numero;
                                             canvas.setRestF(restricciones_filas);
-                                            posicion--;
+                                            posicionF--;
                             }
                             else {
-                                    restricciones_cols[fila][posicion] = numero;
+                                    restricciones_cols[fila][posicionC] = numero;
                                     canvas.setRestC(restricciones_cols);
-                                    posicion--;
+                                    posicionC--;
                             }
                             num = "";
                             
