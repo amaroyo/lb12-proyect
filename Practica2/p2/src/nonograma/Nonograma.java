@@ -37,7 +37,7 @@ public class Nonograma {
 		this.tablero = new int[nfils][ncols];
 		this.max_rest_fil = ((ncols / 2) + (ncols % 2));
 		this.max_rest_col = ((nfils / 2) + (nfils % 2));
-
+		
 		for(int i = 0; i < nfils; i++)
 			for(int j = 0; j < ncols; j++)
 				tablero[i][j] = c.getValorPosTablero(i, j);

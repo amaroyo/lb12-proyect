@@ -25,6 +25,7 @@ public class TableroCanvas extends Canvas implements MouseListener{
 	private int posStringX = 15;
 	private int posStringY = 25;
 	
+	
 	/******************************************************************************************************/
 	public TableroCanvas(int filas, int cols){
 		this.nfilas=filas;
