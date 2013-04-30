@@ -225,7 +225,6 @@ public class Nonograma {
 				if(forzado) aplicarForzado();
 				iterSolFilas[lineaActual] = solFilas[lineaActual].listIterator();
 			}	
-			canvas.repaint();
 			if(solFilas[lineaActual]!=null) quitarFilaTablero(lineaActual, solActual[lineaActual]);
 				boolean aplicable = false;
 				while(iterSolFilas[lineaActual].hasNext() && !aplicable){
@@ -407,7 +406,6 @@ public class Nonograma {
 	
 	/******************************************************************************************************/
 	private void quitarFilaTablero(int fil, int[] is) {
-		//tablero[fil]=clonaSol(tableroInicial[fil]);
 		for (int i = 0; i < ncols; i++){
 			if(tablero[fil][i] == 0){
 			canvas.setValorPosTablero(fil, i, 0);
@@ -442,7 +440,6 @@ public class Nonograma {
 		return true;
 	}
 	
-	/******************************************************************************************************/
 
 	/******************************************************************************************************/
 	public int[][] getTablero(){
