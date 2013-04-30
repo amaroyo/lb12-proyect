@@ -187,11 +187,11 @@ public class Nonograma {
 	}
 	
 	/******************************************************************************************************/
-	/*public boolean conflicto(){
+	public boolean conflicto(){
 		for(int i = 0; i<ncols;i++)
 			if (conflictoCol(i)) return true;
 		return false;
-	}*/
+	}
 	
 	/******************************************************************************************************/
 	public boolean conflictoCol(int col){
@@ -203,21 +203,75 @@ public class Nonograma {
 	
 	/******************************************************************************************************/
 	public boolean funcionaConUna(int col, int[] is){
-		int[] solAux = new int[nfils];
-		int[] aux = resSinC(col);
-		for(int i=0; i<is.length; i++){
-			for(int j=is[i]; j<(aux[i]+is[i]); j++)
-				solAux[j]=1;
+		
+		
+		int[][] resAux = new int[ncols][canvas.getMax_rest_col()];
+		int cont = 0;//contador de casillas negras
+		int color;
+		int posFila = 0;
+		int num;
+		int total = 0;
+		//Calculamos el numero de restricciones por Columna 
+
+			num = numeroRC(col);
+			
+			if (num == 0){//Si no habia restricciones para esa columna
+				total = 0;
+			}
+			else{
+				total = canvas.getMax_rest_col()-num;//Las que me quedan
+				//total = numeroRC(col)-num;
+			}
+			
+			for(int j = 0; j <= lineaActual; j++){
+				color = canvas.getValorPosTablero(j,col);//Compruebo si la casilla es blanca o negra en esa fila
+				if(color > 0){ //casilla negra
+					cont++;
+				}
+				else{  //casilla blanca
+					if(cont > 0){ //Si habia al menos una negra
+						resAux[col][posFila] = cont; //Le asigno el numero de fichas negras consecutivas a nuestra matriz auxiliar
+						cont = 0;//Reinicio el contador xq tengo una casilla blanca
+						//Si no concuerdan los valores entonces hay CONFLICTO
+						if((total > canvas.getMax_rest_col()-1) || (resAux[col][posFila] != restriccionesCols[col][total])){
+							return true;
+						}
+						//De lo contrario si se cumple incrementamos para pasar a la siguiente columna
+						posFila++;
+						total++;
+					}
+				}
+			}
+			
+			
+			if(cont > 0){//Si he acabado en una casilla negra
+				resAux[col][posFila] = cont; //Asigno el valor a nuestra matriz auxiliar
+				cont = 0;//Reinicio el contador
+				if((total > canvas.getMax_rest_col()-1) || (resAux[col][posFila] > restriccionesCols[col][posFila])){
+					return true;
+				}
+			}
+			posFila = 0;//Reinicio el punto de partida
+		
+		
+		
+		
+		if (cont > 0){//Si he acabado en una casilla negra
+			resAux[ncols-1][posFila] = cont;//Asigno el valor a nuestra matriz auxiliar
+			if((total > canvas.getMax_rest_col()-1) || (resAux[ncols-1][posFila] > restriccionesCols[ncols-1][total])){
+				return true;
+			}
 		}
-		if(tablero[lineaActual][col]>0 && solAux[lineaActual]>0 ) return true;
-		if(tablero[lineaActual][col]<=0 && solAux[lineaActual]<=0 ) return true;
 		
 		return false;
+	
+	
 	}
 	
 	/******************************************************************************************************/
 				    
 	public boolean busquedaBack(){
+		
 		if(lineaActual == nfils) lineaActual--;
 		
 		while(lineaActual >= 0 && lineaActual < nfils){
@@ -235,7 +289,7 @@ public class Nonograma {
 				
 				if(aplicable){
 					ponerFilaTablero(lineaActual,solActual[lineaActual]);
-					if((lineaActual < nfils-1 && conflicto()
+					if((lineaActual < nfils-1 && !conflicto()
 							|| lineaActual == nfils-1 && esValida()))
 						lineaActual++; //el else vacio es hacer backtracking al hermano
 				
@@ -257,68 +311,7 @@ public class Nonograma {
 		else return true; //ESTA GUARDADA EN SOLACTUAL
 	}
 
-	/******************************************************************************************************/
-	private boolean conflicto(){
-		int c = canvas.getNcols();
-		int[][] resAux = new int[c][canvas.getMax_rest_col()];
-		int cont = 0;
-		int color;
-		int posFila = 0;
-		int num;
-		int total = 0;
-		//Calculamos el numero de restricciones por Columna 
-		for(int i = 0; i < c; i++){
-			num = numeroRC(i);
-			
-			if (num == 0){//Si no habia restricciones para esa columna
-				total = 0;
-			}
-			else{
-				total = canvas.getMax_rest_col()-num;//Las que me quedan
-			}
-			
-			for(int j = 0; j <= lineaActual; j++){
-				color = canvas.getValorPosTablero(j,i);//Compruebo si la casilla es blanca o negra en esa fila
-				if(color > 0){ //casilla negra
-					cont++;
-				}
-				else{  //casilla blanca
-					if(cont > 0){ //Si habia al menos una negra
-						resAux[i][posFila] = cont; //Le asigno el numero de fichas negras consecutivas a nuestra matriz auxiliar
-						cont = 0;//Reinicio el contador xq tengo una casilla blanca
-						//Si no concuerdan los valores entonces hay CONFLICTO
-						if((total > canvas.getMax_rest_col()-1) || (resAux[i][posFila] != restriccionesCols[i][total])){
-							return false;
-						}
-						//De lo contrario si se cumple incrementamos para pasar a la siguiente columna
-						posFila++;
-						total++;
-					}
-				}
-			}
-			
-			
-			if(cont > 0){//Si he acabado en una casilla negra
-				resAux[i][posFila] = cont; //Asigno el valor a nuestra matriz auxiliar
-				cont = 0;//Reinicio el contador
-				if((total > canvas.getMax_rest_col()-1) || (resAux[i][posFila] > restriccionesCols[i][total])){
-					return false;
-				}
-			}
-			posFila = 0;//Reinicio el punto de partida
-		}
-		
-		
-		
-		if (cont > 0){//Si he acabado en una casilla negra
-			resAux[c-1][posFila] = cont;//Asigno el valor a nuestra matriz auxiliar
-			if((total > canvas.getMax_rest_col()-1) || (resAux[c-1][posFila] > restriccionesCols[c-1][total])){
-				return false;
-			}
-		}
-		
-		return true;
-	}
+	
 	
 	/******************************************************************************************************/
 	public boolean esValida(){
