@@ -189,22 +189,19 @@ public class Nonograma {
 	/******************************************************************************************************/
 	public boolean conflicto(){
 		for(int i = 0; i<ncols;i++)
-			if (conflictoCol(i)) return true;
+			if (conflictoCol(i)) return true; //Si hay conflicto retorno TRUE
 		return false;
 	}
 	
 	/******************************************************************************************************/
-	public boolean conflictoCol(int col){
-		ListIterator<int[]> solsCols = solCols[col].listIterator();
-		while(solsCols.hasNext())
-			if (funcionaConUna(col,solsCols.next())) return false;
+	public boolean conflictoCol(int col){ //Conflicto solo puede valer TRUE cuano se produce un conflicto para esa columna
+		if (funcionaConUna(col)) return false; //Mientras funcione para esta columna no hay conflicto
 		return true;
 	}
 	
 	/******************************************************************************************************/
-	public boolean funcionaConUna(int col, int[] is){
-		
-		
+	public boolean funcionaConUna(int col){//Pruebo con esta columna que no haya conflicto con las soluciones de las filas
+		//Hasta la lineaActual de la que tengo solucion en el tablero del canvas
 		int[][] resAux = new int[ncols][canvas.getMax_rest_col()];
 		int cont = 0;//contador de casillas negras
 		int color;
@@ -212,7 +209,6 @@ public class Nonograma {
 		int num;
 		int total = 0;
 		//Calculamos el numero de restricciones por Columna 
-
 			num = numeroRC(col);
 			
 			if (num == 0){//Si no habia restricciones para esa columna
@@ -220,7 +216,6 @@ public class Nonograma {
 			}
 			else{
 				total = canvas.getMax_rest_col()-num;//Las que me quedan
-				//total = numeroRC(col)-num;
 			}
 			
 			for(int j = 0; j <= lineaActual; j++){
@@ -234,7 +229,7 @@ public class Nonograma {
 						cont = 0;//Reinicio el contador xq tengo una casilla blanca
 						//Si no concuerdan los valores entonces hay CONFLICTO
 						if((total > canvas.getMax_rest_col()-1) || (resAux[col][posFila] != restriccionesCols[col][total])){
-							return true;
+							return false;
 						}
 						//De lo contrario si se cumple incrementamos para pasar a la siguiente columna
 						posFila++;
@@ -247,23 +242,12 @@ public class Nonograma {
 			if(cont > 0){//Si he acabado en una casilla negra
 				resAux[col][posFila] = cont; //Asigno el valor a nuestra matriz auxiliar
 				cont = 0;//Reinicio el contador
-				if((total > canvas.getMax_rest_col()-1) || (resAux[col][posFila] > restriccionesCols[col][posFila])){
-					return true;
+				if((total > canvas.getMax_rest_col()-1) || (resAux[col][posFila] > restriccionesCols[col][total])){
+					return false;
 				}
 			}
-			posFila = 0;//Reinicio el punto de partida
-		
-		
-		
-		
-		if (cont > 0){//Si he acabado en una casilla negra
-			resAux[ncols-1][posFila] = cont;//Asigno el valor a nuestra matriz auxiliar
-			if((total > canvas.getMax_rest_col()-1) || (resAux[ncols-1][posFila] > restriccionesCols[ncols-1][total])){
-				return true;
-			}
-		}
-		
-		return false;
+			posFila = 0;//Reinicio el punto de partida	
+		return true;
 	
 	
 	}
@@ -284,7 +268,7 @@ public class Nonograma {
 				while(iterSolFilas[lineaActual].hasNext() && !aplicable){
 					//PODA 1
 					solActual[lineaActual] = iterSolFilas[lineaActual].next();
-					if(aplicable(lineaActual,solActual[lineaActual])) aplicable = true;
+					if(esAplicable(lineaActual,solActual[lineaActual])) aplicable = true;
 				}
 				
 				if(aplicable){
@@ -301,7 +285,7 @@ public class Nonograma {
 						if(lineaActual >= 0){
 							quitarFilaTablero(lineaActual, solActual[lineaActual]);
 							solActual[lineaActual] = null;
-							if(forzado) deshacerForzado(); //El forzado siempre sera el mismo asi que lo dejamos asi
+							if(forzado) deshacerForzado(); 
 						}
 			}//FIN ELSE - FIN BACK
 			
@@ -398,7 +382,7 @@ public class Nonograma {
 	}
 	
 	/******************************************************************************************************/
-	private void quitarFilaTablero(int fil, int[] is) {
+	private void quitarFilaTablero(int fil, int[] is) {//Restablecemos los valores originales de esa fila
 		for (int i = 0; i < ncols; i++){
 			if(tablero[fil][i] == 0){
 			canvas.setValorPosTablero(fil, i, 0);
@@ -408,7 +392,7 @@ public class Nonograma {
 	}
 
 	/******************************************************************************************************/
-	private boolean aplicable(int lA, int[] solA){
+	private boolean esAplicable(int lA, int[] solA){
 		int[] fila = new int[ncols];
 		for(int i = 0; i < ncols; i++){ //Ponemos la fila totalmente en blanco
 				fila[i] = -1;
@@ -445,12 +429,16 @@ public class Nonograma {
 	/******************************************************************************************************/
 	
 	private void aplicarForzado(){
+		
 		int[][] forzadas = new int[nfils][ncols];
 		boolean negrasForzadas[] = new boolean[Math.max(nfils, ncols)];
 		boolean blancasForzadas[] = new boolean[Math.max(nfils, ncols)];
-		for(int i = 0; i < nfils; i++){  //para las filas
+		
+		//FILAS
+		for(int i = 0; i < nfils; i++){ 
 			forzadoFila(i, negrasForzadas, blancasForzadas);
 			for(int j = 0; j < ncols; j++){
+				
 				if(negrasForzadas[j] &&  (tablero[i][j] == 0)) {
 					tablero[i][j]=forzadas[i][j]=1;
 				}
@@ -461,8 +449,10 @@ public class Nonograma {
 				}
 			}
 		}
-		for(int x = 0; x < ncols; x++){ //para las columnas
-			forzadoCol(x, negrasForzadas, blancasForzadas);
+		
+		//COLUMNAS
+		for(int x = 0; x < ncols; x++){ 
+			forzadoColumna(x, negrasForzadas, blancasForzadas);
 			for(int y = 0; y < nfils; y++){
 				if(negrasForzadas[y] &&  tablero[y][x] == 0){
 					tablero[y][x]=forzadas[y][x]=1;
@@ -474,57 +464,65 @@ public class Nonograma {
 				}
 			}
 		}
-		pilaForzado.push(forzadas);
+		pilaForzado.push(forzadas); //Coloco en la cima de la pila las forzadas
 	}
 	
 	/******************************************************************************************************/
 	private void forzadoFila(int in, boolean[] negroF, boolean[] blancoF){
+		
 		for (int i = 0; i < negroF.length; i++){
 			negroF[i] = true; 
 		}
 		for (int j = 0; j < blancoF.length; j++){
 			blancoF[j] = true; 
 		}
+		
 		ListIterator<int[]> it = solFilas[in].listIterator();
 		int[] sol;
-		int cuantas = 0;
-		int cuantas1 = 0;
+		int numR = 0;
+		int numNoR = 0;
+		
 		while(it.hasNext()){
-			cuantas = 0;
+			numR = 0;
+			
 			for(int aux = 0; aux < canvas.getMax_rest_fil(); aux++){
-				if(restriccionesFilas[in][aux] != 0){cuantas++;}
+				if(restriccionesFilas[in][aux] != 0){numR++;}
 			}
-			cuantas = canvas.getMax_rest_fil()-cuantas;
-			cuantas1 = cuantas;
+			
+			numR = canvas.getMax_rest_fil()-numR;
+			numNoR = numR;
 			sol = it.next();
-			if(aplicable(in,sol) && (sol.length != 0)){
+			
+			if(esAplicable(in,sol) && (sol.length != 0)){
 				//forzado negras
 				//a.1 hasta primer lugar en blanco
 				for(int blanco = 0; blanco < sol[0]; blanco++){
 					negroF[blanco] = false;
 				}
 				//a.2 desde el ultimo bloque hasta el final
-				int limite = sol[sol.length-1] + restriccionesFilas[in][canvas.getMax_rest_fil() - 1];
-				for(int blancoFinal = limite; blancoFinal < ncols; blancoFinal++){
-					negroF[blancoFinal] = false;
+				int lim = sol[sol.length-1] + restriccionesFilas[in][canvas.getMax_rest_fil() - 1];
+				for(int bFinal = lim; bFinal < ncols; bFinal++){
+					negroF[bFinal] = false;
 				}
 				int r;
 				//a.3 blancos entre bloques
-				for(int blancoMedio = 0; blancoMedio < sol.length-1; blancoMedio++){
-					r = sol[blancoMedio] + restriccionesFilas[in][cuantas];
-					for(int hasta = r; hasta < sol[blancoMedio+1]; hasta++){
-						negroF[hasta] = false;
+				for(int bCentro = 0; bCentro < sol.length-1; bCentro++){
+					r = sol[bCentro] + restriccionesFilas[in][numR];
+					for(int posFin = r; posFin < sol[bCentro+1]; posFin++){
+						negroF[posFin] = false;
 					}
-					cuantas++;
+					numR++;
 				}
 				//forzado blancas
-				for(int blan = 0; blan < sol.length; blan++){
-					for(int k = sol[blan]; k < (restriccionesFilas[in][cuantas1]+sol[blan]); k++){
+				for(int b = 0; b < sol.length; b++){
+					for(int k = sol[b]; k < (restriccionesFilas[in][numNoR]+sol[b]); k++){
 						blancoF[k] = false;
 					}
-					cuantas1++;
+					numNoR++;
 				}
 			}
+			
+			
 			if ((sol.length == 0)){
 				for (int i = 0; i < blancoF.length; i++){
 					blancoF[i] = true;
@@ -537,48 +535,56 @@ public class Nonograma {
 	}
 	
 	/******************************************************************************************************/
-	private void forzadoCol(int in, boolean[] negroF, boolean[] blancoF){
+	private void forzadoColumna(int in, boolean[] negroF, boolean[] blancoF){
+		
 		for (int i = 0; i < negroF.length; i++){
 			negroF[i] = true; 
 		}
+		
 		for (int j = 0; j < blancoF.length; j++){
 			blancoF[j] = true; 
 		}
+		
 		ListIterator<int[]> it = solCols[in].listIterator();
 		int[] sol;
-		int cuantas = 0;
-		int cuantas1 = 0;
+		int numR = 0;
+		int numNoR = 0;
+		
 		while(it.hasNext()){
-			cuantas = 0;
+			numR = 0;
+			
 			for(int aux = 0; aux < canvas.getMax_rest_col(); aux++){
-				if(restriccionesCols[in][aux] != 0){cuantas ++;}
+				if(restriccionesCols[in][aux] != 0){numR ++;}
 			}
-			cuantas = canvas.getMax_rest_col()-cuantas;
-			cuantas1 = cuantas;
+			
+			numR = canvas.getMax_rest_col()-numR;
+			numNoR = numR;
 			sol = it.next();
-			if(aplicableCol(in,sol) && (sol.length != 0)){
+			
+			if(esAplicableCol(in,sol) && (sol.length != 0)){
 				//forzado negras
 				for(int blanco = 0; blanco < sol[0]; blanco++){
 					negroF[blanco] = false;
 				}
-				int limite = sol[sol.length-1] + restriccionesCols[in][canvas.getMax_rest_col() - 1];
-				for(int blancoFinal = limite; blancoFinal < nfils; blancoFinal++){
-					negroF[blancoFinal] = false;
+				
+				int lim = sol[sol.length-1] + restriccionesCols[in][canvas.getMax_rest_col() - 1];
+				for(int bFinal = lim; bFinal < nfils; bFinal++){
+					negroF[bFinal] = false;
 				}
 				int r;
-				for(int blancoMedio = 0; blancoMedio < sol.length-1; blancoMedio++){
-					r = sol[blancoMedio] + restriccionesCols[in][cuantas];
-					for(int hasta = r; hasta < sol[blancoMedio+1]; hasta++){
-						negroF[hasta] = false;
+				for(int bCentro = 0; bCentro < sol.length-1; bCentro++){
+					r = sol[bCentro] + restriccionesCols[in][numR];
+					for(int posFinal = r; posFinal < sol[bCentro+1]; posFinal++){
+						negroF[posFinal] = false;
 					}
-					cuantas++;
+					numR++;
 				}
 				//forzado blancas
-				for(int blan = 0; blan < sol.length; blan++){
-					for(int k = sol[blan]; k < (restriccionesCols[in][cuantas1]+sol[blan]); k++){
+				for(int b = 0; b < sol.length; b++){
+					for(int k = sol[b]; k < (restriccionesCols[in][numNoR]+sol[b]); k++){
 						blancoF[k] = false;
 					}
-					cuantas1++;
+					numNoR++;
 				}
 			}
 			if ((sol.length == 0)){
@@ -594,7 +600,7 @@ public class Nonograma {
 	
 	/******************************************************************************************************/
 	private void deshacerForzado() {
-		int[][] forz = pilaForzado.pop();
+		int[][] forz = pilaForzado.pop(); //Quitamos el forzado aplicado de la pila
 		for(int i = 0; i < nfils; i++){
 			for(int j = 0; j < ncols; j++){
 				if(forz[i][j] != 0){
@@ -605,31 +611,28 @@ public class Nonograma {
 	}
 	
 	/******************************************************************************************************/
-	private boolean aplicableCol(int cAct, int[] solAct){
-		int[] aux = generarCol(cAct,solAct);
-		for(int i = 0; i < nfils; i++){
-			if((tablero[i][cAct] != 0) && (tablero[i][cAct] != aux[i])){
-				return false;
-			}
-		}
-		return true;
-	}
-	
-	/******************************************************************************************************/
-	private int[] generarCol(int cAct, int[] solAct) {
+	private boolean esAplicableCol(int c, int[] solAct){//Lo mismo que esAplicable pero para cols
+		
 		int[] col = new int[nfils];
 		for(int i = 0; i < nfils; i++){ //la ponemos a blanco entera
 			col[i] = -1;
 		}
-		int tam = solAct.length;
-		for(int j = 0; j < tam; j++){
-			int donde = solAct[j];
-			int cuantas = restriccionesCols[cAct][canvas.getMax_rest_col()-(tam-j)];
-			for(int k = donde; k < donde+cuantas; k++){ //pintamos las casillas negras
+		
+		int t = solAct.length;
+		for(int j = 0; j < t; j++){
+			int pos = solAct[j];
+			int num = restriccionesCols[c][canvas.getMax_rest_col()-(t-j)];
+			for(int k = pos; k < pos+num; k++){ //pintamos las casillas negras
 				col[k] = 1;
 			}
 		}
-		return col;
+		
+		for(int i = 0; i < nfils; i++){
+			if((tablero[i][c] != 0) && (tablero[i][c] != col[i])){
+				return false;
+			}
+		}
+		return true;
 	}
 	
 	/******************************************************************************************************/
@@ -641,4 +644,5 @@ public class Nonograma {
 	public void setCanvas(TableroCanvas canvas) {
 		this.canvas = canvas;
 	}
+	
 }//fin de clase

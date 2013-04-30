@@ -472,7 +472,7 @@ public class Interfaz extends JFrame {
 				canvas.setRestC(restricciones_cols);
 				canvas.repaint();
 			//LISTENER!!!!
-				
+				guardarMenuItem.setEnabled(true);	
 			}
 		});
 	
@@ -573,7 +573,10 @@ public class Interfaz extends JFrame {
 				 			siguienteMenuItem.setEnabled(true);
 				 			primeraMenuItem.setEnabled(true);
 				 	}
-			}
+				 	
+				 	//guardarMenuItem.setEnabled(false);
+			}		
+			
 		});
 
 		return primeraMenuItem;
@@ -636,7 +639,6 @@ public class Interfaz extends JFrame {
 						ventanaFijarTamanyo.dispose();
 						ventanaFijarTamanyo=null;
 						
-						guardarMenuItem.setEnabled(true);
 						inversoMenuItem.setEnabled(true);
 						
 						
@@ -775,7 +777,6 @@ public class Interfaz extends JFrame {
                  	
 			         directoMenu.setEnabled(true);
 			         primeraMenuItem.setEnabled(true);
-			         guardarMenuItem.setEnabled(true);
 			         conForzado.setEnabled(true);
 			         sinForzado.setEnabled(true);
 			         
