@@ -543,9 +543,9 @@ public class Interfaz extends JFrame {
 					miCont = 0;
 		 			JOptionPane.showMessageDialog(null, "YA NO HAY MAS SOLUCIONES!");
 				}
-				else{
-					canvas.setTablero(n.getTablero());
-		 			canvas.repaint();
+				else{canvas.pintarCuadri(canvas.getGraphics());
+					//canvas.setTablero(n.getTablero());
+		 			//canvas.repaint();
 		 			miCont++;
 				}
 			}
