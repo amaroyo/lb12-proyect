@@ -375,141 +375,199 @@ public class Nonograma {
 	}
 	
 	
-	private void deshacerForzado() {
-		int[][] forzado = pilaForzado.pop();//Coge la cima de la pila que tiene el ultimo forzado aplicado
-		for(int i=0; i < nfils; i++)
-			for(int j=0; j < ncols; j++){
-				if(forzado[i][j] == 1)
-					tablero[i][j] = 0;
-				if(forzado[i][j] == -1)
-					tablero[i][j] = 0;
-			}
-	}
-
-	private void aplicarForzado() {
-		int[][] forzadas = new int[nfils][ncols];
-		boolean negrasForzado[] = new boolean[Math.max(nfils, ncols)];
-		boolean blancasForzado[] = new boolean[Math.max(nfils,ncols)];
-		
-		//FILAS
-		for(int i=lineaActual; i<nfils; i++){
-			forzadoFila(i, negrasForzado, blancasForzado);
-			for(int j=0; j<ncols; j++){
-				if(negrasForzado[j]==true && tablero[i][j]==0)
-					tablero[i][j]=forzadas[i][j]=1;
-				if(blancasForzado[j]==true && tablero[i][j]==0)
-					tablero[i][j]=forzadas[i][j]=-1;
-			}
-		}
-		
-
-		//COLUMNAS
-		for(int i=0; i<ncols; i++){
-			forzadoColumna(i, negrasForzado, blancasForzado);
-			for(int j=lineaActual; j<nfils; j++){
-				if(negrasForzado[j]==true && tablero[j][i]==0)
-					tablero[j][i]=forzadas[j][i]=1;
-				if(blancasForzado[j]==true && tablero[j][i]==0)
-					tablero[j][i]=forzadas[j][i]=-1;
-			}
-		}
-      
-		pilaForzado.push(forzadas);
-	}
-
-	private void forzadoColumna(int i, boolean[] negrasForzado, boolean[] blancasForzado) {
-				//Forzado negro
-				for(int j=0; j<negrasForzado.length;j++)
-					negrasForzado[j]=true;
-				
-				iterSolCols[i]=solCols[i].listIterator();
-				while (iterSolCols[i].hasNext()){
-					int[] solAux=iterSolCols[i].next();
-					if(solAux.length>0 ){//&& esAplicable(i,solAux)){
-						//a.1 hasta primer lugar en blanco
-						for(int j=0;j<solAux[0];j++)
-							negrasForzado[j]=false;
-						//a.2 desde el ultimo bloque hasta el final
-						int[][] auxSinCeros = restSinCerosC();
-						int inicio=solAux[(solAux.length-1)]+auxSinCeros[i][(solAux.length-1)];
-						for(int j=inicio; j<negrasForzado.length;j++)
-							negrasForzado[j]=false;
-						//a.3
-						for(int j=0;j<(solAux.length-1);j++)
-							for(int k=solAux[j];k<solAux[j+1];k++)
-								negrasForzado[k]=false;
-					}else for(int j=0; j<negrasForzado.length;j++)
-						negrasForzado[j]=false;
+	private void aplicarForzado(){
+		int[][] forzado = new int[nfils][ncols];
+		boolean negroForzadas[] = new boolean[ncols];
+		boolean blancoForzadas[] = new boolean[ncols];
+		for(int i = 0; i < nfils; i++){  //para las filas
+			forzadoFilas(i, negroForzadas, blancoForzadas);
+			for(int j = 0; j < ncols; j++){
+				if((negroForzadas[j] && (canvas.getValorPosTablero(i,j) == 0)) || (tableroInicial[i][j] == 1)) {
+					forzado[i][j] = 1;
+					canvas.setValorPosTablero(i, j, 1);
+					tableroInicial[i][j] = 1;
 				}
-				iterSolCols[i]=null;
-				//Forzado blanco
-				for(int j=0; j<blancasForzado.length;j++)
-					blancasForzado[j]=true;
-				
-				iterSolCols[i]=solCols[i].listIterator();
-				while (iterSolCols[i].hasNext()){
-					int[] solAux=iterSolCols[i].next();
-					if(solAux.length>0){ // esAplicable(i,solAux)){
-						//ponemos la solucion
-						int[][] auxSinCeros = restSinCerosC();
-						for(int j=0;j<solAux.length;j++)
-							for(int k=solAux[j];k<solAux[j]+auxSinCeros[i][j];k++)
-								blancasForzado[k]=false;		
+				else{
+					if(((blancoForzadas[j]) && (canvas.getValorPosTablero(i,j) == 0)) || (tableroInicial[i][j] == -1)){
+						forzado[i][j] = -1;
+						canvas.setValorPosTablero(i, j, -1);
+						tableroInicial[i][j] = -1;
 					}
 				}
-				iterSolCols[i]=null;
+				canvas.pintarFichas(canvas.getGraphics());
+			}
+		}
+		for(int x = 0; x < ncols; x++){ //para las columnas
+			forzadoCols(x, negroForzadas, blancoForzadas);
+			for(int y = 0; y < nfils; y++){
+				if(((negroForzadas[y]) && (canvas.getValorPosTablero(y,x) == 0) || tableroInicial[y][x] == 1)){
+					forzado[y][x] = 1;
+					canvas.setValorPosTablero(y, x, 1);
+					tableroInicial[y][x] = 1;
+				}
+				else{
+					if((blancoForzadas[y] && (canvas.getValorPosTablero(y,x) == 0) || tableroInicial[y][x] == -1)){
+						forzado[y][x] = -1;
+						canvas.setValorPosTablero(y, x, -1);
+						tableroInicial[y][x] = -1;
+					}
+				}
+				canvas.pintarFichas(canvas.getGraphics());
+			}
+			/*for(int xx = 0; xx < nFilas; xx++){
+				for(int yy = 0; yy < nCols; yy++){
+					inicial[xx][yy] = canvas.getTablero(xx,yy);
+				}
+			}*/
+		}
+		pilaForzado.push(forzado);
 	}
-
-	private void forzadoFila(int i, boolean[] negrasForzado, boolean[] blancasForzado) {
-		//Forzado negro
-		for(int j=0; j<negrasForzado.length;j++)
-			negrasForzado[j]=true;
-		
-		iterSolFilas[i]=solFilas[i].listIterator();
-		while (iterSolFilas[i].hasNext()){
-			int[] solAux=iterSolFilas[i].next();
-			if(solAux.length>0){
-			if(esAplicable(i,solAux)){
-				//a.1 hasta primer lugar en blanco
-				for(int j=0;j<solAux[0];j++)
-					negrasForzado[j]=false;
-				//a.2 desde el ultimo bloque hasta el final
-				int[][] auxSinCeros = restSinCerosF();
-				int inicio=solAux[(solAux.length-1)]+auxSinCeros[i][(solAux.length-1)];
-				for(int j=inicio; j<ncols;j++)
-					negrasForzado[j]=false;
-				//a.3 blancos entre bloques 
-				for(int j=0;j<(solAux.length-1);j++){
-					int rest = auxSinCeros[i][j];
-					int limit = solAux[j+1];
-					for(int k=solAux[j]+rest;k<limit;k++)
-						negrasForzado[k]=false;
+	
+	private void forzadoFilas(int in, boolean[] negroF, boolean[] blancoF){
+		for (int i = 0; i < negroF.length; i++){
+			negroF[i] = true; 
+		}
+		for (int j = 0; j < blancoF.length; j++){
+			blancoF[j] = true; 
+		}
+		ListIterator<int[]> it = solFilas[in].listIterator();
+		int[] sol;
+		int cuantas = 0;
+		int cuantas1 = 0;
+		while(it.hasNext()){
+			cuantas = 0;
+			for(int aux = 0; aux < canvas.getMax_rest_fil(); aux++){
+				if(restriccionesFilas[in][aux] != 0){cuantas++;}
+			}
+			cuantas = canvas.getMax_rest_fil()-cuantas;
+			cuantas1 = cuantas;
+			sol = it.next();
+			if(esAplicable(in,sol) && (sol.length != 0)){
+				//forzado negras
+				for(int blanco = 0; blanco < sol[0]; blanco++){
+					negroF[blanco] = false;
+				}
+				int limite = sol[sol.length-1] + restriccionesFilas[in][canvas.getMax_rest_fil() - 1];
+				for(int blancoFinal = limite; blancoFinal < ncols; blancoFinal++){
+					negroF[blancoFinal] = false;
+				}
+				int r;
+				for(int blancoMedio = 0; blancoMedio < sol.length-1; blancoMedio++){
+					r = sol[blancoMedio] + restriccionesFilas[in][cuantas];
+					for(int hasta = r; hasta < sol[blancoMedio+1]; hasta++){
+						negroF[hasta] = false;
+					}
+					cuantas++;
+				}
+				//forzado blancas
+				for(int blan = 0; blan < sol.length; blan++){
+					for(int k = sol[blan]; k < (restriccionesFilas[in][cuantas1]+sol[blan]); k++){
+						blancoF[k] = false;
+					}
+					cuantas1++;
 				}
 			}
-			} else for(int j=0; j<negrasForzado.length;j++)
-				negrasForzado[j]=false;
-		}
-		iterSolFilas[i]=null;
-		
-		//Forzado blanco
-		for(int j=0; j<blancasForzado.length;j++)
-			blancasForzado[j]=true;
-		
-		iterSolFilas[i]=solFilas[i].listIterator();
-		while (iterSolFilas[i].hasNext()){
-			int[] solAux=iterSolFilas[i].next();
-			if(solAux.length>0){
-			if(esAplicable(i,solAux)){
-				//ponemos la solucion
-				int[][] auxSinCeros = restSinCerosF();
-				for(int j=0;j<solAux.length;j++)
-					for(int k=solAux[j];k<solAux[j]+auxSinCeros[i][j];k++)
-						blancasForzado[k]=false;		
+			if ((sol.length == 0)){
+				for (int i = 0; i < blancoF.length; i++){
+					blancoF[i] = true;
+				}
+				for (int i = 0; i < negroF.length; i++){
+					negroF[i] = false;
+				}
 			}
-			} else for(int j=0; j<blancasForzado.length;j++)
-			blancasForzado[j]=true;
 		}
-		iterSolFilas[i]=null;
+	}
+	
+	private void forzadoCols(int in, boolean[] negroF, boolean[] blancoF){
+		for (int i = 0; i < negroF.length; i++){
+			negroF[i] = true; 
+		}
+		for (int j = 0; j < blancoF.length; j++){
+			blancoF[j] = true; 
+		}
+		ListIterator<int[]> it = solCols[in].listIterator();
+		int[] sol;
+		int cuantas = 0;
+		int cuantas1 = 0;
+		while(it.hasNext()){
+			cuantas = 0;
+			for(int aux = 0; aux < canvas.getMax_rest_col(); aux++){
+				if(restriccionesCols[in][aux] != 0){cuantas ++;}
+			}
+			cuantas = canvas.getMax_rest_col()-cuantas;
+			cuantas1 = cuantas;
+			sol = it.next();
+			if(aplicableCol(in,sol) && (sol.length != 0)){
+				//forzado negras
+				for(int blanco = 0; blanco < sol[0]; blanco++){
+					negroF[blanco] = false;
+				}
+				int limite = sol[sol.length-1] + restriccionesCols[in][canvas.getMax_rest_col() - 1];
+				for(int blancoFinal = limite; blancoFinal < nfils; blancoFinal++){
+					negroF[blancoFinal] = false;
+				}
+				int r;
+				for(int blancoMedio = 0; blancoMedio < sol.length-1; blancoMedio++){
+					r = sol[blancoMedio] + restriccionesCols[in][cuantas];
+					for(int hasta = r; hasta < sol[blancoMedio+1]; hasta++){
+						negroF[hasta] = false;
+					}
+					cuantas++;
+				}
+				//forzado blancas
+				for(int blan = 0; blan < sol.length; blan++){
+					for(int k = sol[blan]; k < (restriccionesCols[in][cuantas1]+sol[blan]); k++){
+						blancoF[k] = false;
+					}
+					cuantas1++;
+				}
+			}
+			if ((sol.length == 0)){
+				for (int i = 0; i < blancoF.length; i++){
+					blancoF[i] = true;
+				}
+				for (int i = 0; i < negroF.length; i++){
+					negroF[i] = false;
+				}
+			}
+		}
+	}
+	
+	private void deshacerForzado(){
+		int[][] forz = pilaForzado.pop();
+		for(int i = 0; i < nfils; i++){
+			for(int j = 0; j < ncols; j++){
+				if(forz[i][j] != 0){
+					canvas.setValorPosTablero(i, j, 0);
+				}
+			}
+		}
+	}
+	
+	private boolean aplicableCol(int cAct, int[] solAct){
+		int[] aux = generarCol(cAct,solAct);
+		for(int i = 0; i < nfils; i++){
+			if((tableroInicial[i][cAct] != 0) && (tableroInicial[i][cAct] != aux[i])){
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	private int[] generarCol(int cAct, int[] solAct) {
+		int[] col = new int[nfils];
+		for(int i = 0; i < nfils; i++){ //la ponemos a blanco entera
+			col[i] = -1;
+		}
+		int tam = solAct.length;
+		for(int j = 0; j < tam; j++){
+			int donde = solAct[j];
+			int cuantas = restriccionesCols[cAct][canvas.getMax_rest_col()-(tam-j)];
+			for(int k = donde; k < donde+cuantas; k++){ //pintamos las casillas negras
+				col[k] = 1;
+			}
+		}
+		return col;
 	}
 	
 }//fin de clase
