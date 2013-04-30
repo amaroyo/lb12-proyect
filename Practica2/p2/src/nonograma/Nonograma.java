@@ -225,6 +225,7 @@ public class Nonograma {
 				if(forzado) aplicarForzado();
 				iterSolFilas[lineaActual] = solFilas[lineaActual].listIterator();
 			}	
+			
 			if(solFilas[lineaActual]!=null) quitarFilaTablero(lineaActual, solActual[lineaActual]);
 				boolean aplicable = false;
 				while(iterSolFilas[lineaActual].hasNext() && !aplicable){
@@ -316,11 +317,14 @@ public class Nonograma {
 	private void ponerFilaTablero(int fil, int[] is) {
 		int[] aux = resSinF(fil);
 		for(int i=0; i<is.length; i++){
-			for(int j=is[i]; j<(aux[i]+is[i]); j++)
+			for(int j=is[i]; j<(aux[i]+is[i]); j++){
 				tablero[fil][j]=1;
+
+			}
 		}
-		for(int i=0; i<ncols; i++)
+		for(int i=0; i<ncols; i++){
 			if(tablero[fil][i]!=1) tablero[fil][i]=-1;
+		}
 		
 	}
 	
@@ -376,43 +380,35 @@ public class Nonograma {
 	
 	
 	private void aplicarForzado(){
-		int[][] forzado = new int[nfils][ncols];
+		int[][] forzadas = new int[nfils][ncols];
 		boolean negroForzadas[] = new boolean[ncols];
 		boolean blancoForzadas[] = new boolean[ncols];
 		for(int i = 0; i < nfils; i++){  //para las filas
 			forzadoFilas(i, negroForzadas, blancoForzadas);
 			for(int j = 0; j < ncols; j++){
-				if((negroForzadas[j] && (canvas.getValorPosTablero(i,j) == 0)) || (tableroInicial[i][j] == 1)) {
-					forzado[i][j] = 1;
-					canvas.setValorPosTablero(i, j, 1);
-					tableroInicial[i][j] = 1;
+				if(negroForzadas[j] &&  (tablero[i][j] == 0)) {
+					tablero[i][j]=forzadas[i][j]=1;
 				}
 				else{
-					if(((blancoForzadas[j]) && (canvas.getValorPosTablero(i,j) == 0)) || (tableroInicial[i][j] == -1)){
-						forzado[i][j] = -1;
-						canvas.setValorPosTablero(i, j, -1);
-						tableroInicial[i][j] = -1;
+					if((blancoForzadas[j]) &&  (tablero[i][j] == 0)){
+						tablero[i][j]=forzadas[i][j]=-1;
 					}
 				}
-				canvas.pintarFichas(canvas.getGraphics());
+				//canvas.pintarFichas(canvas.getGraphics());
 			}
 		}
 		for(int x = 0; x < ncols; x++){ //para las columnas
 			forzadoCols(x, negroForzadas, blancoForzadas);
 			for(int y = 0; y < nfils; y++){
-				if(((negroForzadas[y]) && (canvas.getValorPosTablero(y,x) == 0) || tableroInicial[y][x] == 1)){
-					forzado[y][x] = 1;
-					canvas.setValorPosTablero(y, x, 1);
-					tableroInicial[y][x] = 1;
+				if(negroForzadas[y] &&  tablero[y][x] == 0){
+					tablero[y][x]=forzadas[y][x]=1;
 				}
 				else{
-					if((blancoForzadas[y] && (canvas.getValorPosTablero(y,x) == 0) || tableroInicial[y][x] == -1)){
-						forzado[y][x] = -1;
-						canvas.setValorPosTablero(y, x, -1);
-						tableroInicial[y][x] = -1;
+					if((blancoForzadas[y] && tablero[y][x] == 0)){
+						tablero[y][x]=forzadas[y][x]=-1;
 					}
 				}
-				canvas.pintarFichas(canvas.getGraphics());
+				//canvas.pintarFichas(canvas.getGraphics());
 			}
 			/*for(int xx = 0; xx < nFilas; xx++){
 				for(int yy = 0; yy < nCols; yy++){
@@ -420,7 +416,7 @@ public class Nonograma {
 				}
 			}*/
 		}
-		pilaForzado.push(forzado);
+		pilaForzado.push(forzadas);
 	}
 	
 	private void forzadoFilas(int in, boolean[] negroF, boolean[] blancoF){
@@ -533,15 +529,15 @@ public class Nonograma {
 		}
 	}
 	
-	private void deshacerForzado(){
-		int[][] forz = pilaForzado.pop();
-		for(int i = 0; i < nfils; i++){
-			for(int j = 0; j < ncols; j++){
-				if(forz[i][j] != 0){
-					canvas.setValorPosTablero(i, j, 0);
-				}
+	private void deshacerForzado() {
+		int[][] forzado = pilaForzado.pop();//Coge la cima de la pila que tiene el ultimo forzado aplicado
+		for(int i=0; i < nfils; i++)
+			for(int j=0; j < ncols; j++){
+				if(forzado[i][j] == 1)
+					tablero[i][j] = 0;
+				if(forzado[i][j] == -1)
+					tablero[i][j] = 0;
 			}
-		}
 	}
 	
 	private boolean aplicableCol(int cAct, int[] solAct){
