@@ -568,8 +568,7 @@ public class Interfaz extends JFrame {
 				 			JOptionPane.showMessageDialog(null, "NO EXISTEN SOLUCIONES!");
 				 	}
 				 	else {//Ha encontrado una solucion
-				 			canvas.setTablero(n.getTablero());
-				 			canvas.repaint();
+				 			canvas.pintarCuadri(canvas.getGraphics());
 				 			miCont++;
 				 			siguienteMenuItem.setEnabled(true);
 				 			primeraMenuItem.setEnabled(true);
