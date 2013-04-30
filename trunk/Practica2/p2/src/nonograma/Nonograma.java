@@ -456,29 +456,29 @@ public class Nonograma {
 	
 	private void aplicarForzado(){
 		int[][] forzadas = new int[nfils][ncols];
-		boolean negroForzadas[] = new boolean[ncols];
-		boolean blancoForzadas[] = new boolean[ncols];
+		boolean negrasForzadas[] = new boolean[Math.max(nfils, ncols)];
+		boolean blancasForzadas[] = new boolean[Math.max(nfils, ncols)];
 		for(int i = 0; i < nfils; i++){  //para las filas
-			forzadoFilas(i, negroForzadas, blancoForzadas);
+			forzadoFila(i, negrasForzadas, blancasForzadas);
 			for(int j = 0; j < ncols; j++){
-				if(negroForzadas[j] &&  (tablero[i][j] == 0)) {
+				if(negrasForzadas[j] &&  (tablero[i][j] == 0)) {
 					tablero[i][j]=forzadas[i][j]=1;
 				}
 				else{
-					if((blancoForzadas[j]) &&  (tablero[i][j] == 0)){
+					if((blancasForzadas[j]) &&  (tablero[i][j] == 0)){
 						tablero[i][j]=forzadas[i][j]=-1;
 					}
 				}
 			}
 		}
 		for(int x = 0; x < ncols; x++){ //para las columnas
-			forzadoCols(x, negroForzadas, blancoForzadas);
+			forzadoCol(x, negrasForzadas, blancasForzadas);
 			for(int y = 0; y < nfils; y++){
-				if(negroForzadas[y] &&  tablero[y][x] == 0){
+				if(negrasForzadas[y] &&  tablero[y][x] == 0){
 					tablero[y][x]=forzadas[y][x]=1;
 				}
 				else{
-					if((blancoForzadas[y] && tablero[y][x] == 0)){
+					if((blancasForzadas[y] && tablero[y][x] == 0)){
 						tablero[y][x]=forzadas[y][x]=-1;
 					}
 				}
@@ -488,7 +488,7 @@ public class Nonograma {
 	}
 	
 	/******************************************************************************************************/
-	private void forzadoFilas(int in, boolean[] negroF, boolean[] blancoF){
+	private void forzadoFila(int in, boolean[] negroF, boolean[] blancoF){
 		for (int i = 0; i < negroF.length; i++){
 			negroF[i] = true; 
 		}
@@ -509,14 +509,17 @@ public class Nonograma {
 			sol = it.next();
 			if(aplicable(in,sol) && (sol.length != 0)){
 				//forzado negras
+				//a.1 hasta primer lugar en blanco
 				for(int blanco = 0; blanco < sol[0]; blanco++){
 					negroF[blanco] = false;
 				}
+				//a.2 desde el ultimo bloque hasta el final
 				int limite = sol[sol.length-1] + restriccionesFilas[in][canvas.getMax_rest_fil() - 1];
 				for(int blancoFinal = limite; blancoFinal < ncols; blancoFinal++){
 					negroF[blancoFinal] = false;
 				}
 				int r;
+				//a.3 blancos entre bloques
 				for(int blancoMedio = 0; blancoMedio < sol.length-1; blancoMedio++){
 					r = sol[blancoMedio] + restriccionesFilas[in][cuantas];
 					for(int hasta = r; hasta < sol[blancoMedio+1]; hasta++){
@@ -544,7 +547,7 @@ public class Nonograma {
 	}
 	
 	/******************************************************************************************************/
-	private void forzadoCols(int in, boolean[] negroF, boolean[] blancoF){
+	private void forzadoCol(int in, boolean[] negroF, boolean[] blancoF){
 		for (int i = 0; i < negroF.length; i++){
 			negroF[i] = true; 
 		}
