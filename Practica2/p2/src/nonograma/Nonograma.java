@@ -37,7 +37,7 @@ public class Nonograma {
 		this.tablero = new int[nfils][ncols];
 		this.max_rest_fil = ((ncols / 2) + (ncols % 2));
 		this.max_rest_col = ((nfils / 2) + (nfils % 2));
-		//Hacemos una copia del tablero original así podemos deshacer cambios y comparar.
+		//Hacemos una copia del tablero original asï¿½ podemos deshacer cambios y comparar.
 		for(int i = 0; i < nfils; i++)
 			for(int j = 0; j < ncols; j++)
 				tablero[i][j] = c.getValorPosTablero(i, j);
@@ -219,12 +219,13 @@ public class Nonograma {
 				    
 	public boolean busquedaBack(){
 		if(lineaActual == nfils) lineaActual--;
-		if(forzado) aplicarForzado();
+		
 		while(lineaActual >= 0 && lineaActual < nfils){
 			if(iterSolFilas[lineaActual] == null){
+				if(forzado) aplicarForzado();
 				iterSolFilas[lineaActual] = solFilas[lineaActual].listIterator();
 			}	
-			
+			canvas.repaint();
 			if(solFilas[lineaActual]!=null) quitarFilaTablero(lineaActual, solActual[lineaActual]);
 				boolean aplicable = false;
 				while(iterSolFilas[lineaActual].hasNext() && !aplicable){
@@ -247,7 +248,7 @@ public class Nonograma {
 						if(lineaActual >= 0){
 							quitarFilaTablero(lineaActual, solActual[lineaActual]);
 							solActual[lineaActual] = null;
-							//if(forzado) deshacerForzado(); //El forzado siempre será el mismo así que lo dejamos asi
+							if(forzado) deshacerForzado(); //El forzado siempre sera el mismo asi que lo dejamos asi
 						}
 			}//FIN ELSE - FIN BACK
 			
