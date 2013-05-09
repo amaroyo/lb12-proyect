@@ -1,5 +1,7 @@
 package interfaz;
 
+import grafo.Grafo;
+
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -39,7 +41,7 @@ public class Interfaz extends JFrame {
 	private JTextField botonCol;
 
 	private JFrame ventanaNombreVertice;
-	
+	protected JFrame ventanaPesoArista;
 	
 	private JMenuItem verticeMenu;
 	private JMenuItem aristaMenu;
@@ -50,7 +52,10 @@ public class Interfaz extends JFrame {
 	private JMenuItem dijkstraMenu;
 	private JMenuItem kruskalMenu;
 	private JMenuItem floydMenu;
-	protected JFrame ventanaPesoArista;
+	
+	
+	private Lienzo g;
+	private Grafo grafo;
 	
 
 	/******************************************************************************************************/
@@ -269,6 +274,41 @@ public class Interfaz extends JFrame {
 		
 	}
 	
+	/******************************************************************************************************/
+	public Grafo getGrafo() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	/******************************************************************************************************/
+	public int getPesoArco() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	/******************************************************************************************************/
+	public String getNombreVertice() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/******************************************************************************************************/
+	public int getCont() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	/******************************************************************************************************/
+	public boolean getIntroduceVertice() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
+	/******************************************************************************************************/
+	public void setGrafo(Grafo grafo2) {
+		// TODO Auto-generated method stub
+		
+	}
 	/******************************************************************************************************/
 	private void modificarFrame(int filas, int columnas) {
 		
@@ -539,7 +579,7 @@ public class Interfaz extends JFrame {
 		Interfaz i = new Interfaz();
 
 	}
-	
+
 
 }
 

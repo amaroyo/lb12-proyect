@@ -1,4 +1,5 @@
-package interfaz;
+package grafo;
+
 
 import java.util.Iterator;
 import java.util.Set;
@@ -35,6 +36,11 @@ public class Grafo {
 	/******************************************************************************************************/
 	public Iterator<Nodo> dameNodos(){
 		return null;
+		
+	}
+
+	public void addArco(Arco arco) {
+		// TODO Auto-generated method stub
 		
 	}
 
