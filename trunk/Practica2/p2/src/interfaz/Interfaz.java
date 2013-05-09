@@ -1,8 +1,7 @@
 package interfaz;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Dimension;
+
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -10,25 +9,25 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.FileWriter;
+
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
+
 import java.util.Scanner;
 
 import javax.swing.*;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.table.DefaultTableModel;
+
 
 import nonograma.Nonograma;
 
 
 public class Interfaz extends JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	/***********************
 	 * ATRIBUTOS PRIVADOS
 	 * 
@@ -140,6 +139,8 @@ public class Interfaz extends JFrame {
 		conForzado.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				forzado = true;
+				conForzado.setEnabled(false);
+				sinForzado.setEnabled(true);
 			}
 		});
 		return conForzado;
@@ -153,6 +154,8 @@ public class Interfaz extends JFrame {
 		sinForzado.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				forzado = false;
+				sinForzado.setEnabled(false);
+				conForzado.setEnabled(true);
 			}
 		});
 		return sinForzado;
@@ -318,7 +321,8 @@ public class Interfaz extends JFrame {
 					                   boolean primeraVez = false;
 					                    if(path.compareTo(archivo.getAbsolutePath())==0){
 					                        JOptionPane.showMessageDialog(null, "Archivo Abierto","Oops! Error", JOptionPane.ERROR_MESSAGE);
-					                    }else{
+					                    }
+					                    else{
 					                        path = archivo.getAbsolutePath();
 					                        try{
 					                        	s = sc.nextLine();
@@ -332,8 +336,6 @@ public class Interfaz extends JFrame {
 					        						restricciones_filas = new int[filas][canvas.getMax_rest_fil()]; 
 					        						restricciones_cols = new int[columnas][canvas.getMax_rest_col()];
 					        						
-					        						/*restricciones_filas = new int[filas][3]; 
-					        						restricciones_cols = new int[columnas][3];*/
 					        					}
 					                        
 					                        	while(sc.hasNext()){
@@ -391,8 +393,6 @@ public class Interfaz extends JFrame {
 					                }
 					            }
 					        }
-
-
 						}
 					});
 
@@ -438,7 +438,6 @@ public class Interfaz extends JFrame {
 	}
 
 
-	/******************************************************************************************************/
 
 	/******************************************************************************************************/
 	private JMenu getDirectoMenu() {
@@ -471,7 +470,7 @@ public class Interfaz extends JFrame {
 				canvas.setRestF(restricciones_filas);
 				canvas.setRestC(restricciones_cols);
 				canvas.repaint();
-			//LISTENER!!!!
+		
 				guardarMenuItem.setEnabled(true);	
 			}
 		});
@@ -625,8 +624,8 @@ public class Interfaz extends JFrame {
 						columnas = Integer.parseInt(s2);
 						
 						
-						if (filas > 0 && filas <= 20 && columnas > 0
-								&& columnas <= 20) {
+						if (filas > 0 && filas <= 25 && columnas > 0
+								&& columnas <= 25) {
 							modificarFrame(filas,columnas);
 							
 						} else
@@ -717,7 +716,6 @@ public class Interfaz extends JFrame {
 		botonAceptar.addActionListener(new ActionListener() {
 			File archivo = null;
 		    FileReader fr = null;
-		    BufferedReader br = null;
 		    
 			public void actionPerformed(ActionEvent e) {
 				ventanaElegirEjemplo.setAlwaysOnTop(false);
@@ -847,7 +845,6 @@ public class Interfaz extends JFrame {
             }
             
     }
-	/******************************************************************************************************/
     /******************************************************************************************************/
     public static void main(String[] args) {
 
