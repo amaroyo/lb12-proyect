@@ -2,8 +2,6 @@ package interfaz;
 
 import java.awt.Canvas;
 import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
@@ -11,9 +9,6 @@ import java.awt.event.MouseListener;
 
 public class TableroCanvas extends Canvas implements MouseListener{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	private int nfilas, ncols, max_rest_col, max_rest_fil;
@@ -30,7 +25,7 @@ public class TableroCanvas extends Canvas implements MouseListener{
 	public TableroCanvas(int filas, int cols){
 		this.nfilas=filas;
 		this.ncols=cols;
-		this.max_rest_fil = ((ncols / 2) + (ncols % 2));
+		this.max_rest_fil = ((ncols / 2) + (ncols % 2)); //restricciones maximas segun el tamanyo del tablero
 		this.max_rest_col = ((nfilas / 2) + (nfilas % 2));
 		this.tablero = new int[nfilas][ncols];
 	}
@@ -83,7 +78,8 @@ public class TableroCanvas extends Canvas implements MouseListener{
 					valor = restC[fila][columna] + "";
 					g.setColor(new Color(23, 6, 128));//(Azul oscuro)
 					g.setFont(new Font("ComicSans", Font.BOLD, 16));
-					g.drawString(valor, x+posStringX, i+posStringY);//Muestro el valor de la celda y la posicion respecto a la casilla
+					g.drawString(valor, x+posStringX, i+posStringY);//Muestro el valor de la celda y 
+																	//la posicion respecto a la casilla
 				}
 				else{//La celda no contienen ningun valor
 					g.setColor(new Color(75, 141, 221));
@@ -247,13 +243,10 @@ public class TableroCanvas extends Canvas implements MouseListener{
 		restC = restriccionesCols;		
 	}
 	
-	/******************************************************************************************************/
-
 	
 	/******************************************************************************************************/
 	@Override
 	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
 		int y = e.getY();
 		int x = e.getX();
 		int f = queFila(y);	//SEGUN ELVIRA AL REVES, PERO ASI FUNCIONA
@@ -360,9 +353,7 @@ public class TableroCanvas extends Canvas implements MouseListener{
 	public void setPosStringY(int posStringY) {
 		this.posStringY = posStringY;
 	}
-	/******************************************************************************************************/
-										/*AUTO-GENERATED METHODS*/ 
-	/******************************************************************************************************/
+
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
 		// TODO Auto-generated method stub
@@ -386,6 +377,7 @@ public class TableroCanvas extends Canvas implements MouseListener{
 		// TODO Auto-generated method stub
 		
 	}
+	
 
 
 }

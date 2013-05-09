@@ -37,7 +37,7 @@ public class Nonograma {
 		this.tablero = new int[nfils][ncols];
 		this.max_rest_fil = ((ncols / 2) + (ncols % 2));
 		this.max_rest_col = ((nfils / 2) + (nfils % 2));
-		//Hacemos una copia del tablero original as� podemos deshacer cambios y comparar.
+		//Hacemos una copia del tablero original asi podemos deshacer cambios y comparar.
 		for(int i = 0; i < nfils; i++)
 			for(int j = 0; j < ncols; j++)
 				tablero[i][j] = c.getValorPosTablero(i, j);
@@ -215,7 +215,7 @@ public class Nonograma {
 				total = 0;
 			}
 			else{
-				total = canvas.getMax_rest_col()-num;//Las que me quedan
+				total = canvas.getMax_rest_col()-num;//Las que me quedan KE ES TOTAL?? LAS Q ME QUEDAN??
 			}
 			
 			for(int j = 0; j <= lineaActual; j++){
