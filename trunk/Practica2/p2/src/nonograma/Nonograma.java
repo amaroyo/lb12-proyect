@@ -479,8 +479,8 @@ public class Nonograma {
 		
 		ListIterator<int[]> it = solFilas[in].listIterator();
 		int[] sol;
-		int numR = 0;
-		int numNoR = 0;
+		int numR = 0; //numero de restricciones
+		int numNoR = 0; //numero de No restricciones, para saber la posicion
 		
 		while(it.hasNext()){
 			numR = 0;
@@ -489,7 +489,7 @@ public class Nonograma {
 				if(restriccionesFilas[in][aux] != 0){numR++;}
 			}
 			
-			numR = canvas.getMax_rest_fil()-numR;
+			numR = canvas.getMax_rest_fil()-numR; //es como el  total de funciona con una
 			numNoR = numR;
 			sol = it.next();
 			
