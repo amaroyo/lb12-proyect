@@ -1,13 +1,19 @@
 package grafo;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.geom.Point2D;
+import java.awt.geom.Point2D.Double;
+import java.awt.geom.QuadCurve2D;
 
 public class Arco {
 	private Nodo origen;
 	private Nodo destino;
 	private int peso;
 	private boolean pintar;
+	
 	
 	public Arco(Nodo origen, Nodo destino, int peso){
 		this.origen = origen;
@@ -56,17 +62,53 @@ public class Arco {
 		Color color = null;
 		if (pintar == true){
 			g.setColor(color.red);
-			g.drawLine(x1,y1,x2,y2);
-			g.drawString(Integer.toString(peso),(x1+x2)/2,(y1+y2)/2);
+			drawArrow(g,x1,y1,x2,y2);
+			if (x1>x2)
+				g.drawString(Integer.toString(peso),x1+(x2-x1)/2,y1+50);
+			else g.drawString(Integer.toString(peso),x1+(x2-x1)/2,y1-50);
 			pintar = false;
 		}
 		else {
-			g.drawLine(x1,y1,x2,y2);
-			g.drawString(Integer.toString(peso),(x1+x2)/2,(y1+y2)/2);
+			g.setColor(new Color(141, 0, 141));
+			drawArrow(g,x1,y1,x2,y2);
+			if (x1>x2)
+				g.drawString(Integer.toString(peso),x1+(x2-x1)/2,y1+50);
+			else g.drawString(Integer.toString(peso),x1+(x2-x1)/2,y1-50);
 		}
 		g.setColor(color.black);
 	}
 		
+	
+	public void drawArrow(Graphics g,int x0,int y0,int x1,int y1){
+		
+		Graphics2D g2D=(Graphics2D)g;
+		g2D.setStroke (new BasicStroke(2f));
+		QuadCurve2D.Double quad = new QuadCurve2D.Double();
+		Point2D.Double inicio1 = new Point2D.Double();
+		Point2D.Double fin1 = new Point2D.Double();
+		Point2D.Double control1 = new Point2D.Double();
+		
+		inicio1.setLocation(x0,y0);
+		fin1.setLocation(x1,y1);
+		if (x0>x1)
+		control1.setLocation(x0+(x1-x0)/2,y0+50);
+		else control1.setLocation(x0+(x1-x0)/2,y0-50);
+		
+		
+		double alfa=Math.atan2(y1-y0,x1-x0);
+		//g2D.drawLine(x0,y0,x1,y1); 
+		quad.setCurve(inicio1,control1,fin1);
+		g2D.draw(quad);
+		int k=7;
+		int xa=(int)(x1-k*Math.cos(alfa+1));
+		int ya=(int)(y1-k*Math.sin(alfa+1));
+		// Se dibuja un extremo de la direccion de la flecha.
+		g2D.drawLine(xa,ya,x1,y1); 
+		xa=(int)(x1-k*Math.cos(alfa-1));
+		ya=(int)(y1-k*Math.sin(alfa-1));
+		// Se dibuja el otro extremo de la direccion de la flecha.
+		g2D.drawLine(xa,ya,x1,y1); 
+	}
 
 
 

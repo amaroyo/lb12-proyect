@@ -55,6 +55,8 @@ public class Interfaz extends JFrame implements ActionListener {
 	public Interfaz(){
 		grafo = new Grafo();
 		inicializarInterfaz();
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //Para que se termine el hilo al cerrar la ventana
+
 	}
 		
 	public void inicializarInterfaz(){		
@@ -65,7 +67,7 @@ public class Interfaz extends JFrame implements ActionListener {
 
 	private JMenuBar getMenuPrincipal(){
 		JMenuBar barraMenu = new JMenuBar();
-		barraMenu.add(getMenuGrafo());  // Colocar las pestañas de la ventana
+		barraMenu.add(getMenuGrafo());  // Colocar las pestanyas de la ventana
 		barraMenu.add(getMenuArchivo());
 		barraMenu.add(getMenuOperaciones()); 
 		return barraMenu;
@@ -109,7 +111,7 @@ public class Interfaz extends JFrame implements ActionListener {
 	
 	private JMenuItem getCrearArcoItem() {
 		JMenuItem nuevoArco = new JMenuItem();
-		nuevoArco.setText("Crear arco");
+		nuevoArco.setText("Introducir arista");
 		nuevoArco.setEnabled(true);
 		nuevoArco.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
@@ -121,10 +123,10 @@ public class Interfaz extends JFrame implements ActionListener {
 				dijkstra = false;
 				floyd = false;
 				kruskal = false;
-				String i = JOptionPane.showInputDialog(null, "Peso del arco");
+				String i = JOptionPane.showInputDialog(null, "Peso de la arista");
 				if (i!= null) pesoArco= Integer.parseInt((String) i);
 				else pesoArco = 0;
-				JOptionPane.showMessageDialog(null,"Selecciona el nodo origen y el nodo destino para crear el arco");
+				JOptionPane.showMessageDialog(null,"Selecciona el vertice origen y el vertice destino para crear la arista");
 				}
 		});	
 		return nuevoArco;
@@ -132,7 +134,7 @@ public class Interfaz extends JFrame implements ActionListener {
 	
 	private JMenuItem getCrearNodoItem() {
 		JMenuItem nuevoNodo = new JMenuItem();
-		nuevoNodo.setText("Crear nodo");
+		nuevoNodo.setText("Introducir vertice");
 		nuevoNodo.setEnabled(true);
 		nuevoNodo.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
@@ -144,7 +146,7 @@ public class Interfaz extends JFrame implements ActionListener {
 				floyd = false;
 				kruskal = false;
 				repintar = false;
-				nombreNodo = JOptionPane.showInputDialog(null, "Nombre del nodo");
+				nombreNodo = JOptionPane.showInputDialog(null, "Nombre del vertice");
 		}
 	});	
 	return nuevoNodo;
@@ -152,7 +154,7 @@ public class Interfaz extends JFrame implements ActionListener {
 	
 	private JMenuItem getBorrarArcoItem() {
 		JMenuItem borrarArco = new JMenuItem();
-		borrarArco.setText("Borrar arco");
+		borrarArco.setText("Borrar arista");
 		borrarArco.setEnabled(true);
 		borrarArco.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
@@ -164,7 +166,7 @@ public class Interfaz extends JFrame implements ActionListener {
 				dijkstra = false;
 				floyd = false;
 				kruskal = false;
-				JOptionPane.showMessageDialog(null,"Selecciona el nodo origen y el nodo destino para borrar el arco");
+				JOptionPane.showMessageDialog(null,"Selecciona el vertice origen y el vertice destino para borrar la arista");
 		}
 	});	
 	return borrarArco;
@@ -172,7 +174,7 @@ public class Interfaz extends JFrame implements ActionListener {
 	
 	private JMenuItem getBorrarNodoItem() {
 		JMenuItem borrarNodo = new JMenuItem();
-		borrarNodo.setText("Borrar nodo");
+		borrarNodo.setText("Borrar vertice");
 		borrarNodo.setEnabled(true);
 		borrarNodo.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
@@ -184,7 +186,7 @@ public class Interfaz extends JFrame implements ActionListener {
 				floyd = false;
 				kruskal = false;
 				repintar = false;
-				JOptionPane.showMessageDialog(null,"Selecciona el nodo para eliminarlo");
+				JOptionPane.showMessageDialog(null,"Selecciona el vertice para eliminarlo");
 		}
 	});	
 	return borrarNodo;
@@ -239,7 +241,7 @@ public class Interfaz extends JFrame implements ActionListener {
 				floyd = false;
 				kruskal = false;
 				repintar = false;
-				JOptionPane.showMessageDialog(null,"Selecciona el nodo origen y destino");
+				JOptionPane.showMessageDialog(null,"Selecciona el vertice origen y destino");
 		}
 	});	
 	return dijkstras;
@@ -259,7 +261,7 @@ public class Interfaz extends JFrame implements ActionListener {
 				floyd = true;
 				kruskal = false;
 				repintar = false;
-				JOptionPane.showMessageDialog(null,"Selecciona el nodo origen y destino");
+				JOptionPane.showMessageDialog(null,"Selecciona el vertice origen y destino");
 		}
 	});	
 	return floyds;
@@ -279,7 +281,7 @@ public class Interfaz extends JFrame implements ActionListener {
 				floyd = false;
 				kruskal = true;
 				repintar = false;
-				JOptionPane.showMessageDialog(null,"Pincha en la pantalla para comenzar");
+				JOptionPane.showMessageDialog(null,"Toca la pantalla para comenzar");
 		}
 	});	
 	return kruskals;
