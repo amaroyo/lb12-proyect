@@ -79,7 +79,7 @@ public class Arco {
 			pintar = false;
 		}
 		else {
-			g.setColor(new Color(141, 0, 141));
+			g.setColor(new Color(23, 70, 121));
 			drawArrow(g,x1,y1,x2,y2);
 			/*if (x1>x2)
 				g.drawString(Integer.toString(peso),x1+(x2-x1)/2,y1+50);
