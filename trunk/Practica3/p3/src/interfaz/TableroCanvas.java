@@ -58,7 +58,7 @@ public class TableroCanvas extends Canvas implements MouseListener {
 	public void paint(Graphics g){
 		Iterator<Nodo> itNodos = grafo.iteratorNodos();
 		Iterator<Arco> itArcos = grafo.iteratorArcos();
-		this.setBackground(Color.YELLOW);//Le asignamos color de fondo al frame actual new Color(r,g,b)
+		this.setBackground(Color.yellow);//Le asignamos color de fondo al frame actual new Color(r,g,b)
 		while (itNodos.hasNext()){
 			Nodo nodo = itNodos.next();
 			nodo.dibujar(g);

@@ -44,8 +44,8 @@ public class Nodo {
 		
 		Graphics2D g2D=(Graphics2D)g;
 		g2D.setStroke (new BasicStroke(10f));
-		g2D.setColor(Color.green);
-		g2D.fillOval(x, y, 10, 10);
+		g2D.setColor(new Color(141, 0, 141));
+		g2D.fillOval(x, y, 20, 20);
 		g2D.drawString(nombre,x,y); 
 	}
 	
