@@ -35,11 +35,11 @@ public class TableroCanvas extends Canvas implements MouseListener {
 	//Dijkstra
 	private Map<Nodo,Integer> camino;
 	private Map<Nodo,Nodo> ruta;
-	private ArrayList<Nodo> yaVisitados;
+	private HashSet<Nodo> yaVisitados;
 	private PriorityQueue<Nodo> aVisitar;
 	//Kruskal
 	private Map<Nodo,Grupo> bosque;
-	private ArrayList<Arco> solucion;
+	private HashSet<Arco> solucion;
 	private PriorityQueue<Arco> arcosPrioridad;
 	//Floyd
 	private HashMap<Nodo,HashMap<Nodo,Integer>> matrizCamino;

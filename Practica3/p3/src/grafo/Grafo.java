@@ -203,7 +203,7 @@ public class Grafo {
 			nodo = it.next();
 			x1 = nodo.getX();
 			y1 = nodo.getY();
-			if ( x > (x1-10) && x < (x1+10) &&  y > (y1-10) && y < (y1+10)){
+			if ( x > (x1-20) && x < (x1+20) &&  y > (y1-20) && y < (y1+20)){
 				return nodo;
 			}
 		}
