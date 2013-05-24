@@ -63,17 +63,38 @@ public class Arco {
 		if (pintar == true){
 			g.setColor(color.red);
 			drawArrow(g,x1,y1,x2,y2);
-			if (x1>x2)
+			/*if (x1>x2)
 				g.drawString(Integer.toString(peso),x1+(x2-x1)/2,y1+50);
-			else g.drawString(Integer.toString(peso),x1+(x2-x1)/2,y1-50);
+			else g.drawString(Integer.toString(peso),x1+(x2-x1)/2,y1-50);*/
+			if(Math.abs(x2-x1) > 50){
+				if (x1>x2)
+					g.drawString(Integer.toString(peso),x1+(x2-x1)/2,y1+50);
+				else g.drawString(Integer.toString(peso),x1+(x2-x1)/2,y1-50);
+			}
+			else{
+				if (y1>y2)
+					g.drawString(Integer.toString(peso),x1+50,y1+(y2-y1)/2);
+				else g.drawString(Integer.toString(peso),x1-50,y1+(y2-y1)/2);
+			}
 			pintar = false;
 		}
 		else {
 			g.setColor(new Color(141, 0, 141));
 			drawArrow(g,x1,y1,x2,y2);
-			if (x1>x2)
+			/*if (x1>x2)
 				g.drawString(Integer.toString(peso),x1+(x2-x1)/2,y1+50);
-			else g.drawString(Integer.toString(peso),x1+(x2-x1)/2,y1-50);
+			else g.drawString(Integer.toString(peso),x1+(x2-x1)/2,y1-50);*/
+			if(Math.abs(x2-x1) > 50){
+				if (x1>x2)
+					g.drawString(Integer.toString(peso),x1+(x2-x1)/2,y1+50);
+				else g.drawString(Integer.toString(peso),x1+(x2-x1)/2,y1-50);
+			}
+			else{
+				if (y1>y2)
+					g.drawString(Integer.toString(peso),x1+50,y1+(y2-y1)/2);
+				else g.drawString(Integer.toString(peso),x1-50,y1+(y2-y1)/2);
+			}
+			
 		}
 		g.setColor(color.black);
 	}
@@ -90,9 +111,21 @@ public class Arco {
 		
 		inicio1.setLocation(x0,y0);
 		fin1.setLocation(x1,y1);
-		if (x0>x1)
-		control1.setLocation(x0+(x1-x0)/2,y0+50);
-		else control1.setLocation(x0+(x1-x0)/2,y0-50);
+		/*if (x0>x1)
+		  control1.setLocation(x0+(x1-x0)/2,y0+50);
+		else control1.setLocation(x0+(x1-x0)/2,y0-50);*/
+		
+		if(Math.abs(x1-x0) > 50){
+			if (x0>x1)
+				  control1.setLocation(x0+(x1-x0)/2,y0+50);
+			else control1.setLocation(x0+(x1-x0)/2,y0-50);
+		}
+		else{
+			if (y0>y1)
+				  control1.setLocation(x0+50,y0+(y1-y0)/2);
+			else control1.setLocation(x0-50,y0+(y1-y0)/2);
+		}
+			
 		
 		
 		double alfa=Math.atan2(y1-y0,x1-x0);
