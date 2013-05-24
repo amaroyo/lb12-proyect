@@ -10,9 +10,18 @@ import java.util.PriorityQueue;
 
 public class Kruskal {
 	
-	private Map<Nodo,Grupo> bosque;
-	private ArrayList<Arco> solucion;
-	private PriorityQueue<Arco> arcosPrioridad;
+	/*
+	 * Arbol de expansion minimo
+	 * Con aristas no dirigidas
+	 * Transformamos el grafo en un arbol minimo sin ciclos. Sus ramas tienen peso minimo
+	 * Tienen que contener todos los vertices a menos que no esten conectados
+	 * 
+	 */
+	
+	
+	private Map<Nodo,Grupo> bosqueF;
+	private HashSet<Arco> solucion;
+	private PriorityQueue<Arco> conjuntoS;
 	private Grafo grafo;
 	public HashSet<Arco> arcos;
 	
@@ -31,22 +40,32 @@ public class Kruskal {
 		};
 		if (g != null){
 			this.grafo = g;
-			bosque = new HashMap<Nodo,Grupo>();
-			solucion = new ArrayList<Arco>();
-			arcosPrioridad = new PriorityQueue<Arco>(1,comp);
+			
+			bosqueF = new HashMap<Nodo,Grupo>();
+			solucion = new HashSet<Arco>();
+			conjuntoS = new PriorityQueue<Arco>(1,comp);
+			//1. Crear un bosque (cjto de arboles. t.q. cada vertice es un arbol separado)
 			inicializarBosque();
+			//2. Creamos un cjto S con todas las aristas
 			inicializarArcos();
 			Arco aux;
 			Nodo nO = null;
 			Nodo nD = null;
-			while (!arcosPrioridad.isEmpty() && !arbolExpansion()){//en los apuntes y bosque no sea bosque de expansión:¿?
-				aux = arcosPrioridad.remove();
+			//mientras S no es vacio y F no es un arbol de expansion
+			while (!conjuntoS.isEmpty() && !arbolExpansion()){
+				//tomamos la arista con minimo peso de S
+				aux = conjuntoS.remove();
 				nO = aux.getOrigen();
 				nD = aux.getDestino();
-				if (!bosque.get(nO).equals(bosque.get(nD))){
-					bosque.get(nD).union(bosque.get(nO));
+				//si la arista conecta a dos arboles de F distintos
+				if (!bosqueF.get(nO).equals(bosqueF.get(nD))){
+					//combinamos en un solo arbol y tomamos la arista
+					bosqueF.get(nD).union(bosqueF.get(nO));
+					//anyado la arista a las soluciones
 					solucion.add(aux);
+					
 				}
+				// si no descartamos la arista
 			}
 			anotarResultadoKruskal();
 		}
@@ -57,11 +76,11 @@ public class Kruskal {
 		return (solucion.size() == grafo.getNumNodos()-1);
 	}
 	
-	public ArrayList<Arco> getSolucion() {
+	public HashSet<Arco> getSolucion() {
 		return solucion;
 	}
 
-	public void setSolucion(ArrayList<Arco> solucion) {
+	public void setSolucion(HashSet<Arco> solucion) {
 		this.solucion = solucion;
 	}
 
@@ -71,7 +90,7 @@ public class Kruskal {
 		while (it.hasNext()){
 			nodo = it.next();
 			Grupo g = new Grupo();
-			bosque.put(nodo,g);
+			bosqueF.put(nodo,g);
 		}
 	}
 	
@@ -80,7 +99,7 @@ public class Kruskal {
 		Arco arco;
 		while (it.hasNext()){
 			arco = it.next();
-			arcosPrioridad.add(arco);
+			conjuntoS.add(arco);
 		}
 	}
 	

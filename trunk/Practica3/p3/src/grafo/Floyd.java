@@ -5,8 +5,19 @@ import java.util.HashSet;
 import java.util.Iterator;
 
 public class Floyd {
-		private int[][] matrizCamino;
-		private Nodo[][] matrizRuta;
+	
+	
+	/* 
+	 * Dado un grafo dirigido con matriz de adyacencia determina la longitud del camino minimo para cada par de vertices
+	 * En nuestro caso, marcamos un vertice fin
+	 * 
+	 * Dividir el problema en subproblemas pequeños (memorizacion)
+	 * Resolver estos problemas de manera optima
+	 * Utilizar las soluciones para una optima global
+	 * 
+	 * */
+		private int[][] camino_min;
+		private Nodo[][] matrizAuxRutas;
 		private Grafo grafo;
 		public HashSet<Arco> arcos;
 		private static final Integer MAX_INT = 999999999;
@@ -17,17 +28,21 @@ public class Floyd {
 		public Floyd(Grafo g,Nodo origen, Nodo destino){
 			if (g != null && g.getNumNodos()>0){
 				grafo = g;
-				matrizCamino = new int[grafo.getNumNodos()][grafo.getNumNodos()];
+				camino_min = new int[grafo.getNumNodos()][grafo.getNumNodos()];
 				inicializarMatrizCamino();
-				matrizRuta = new Nodo[grafo.getNumNodos()][grafo.getNumNodos()];
+				matrizAuxRutas = new Nodo[grafo.getNumNodos()][grafo.getNumNodos()];
 				inicializarMatrizRuta();
+				//Programacion dinamica, caso base simple
+				// y luego llamadas recursivas de tamanyo menor que el original
 				for (int k=0; k<grafo.getNumNodos();k++){
 					for (int i=0; i<grafo.getNumNodos();i++){
 						for (int j=0; j<grafo.getNumNodos();j++){
-							int suma = matrizCamino[i][k]+matrizCamino[k][j];
-							if(suma < matrizCamino[i][j]){
-								matrizCamino[i][j]=suma;
-								matrizRuta[i][j]= grafo.nodoPos(k);
+							// Calculamos el valor del camino de i a j pasando por k
+							int suma = camino_min[i][k]+camino_min[k][j];
+							//Comparamos si es mejor que ir de i a j sin pasar por k
+							if(suma < camino_min[i][j]){
+								camino_min[i][j]=suma;//Si es mejor pasar por k
+								matrizAuxRutas[i][j]= grafo.nodoPos(k);//Anotamos el nodo k por el que hemos pasado para ir de i a j
 							}
 	                    }
 	                }
@@ -41,16 +56,18 @@ public class Floyd {
         
 			
 		public void inicializarMatrizRuta(){
+			//Inicialmente la matriz auxiliar esta a null ya que no hemos tomado ningun camino aun
 			for (int i=0; i<grafo.getNumNodos();i++){   
 					for (int j=0; j<grafo.getNumNodos();j++)
-						matrizRuta[i][j]=null;
+						matrizAuxRutas[i][j]=null;
 			}
 		}
 		
 		
 		
 		public void inicializarMatrizCamino(){
-				matrizCamino = new int[grafo.getNumNodos()][grafo.getNumNodos()];
+			//Inicializado camino minimo con las distancias directas
+				camino_min = new int[grafo.getNumNodos()][grafo.getNumNodos()];
 				Iterator<Nodo> it1 = grafo.iteratorNodos();
 				for (int i=0; i<grafo.getNumNodos();i++){   
 					Nodo nodo=it1.next();
@@ -59,22 +76,22 @@ public class Floyd {
 						Nodo nodo2 = it2.next();
 						Arco arco = grafo.existeArco(nodo, nodo2);
 						if (arco != null)
-							matrizCamino[i][j] = arco.getPeso();
+							camino_min[i][j] = arco.getPeso();
 						else if (nodo.equals(nodo2)) 
-							matrizCamino[i][j] = 0;
-						else matrizCamino[i][j] = MAX_INT;
+							camino_min[i][j] = 0;
+						else camino_min[i][j] = MAX_INT;
 						}
 				}
 		}
 		
 		public void anotarResultadoFloyd(Nodo origen, Nodo destino){
-			if(matrizRuta[grafo.posNodo(origen)][grafo.posNodo(destino)] == null ){ 
+			if(matrizAuxRutas[grafo.posNodo(origen)][grafo.posNodo(destino)] == null ){ 
 				Arco arco= grafo.existeArco(origen,destino);
 				if (arco != null)
 					arcos.add(arco);
 				}
 				else {    
-				     Nodo nodo = grafo.nodoPos(grafo.posNodo(matrizRuta[grafo.posNodo(origen)][grafo.posNodo(destino)]));
+				     Nodo nodo = grafo.nodoPos(grafo.posNodo(matrizAuxRutas[grafo.posNodo(origen)][grafo.posNodo(destino)]));
 				     anotarResultadoFloyd(origen,nodo);
 				     anotarResultadoFloyd(nodo,destino);
 				     }  

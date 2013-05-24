@@ -2,11 +2,11 @@ package grafo;
 
 public class Grupo {
 	private Grupo padre;
-	private int profundidad;
+	private int prof;
 	
 	public Grupo(){
 		padre = null;
-		profundidad = 0;
+		prof = 0;
 	}
 	
 	public Grupo dameGrupo(){
@@ -14,20 +14,19 @@ public class Grupo {
 		else return padre = padre.dameGrupo();
 	}
 	
-	/*public void union(Grupo g){
-		this.padre = g.dameGrupo();
-	}*/
 	
-	 public void union(Grupo g)
-	{
+	
+	 public void union(Grupo g){
+		 //cuando dos arboles distintos comparten una misma arista, los unimos
 		if(this.dameGrupo() != g.dameGrupo()){//si no tienen el mismo padre (son arboles distintos)
-			if (this.profundidad <= g.profundidad){
+			if (this.prof <= g.prof){
+				//si el padre no es null, aprovecho para cambiar el puntero e ir minimizando la profundidad
 				 this.dameGrupo().padre = g.dameGrupo();
-				 this.profundidad = Math.max(this.profundidad, g.profundidad+1);
+				 this.prof = Math.max(this.prof, g.prof+1);
 				}
-			else if (this.profundidad > g.profundidad){
+			else if (this.prof > g.prof){
 				g.dameGrupo().padre = this.dameGrupo();
-				g.profundidad = Math.max(this.profundidad+1, g.profundidad);
+				g.prof = Math.max(this.prof+1, g.prof);
 				}
 			
 		}	

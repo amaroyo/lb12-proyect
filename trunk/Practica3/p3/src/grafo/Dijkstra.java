@@ -8,9 +8,17 @@ import java.util.Iterator;
 import java.util.PriorityQueue;
 
 public class Dijkstra {
-	private HashMap<Nodo,Integer> camino;
+	
+	/**
+	 * @ param Dado un grafo dirigido y un vertice, establece el camino minimo desde ese vertice al resto
+	 * de los vertices del grafo. En nuestro caso, marcamos un vertice final.
+	 * 
+	 */
+	
+	
+	private HashMap<Nodo,Integer> caminos;
 	private HashMap<Nodo,Nodo> ruta;
-	private ArrayList<Nodo> yaVisitados;
+	private HashSet<Nodo> yaVisitados;
 	private PriorityQueue<Nodo> aVisitar;
 	private Grafo grafo;
 	public HashSet<Arco> arcos;
@@ -24,26 +32,30 @@ public class Dijkstra {
 	public Dijkstra(Grafo g, Nodo origen, Nodo destino){
 		Comparator <Nodo> comp = new Comparator<Nodo>(){
 			public int compare(Nodo nd1, Nodo nd2){
-				if (camino.get(nd1) >camino.get(nd2)) return 1;
-				if (camino.get(nd1)<camino.get(nd2)) return -1;
+				if (caminos.get(nd1) >caminos.get(nd2)) return 1;
+				if (caminos.get(nd1)<caminos.get(nd2)) return -1;
 				return 0;
 				}
 		};
 		if (g != null){
 			this.grafo = g;
-			camino = new HashMap<Nodo,Integer>();
+			caminos = new HashMap<Nodo,Integer>();
 			ruta = new HashMap<Nodo,Nodo>();
-			yaVisitados = new ArrayList<Nodo>();
+			yaVisitados = new HashSet<Nodo>();
 			aVisitar = new PriorityQueue<Nodo>(1,comp);
 			inicializarCamino();
-			camino.remove(origen);
-			camino.put(origen, 0);
+			caminos.remove(origen);
+			caminos.put(origen, 0);
 			inicializarRuta();		
 			aVisitar.add(origen);
 			Nodo aux;
+			//mientras a visitar es distinto de cero
 			while (!aVisitar.isEmpty()){
+			    //1. extraer el minimo de aVisitar
 				aux = aVisitar.remove();
+				//2. Anyadir aux a yaVisitados
 				yaVisitados.add(aux);
+				//3. Relajar vertices desde aux
 				relajarVertice(aux);
 			}
 		anotarResultadoDijkstra(origen, destino);
@@ -58,7 +70,7 @@ public class Dijkstra {
 		Nodo nodo;
 		while (it.hasNext()){
 			nodo = it.next();
-			camino.put(nodo, MAX_INT);
+			caminos.put(nodo, MAX_INT);
 		}
 	
 	}
@@ -82,10 +94,12 @@ public class Dijkstra {
 			arco = grafo.existeArco(nodo,nodo2);
 			if (arco != null){
 				if (!estaVisitado(yaVisitados,nodo2))
+
 					aVisitar.add(nodo2);
-					if (camino.get(nodo2) > camino.get(nodo) + arco.getPeso()){
-						camino.remove(nodo2);
-						camino.put(nodo2,arco.getPeso()+camino.get(nodo));
+				    //si camino nodo2 > camino nodo + distancia directa ellos
+					if (caminos.get(nodo2) > caminos.get(nodo) + arco.getPeso()){
+						caminos.remove(nodo2);
+						caminos.put(nodo2,arco.getPeso()+caminos.get(nodo));
 						aVisitar.remove(nodo2);
 						aVisitar.add(nodo2);
 						ruta.remove(nodo2);
@@ -109,8 +123,8 @@ public class Dijkstra {
 		}
 	}
 	
-	public boolean estaVisitado(ArrayList<Nodo> listaNodos,Nodo nodo){
-		if (listaNodos.contains(nodo)) return true;
+	public boolean estaVisitado(HashSet<Nodo> yaVisitados,Nodo nodo){
+		if (yaVisitados.contains(nodo)) return true;
 		return false;
 	}
 

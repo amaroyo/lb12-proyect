@@ -8,7 +8,7 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
 import java.awt.geom.QuadCurve2D;
 
-public class Arco {
+public class Arco implements Comparable<Arco>{
 	private Nodo origen;
 	private Nodo destino;
 	private int peso;
@@ -141,6 +141,13 @@ public class Arco {
 		ya=(int)(y1-k*Math.sin(alfa-1));
 		// Se dibuja el otro extremo de la direccion de la flecha.
 		g2D.drawLine(xa,ya,x1,y1); 
+	}
+
+	@Override
+	public int compareTo(Arco a) {
+		if (peso > a.peso) return 1;
+		else if(peso == a.peso) return 0;
+		else return -1;
 	}
 
 
